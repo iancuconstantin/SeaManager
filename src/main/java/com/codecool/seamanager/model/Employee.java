@@ -12,20 +12,21 @@ public class Employee {
 	private final String birthDate;
 	private final String address;
 	private Rank rank;
+	private Gender gender;
 	private final List<Certificate> certificates;
 
-	public Employee(String firstName, String lastName, String birthDate, String address, Rank rank) {
+	public Employee(String firstName, String lastName, String birthDate, String address, Rank rank, Gender gender) {
 		this.id = UUID.randomUUID().toString();
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.gender = gender;
 		this.birthDate = birthDate;
 		this.address = address;
 		this.rank = rank;
 		this.certificates = new ArrayList<>();
 	}
 
-
-	public void addNewCertificate(Certificate certificate){
+	public void addNewCertificate(Certificate certificate) {
 		certificates.add(certificate);
 	}
 
@@ -55,6 +56,10 @@ public class Employee {
 
 	public String getBirthDate() {
 		return birthDate;
+	}
+
+	public Gender getGender() {
+		return gender;
 	}
 
 	public String getAddress() {
