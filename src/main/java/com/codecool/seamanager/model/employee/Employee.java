@@ -1,4 +1,6 @@
-package com.codecool.seamanager.model;
+package com.codecool.seamanager.model.employee;
+
+import com.codecool.seamanager.model.certificate.Certificate;
 
 import java.util.ArrayList;
 import java.util.List;

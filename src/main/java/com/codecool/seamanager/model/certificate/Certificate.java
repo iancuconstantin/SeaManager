@@ -1,4 +1,4 @@
-package com.codecool.seamanager.model;
+package com.codecool.seamanager.model.certificate;
 
 import java.util.Objects;
 

@@ -1,11 +1,13 @@
-package com.codecool.seamanager.model;
+package com.codecool.seamanager.model.employee;
 
+import com.codecool.seamanager.model.certificate.Certificate;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codecool.seamanager.model.Gender.*;
-import static com.codecool.seamanager.model.Rank.SECOND_ENGINEER;
-import static com.codecool.seamanager.model.Rank.THIRD_ENGINEER;
+import static com.codecool.seamanager.model.employee.Gender.FEMALE;
+import static com.codecool.seamanager.model.employee.Gender.MALE;
+import static com.codecool.seamanager.model.employee.Rank.SECOND_ENGINEER;
+import static com.codecool.seamanager.model.employee.Rank.THIRD_ENGINEER;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EmployeeTest {
