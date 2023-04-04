@@ -5,11 +5,11 @@ import java.util.Objects;
 public class Certificate {
 	private final String ownerID;
 	private final String description;
-	private final int serialNumber;
+	private final String serialNumber;
 	private String issueDate;
 	private String expiryDate;
 
-	public Certificate(String ownerID, String description, int serialNumber, String issueDate, String expiryDate) {
+	public Certificate(String ownerID, String description, String serialNumber, String issueDate, String expiryDate) {
 		this.ownerID = ownerID;
 		this.description = description;
 		this.serialNumber = serialNumber;
@@ -41,7 +41,7 @@ public class Certificate {
 		this.expiryDate = expiryDate;
 	}
 
-	public int getSerialNumber() {
+	public String getSerialNumber() {
 		return serialNumber;
 	}
 
@@ -50,7 +50,7 @@ public class Certificate {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Certificate that = (Certificate) o;
-		return serialNumber == that.serialNumber && ownerID.equals(that.ownerID) && description.equals(that.description) && issueDate.equals(that.issueDate) && Objects.equals(expiryDate, that.expiryDate);
+		return ownerID.equals(that.ownerID) && description.equals(that.description) && serialNumber.equals(that.serialNumber) && issueDate.equals(that.issueDate) && Objects.equals(expiryDate, that.expiryDate);
 	}
 
 	@Override
