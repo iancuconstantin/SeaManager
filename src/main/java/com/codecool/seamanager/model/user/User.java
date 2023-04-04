@@ -1,4 +1,4 @@
-package com.codecool.seamanager.model;
+package com.codecool.seamanager.model.user;
 
 import java.util.Objects;
 import java.util.UUID;

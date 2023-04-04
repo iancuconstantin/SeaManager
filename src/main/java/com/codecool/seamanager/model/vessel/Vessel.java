@@ -1,4 +1,6 @@
-package com.codecool.seamanager.model;
+package com.codecool.seamanager.model.vessel;
+
+import com.codecool.seamanager.model.employee.Employee;
 
 import java.util.List;
 import java.util.UUID;
