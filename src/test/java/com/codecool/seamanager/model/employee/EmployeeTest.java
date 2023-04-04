@@ -15,7 +15,16 @@ public class EmployeeTest {
 
 	@Before
 	public void setUp() {
-		employee = new Employee("John", "Doe", "01-01-1990", "123 Main St", THIRD_ENGINEER, MALE);
+		employee = new Employee(
+				"John",
+				"Doe",
+				"01-01-1990",
+				"+123456789",
+				"123 Main St",
+				"johndoe@gmail.com",
+				THIRD_ENGINEER,
+				MALE
+		);
 	}
 
 	@Test
@@ -33,6 +42,15 @@ public class EmployeeTest {
 		assertEquals("01-01-1990", employee.getBirthDate());
 	}
 
+	@Test
+	public void testGetEmail() {
+		assertEquals("johndoe@gmail.com", employee.getEmail());
+	}
+
+	@Test
+	public void testGetContactNo(){
+		assertEquals("+123456789",employee.getContactNo());
+	}
 	@Test
 	public void testGetAddress() {
 		assertEquals("123 Main St", employee.getAddress());
@@ -56,7 +74,13 @@ public class EmployeeTest {
 
 	@Test
 	public void testAddNewCertificate() {
-		Certificate certificate = new Certificate(employee.getId(), "Seaman's Book", "30692CT", "13-01-2022", "13-01-2025");
+		Certificate certificate = new Certificate(
+				employee,
+				"Seaman's Book",
+				"30123SS",
+				"13-01-2022",
+				"13-01-2025"
+		);
 		employee.addNewCertificate(certificate);
 		assertEquals(1, employee.getCertificates().size());
 		assertTrue(employee.getCertificates().contains(certificate));
@@ -64,7 +88,16 @@ public class EmployeeTest {
 
 	@Test
 	public void testNotEquals() {
-		Employee employee2 = new Employee("Jane", "Doe", "01-01-1990", "123 Main St", THIRD_ENGINEER, FEMALE);
+		Employee employee2 = new Employee(
+				"Jane",
+				"Doe",
+				"01-01-1990",
+				"+123456789",
+				"123 Main St",
+				"johndoe@gmail.com",
+				THIRD_ENGINEER,
+				FEMALE
+		);
 		assertNotEquals(employee, employee2);
 	}
 }
