@@ -1,26 +1,38 @@
 package com.codecool.seamanager.model;
 
+import jakarta.persistence.*;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "vessels")
 public class Vessel {
-	private final String id;
-	private final String name;
-	private final VesselType type;
-	private final String flag;
-	private final long IMONumber;
-	private final List<Employee> crewList;
-	private String nextPortOfCall;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@NotNull
+	@Column(name = "name")
+	private String name;
+	@NotNull
+	@Column(name = "type")
+	@Enumerated(EnumType.STRING)
+	private VesselType type;
+	@NotNull
+	@Column(name = "flag")
+	private String flag;
+	@NotNull
+	@Column(name = "imonumber")
+	private long IMONumber;
+	@NotNull
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "vessel_id")
+	private List<Employee> crewList;
 
-	public Vessel(String name, VesselType type, String flag, long imoNumber, List<Employee> crewList, String nextPortOfCall) {
-		this.id = UUID.randomUUID().toString();
-		this.name = name;
-		this.type = type;
-		this.flag = flag;
-		this.IMONumber = imoNumber;
-		this.crewList = crewList;
-		this.nextPortOfCall = nextPortOfCall;
-	}
+	@NotNull
+	@Column(name = "nextPortOfCall")
+	private String nextPortOfCall;
 
 	public void changeCrew(Employee offSigner, Employee onSigner) {
 		if (!offSigner.getRank().equals(onSigner.getRank())) {
@@ -72,28 +84,52 @@ public class Vessel {
 		return false;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public VesselType getType() {
 		return type;
+	}
+
+	public void setType(VesselType type) {
+		this.type = type;
 	}
 
 	public String getFlag() {
 		return flag;
 	}
 
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
 	public long getIMONumber() {
 		return IMONumber;
 	}
 
+	public void setIMONumber(long IMONumber) {
+		this.IMONumber = IMONumber;
+	}
+
 	public List<Employee> getCrewList() {
 		return crewList;
+	}
+
+	public void setCrewList(List<Employee> crewList) {
+		this.crewList = crewList;
 	}
 
 	public String getNextPortOfCall() {

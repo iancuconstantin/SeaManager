@@ -1,20 +1,38 @@
 package com.codecool.seamanager.model;
 
+import jakarta.persistence.*;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
+@Entity
+@Table(name = "certificate")
 public class Certificate {
-	private final Employee owner; //TODO - keep field??
-	private final String description;
-	private final int serialNumber;
-	private String issueDate;
-	private String expiryDate;
 
-	public Certificate(Employee owner, String description, int serialNumber, String issueDate, String expiryDate) {
-		this.owner = owner;
-		this.description = description;
-		this.serialNumber = serialNumber;
-		this.issueDate = issueDate;
-		this.expiryDate = expiryDate;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToOne
+	@JoinColumn(name = "employee_id")
+	private Employee owner;
+	@NotNull
+	@Column(name = "description")
+	private String description;
+	@NotNull
+	@Column(name = "serialNumber")
+	private int serialNumber;
+	@NotNull
+	@Column(name = "issueDate")
+	private Date issueDate;
+	@NotNull
+	@Column(name = "expiryDate")
+	private Date expiryDate;
+
+	public Long getId() {
+		return id;
 	}
 
 	public Employee getOwner() {
@@ -25,24 +43,40 @@ public class Certificate {
 		return description;
 	}
 
-	public String getIssueDate() {
+	public Date getIssueDate() {
 		return issueDate;
 	}
 
-	public void setIssueDate(String issueDate) {
+	public void setIssueDate(Date issueDate) {
 		this.issueDate = issueDate;
 	}
 
-	public String getExpiryDate() {
+	public Date getExpiryDate() {
 		return expiryDate;
 	}
 
-	public void setExpiryDate(String expiryDate) {
+	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
 
 	public int getSerialNumber() {
 		return serialNumber;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setOwner(Employee owner) {
+		this.owner = owner;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setSerialNumber(int serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 
 	@Override

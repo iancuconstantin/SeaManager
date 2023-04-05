@@ -1,22 +1,32 @@
 package com.codecool.seamanager.model;
 
-import java.util.Objects;
+import jakarta.persistence.*;
+import org.jetbrains.annotations.NotNull;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.UUID;
 
+@Entity
+@Table(name = "users")
 public class User {
-	private final String id;
-	private final String username;
-	private final String password; //TODO - pwd hashing and salting
-	private int accessLevel;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@NotNull
+	@Column(name = "username")
+	private String username;
+	@NotNull
+	@Column(name = "password")
+	private String password;
+	@NotNull
+	@Column(name = "accessLevel")
+	@Min(value = 1, message = "Access level must be at least 1")
+	@Max(value = 3, message = "Access level cannot be greater than 3")
+	private Integer accessLevel;
 
-	public User(String username, String password, int accessLevel) {
-		this.id = UUID.randomUUID().toString();
-		this.username = username;
-		this.password = password;
-		this.accessLevel = accessLevel;
-	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -24,33 +34,23 @@ public class User {
 		return username;
 	}
 
-	public int getAccessLevel() {
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Integer getAccessLevel() {
 		return accessLevel;
 	}
 
-	public void setAccessLevel(int accessLevel) {
+	public void setAccessLevel(Integer accessLevel) {
 		this.accessLevel = accessLevel;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		User user = (User) o;
-		return id.equals(user.id) && username.equals(user.username);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, username);
-	}
-
-	@Override
-	public String toString() {
-		return "User{" +
-				"id='" + id + '\'' +
-				", username='" + username + '\'' +
-				", accessLevel=" + accessLevel +
-				'}';
 	}
 }

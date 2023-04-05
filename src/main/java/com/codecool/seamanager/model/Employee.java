@@ -1,29 +1,40 @@
 package com.codecool.seamanager.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import jakarta.persistence.*;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.*;
+
+@Entity
+@Table(name = "employee")
 public class Employee {
-	private final String id;
-	private final String firstName;
-	private final String lastName;
-	private final String birthDate;
-	private final String address;
+	@ManyToOne
+	@JoinColumn(name = "vessel_id")
+	private Vessel vessel;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@NotNull
+	@Column(name = "firstName")
+	private String firstName;
+	@NotNull
+	@Column(name = "lastName")
+	private String lastName;
+	@NotNull
+	@Column(name = "birthDate")
+	private Date birthDate;
+	@NotNull
+	@Column(name = "address")
+	private String address;
+	@NotNull
+	@Column(name = "rank")
+	@Enumerated(EnumType.STRING)
 	private Rank rank;
-	private final List<Certificate> certificates;
 
-	public Employee(String firstName, String lastName, String birthDate, String address, Rank rank) {
-		this.id = UUID.randomUUID().toString();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.birthDate = birthDate;
-		this.address = address;
-		this.rank = rank;
-		this.certificates = new ArrayList<>();
-	}
-
+	@NotNull
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "certificate_id")
+	private List<Certificate> certificates;
 
 	public void addNewCertificate(Certificate certificate){
 		certificates.add(certificate);
@@ -41,7 +52,7 @@ public class Employee {
 		this.rank = rank;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -53,12 +64,40 @@ public class Employee {
 		return lastName;
 	}
 
-	public String getBirthDate() {
+	public Date getBirthDate() {
 		return birthDate;
 	}
 
 	public String getAddress() {
 		return address;
+	}
+
+	public void setVessel(Vessel vessel) {
+		this.vessel = vessel;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setCertificates(List<Certificate> certificates) {
+		this.certificates = certificates;
 	}
 
 	@Override
