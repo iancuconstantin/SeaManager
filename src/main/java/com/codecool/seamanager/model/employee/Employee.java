@@ -91,12 +91,44 @@ public class Employee {
 		return h_gender;
 	}
 
-	public List<Certificate> getCertificates() {
-		return certificates;
+	public void setA_firstName(String firstName) {
+		this.a_firstName = firstName;
 	}
 
-	public void setRank(Rank rank) {
+	public void setB_lastName(String lastName) {
+		this.b_lastName = lastName;
+	}
+
+	public void setC_email(String email) {
+		this.c_email = email;
+	}
+
+	public void setD_birthDate(String birthDate) {
+		this.d_birthDate = birthDate;
+	}
+
+	public void setE_address(String address) {
+		this.e_address = address;
+	}
+
+	public void setF_contactNo(String contactNo) {
+		this.f_contactNo = contactNo;
+	}
+
+	public void setG_rank(Rank rank) {
 		this.g_rank = rank;
+	}
+
+	public void setH_gender(Gender gender) {
+		this.h_gender = gender;
+	}
+
+	public void setCertificates(List<Certificate> certificates) {
+		this.certificates = certificates;
+	}
+
+	public List<Certificate> getCertificates() {
+		return certificates;
 	}
 
 	@Override
