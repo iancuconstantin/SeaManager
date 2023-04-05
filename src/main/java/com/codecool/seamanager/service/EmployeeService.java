@@ -1,5 +1,6 @@
 package com.codecool.seamanager.service;
 
+import com.codecool.seamanager.exceptions.EmailTakenException;
 import com.codecool.seamanager.model.employee.Employee;
 import com.codecool.seamanager.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,9 @@ public class EmployeeService {
 	}
 
 	public void addNewEmployee(Employee employee) {
-		System.out.println(employee);
 		Optional<Employee> employeeOptional = employeeRepository.findEmployeeByEmail(employee.getEmail());
-		if(employeeOptional.isPresent()){
-			throw new IllegalArgumentException(
+		if (employeeOptional.isPresent()) {
+			throw new EmailTakenException(
 					"Email " + employee.getEmail() + "is taken"
 			);
 		}
