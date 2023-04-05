@@ -1,6 +1,7 @@
 package com.codecool.seamanager.model.employee;
 
 import com.codecool.seamanager.model.certificate.Certificate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -14,10 +15,10 @@ public class Employee {
 			strategy = GenerationType.AUTO
 	)
 	@Column(
-			name = "id",
+			name = "employee_id",
 			updatable = false
 	)
-	private Long id;
+	private Long employeeId;
 	@Column(
 			name = "first_name",
 			nullable = false,
@@ -69,8 +70,10 @@ public class Employee {
 	)
 	@Enumerated(EnumType.STRING)
 	private Gender h_gender;
-	@OneToMany(targetEntity = Certificate.class,
-	cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@OneToMany(
+			targetEntity = Certificate.class,
+			mappedBy = "a_owner"
+	)
 	private List<Certificate> certificates;
 
 	public Employee() {
@@ -92,8 +95,8 @@ public class Employee {
 		certificates.add(certificate);
 	}
 
-	public Long getId() {
-		return id;
+	public Long getEmployeeId() {
+		return employeeId;
 	}
 
 	public String getFirstName() {
@@ -164,6 +167,7 @@ public class Employee {
 		this.certificates = certificates;
 	}
 
+	@JsonIgnore
 	public List<Certificate> getCertificates() {
 		return certificates;
 	}
@@ -171,7 +175,7 @@ public class Employee {
 	@Override
 	public String toString() {
 		return "Employee{" +
-				"id=" + id +
+				"id=" + employeeId +
 				", firstName='" + a_firstName + '\'' +
 				", lastName='" + b_lastName + '\'' +
 				", email='" + c_email + '\'' +
