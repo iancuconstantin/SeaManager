@@ -21,11 +21,20 @@ public class EmployeeController {
 	@GetMapping
 	public List<Employee> getEmployees() {
 		return employeeService.getEmployees();
-
 	}
 
 	@PostMapping()
 	public void registerNewEmployee(@RequestBody Employee employee) {
 		employeeService.addNewEmployee(employee);
+	}
+
+	@DeleteMapping(path = "{employeeId}")
+	public void deleteEmployee(@PathVariable("employeeId") Long employeeId){
+		employeeService.deleteEmployee(employeeId);
+	}
+
+	@PutMapping(path = "{employeeId}")
+	public void updateEmployee(@PathVariable Long employeeId, @RequestBody Employee employeeDetails){
+		employeeService.updateEmployee(employeeId, employeeDetails);
 	}
 }
