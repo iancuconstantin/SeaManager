@@ -13,23 +13,60 @@ public class Employee {
 	@GeneratedValue(
 			strategy = GenerationType.AUTO
 	)
+	@Column(
+			name = "id",
+			updatable = false
+	)
 	private Long id;
-	@Column(name = "first_name")
+	@Column(
+			name = "first_name",
+			nullable = false,
+			columnDefinition = "TEXT"
+	)
 	private String a_firstName;
-	@Column(name = "last_name")
+	@Column(
+			name = "last_name",
+			nullable = false,
+			columnDefinition = "TEXT"
+	)
 	private String b_lastName;
-	@Column(name = "email")
+	@Column(
+			name = "email",
+			nullable = false,
+			columnDefinition = "TEXT",
+			unique = true
+	)
 	private String c_email;
-	@Column(name = "birth_date")
+	@Column(
+			name = "birth_date",
+			nullable = false,
+			columnDefinition = "TEXT"
+	)
 	private String d_birthDate;
-	@Column(name = "address")
+	@Column(
+			name = "address",
+			nullable = false,
+			columnDefinition = "TEXT"
+	)
 	private String e_address;
-	@Column(name = "contact_no")
+	@Column(
+			name = "contact_no",
+			nullable = false,
+			columnDefinition = "TEXT"
+	)
 	private String f_contactNo;
-	@Column(name = "rank")
+	@Column(
+			name = "rank",
+			nullable = false,
+			columnDefinition = "TEXT"
+	)
 	@Enumerated(EnumType.STRING)
 	private Rank g_rank;
-	@Column(name = "gender")
+	@Column(
+			name = "gender",
+			nullable = false,
+			columnDefinition = "TEXT"
+	)
 	@Enumerated(EnumType.STRING)
 	private Gender h_gender;
 	@OneToMany(targetEntity = Certificate.class,
