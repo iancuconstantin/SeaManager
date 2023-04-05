@@ -1,11 +1,12 @@
 package com.codecool.seamanager.service;
 
-import com.codecool.seamanager.exceptions.EmailTakenException;
-import com.codecool.seamanager.exceptions.EmployeeNotFoundException;
+import com.codecool.seamanager.exceptions.email.EmailTakenException;
+import com.codecool.seamanager.exceptions.email.EmployeeNotFoundException;
 import com.codecool.seamanager.model.employee.Employee;
 import com.codecool.seamanager.model.employee.Gender;
 import com.codecool.seamanager.model.employee.Rank;
 import com.codecool.seamanager.repository.EmployeeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,14 @@ public class EmployeeService {
 
 	public List<Employee> getEmployees() {
 		return employeeRepository.findAll();
+	}
+
+	public Employee getEmployeeById(Long employeeId) {
+		return employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new EmployeeNotFoundException(
+								"Employee not exist with id: " + employeeId
+						)
+				);
 	}
 
 	public void addNewEmployee(Employee employee) {
@@ -47,9 +56,13 @@ public class EmployeeService {
 		employeeRepository.deleteById(employeeId);
 	}
 
+	@Transactional
 	public void updateEmployee(Long employeeId, Employee employeeDetails) {
 		Employee employeeToUpdate = employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new EmployeeNotFoundException("Employee not exist with id: " + employeeId));
+				.orElseThrow(() -> new EmployeeNotFoundException(
+								"Employee not exist with id: " + employeeId
+						)
+				);
 
 		String updatedFirstName = employeeDetails.getFirstName();
 		if (updatedFirstName != null &&

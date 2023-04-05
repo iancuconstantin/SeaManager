@@ -85,7 +85,7 @@ public class EmployeeTest {
 
 	@Test
 	public void testGetId() {
-		assertNull(employee.getId());
+		assertNull(employee.getEmployeeId());
 	}
 
 	@Test
