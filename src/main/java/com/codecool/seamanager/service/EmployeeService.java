@@ -31,7 +31,7 @@ public class EmployeeService {
 	public Employee getEmployeeById(Long employeeId) {
 		return employeeRepository.findById(employeeId)
 				.orElseThrow(() -> new EmployeeNotFoundException(
-								"Employee not exist with id: " + employeeId
+								"Employee with id: " + employeeId + " doesn't exist."
 						)
 				);
 	}
@@ -63,6 +63,13 @@ public class EmployeeService {
 								"Employee not exist with id: " + employeeId
 						)
 				);
+		Optional<Employee> employeeOptional = employeeRepository.findEmployeeByEmail(employeeDetails.getEmail());
+		if (employeeOptional.isPresent() &&
+				!employeeOptional.get().getEmployeeId().equals(employeeDetails.getEmployeeId())) {
+			throw new EmailTakenException(
+					"Email " + employeeOptional.get().getEmail() + " is taken"
+			);
+		}
 
 		String updatedFirstName = employeeDetails.getFirstName();
 		if (updatedFirstName != null &&
@@ -79,7 +86,6 @@ public class EmployeeService {
 		}
 
 		String updatedEmail = employeeDetails.getEmail();
-		Optional<Employee> employeeOptional = employeeRepository.findEmployeeByEmail(employeeDetails.getEmail());
 		if (updatedEmail != null &&
 				updatedEmail.length() > 0 &&
 				updatedEmail.equals(employeeDetails.getEmail()) &&
