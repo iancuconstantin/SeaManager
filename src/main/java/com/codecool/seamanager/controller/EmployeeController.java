@@ -3,6 +3,7 @@ package com.codecool.seamanager.controller;
 import com.codecool.seamanager.model.employee.Employee;
 import com.codecool.seamanager.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class EmployeeController {
 	}
 
 	@PutMapping(path = "{employeeId}")
-	public void updateEmployee(@PathVariable Long employeeId, @RequestBody Employee employeeDetails){
-		employeeService.updateEmployee(employeeId, employeeDetails);
+	public ResponseEntity<Employee> updateEmployee(@PathVariable Long employeeId, @RequestBody Employee employeeDetails){
+		return employeeService.updateEmployee(employeeId, employeeDetails);
 	}
 }
