@@ -75,9 +75,7 @@ public class CertificateService {
 			boolean ownerExists = employeeRepository.existsById(certificateDetails.getOwner().getEmployeeId());
 			if (!ownerExists) {
 				throw new EmployeeNotFoundException(
-						"Owner of this certificate with id " + certificateDetails.getOwner().getEmployeeId() +
-								" and name " + certificateDetails.getOwner().getFirstName() + certificateDetails.getOwner().getLastName() +
-								" does not exist."
+						"Owner of this certificate with id " + certificateDetails.getOwner().getEmployeeId() + " does not exist."
 				);
 			}
 			certificateToUpdate.setA_owner(updatedOwner);
@@ -110,6 +108,13 @@ public class CertificateService {
 		}
 
 		String updatedSerialNo = certificateDetails.getSerialNumber();
+		Optional<Certificate> certificateOptional = certificateRepository.findCertificateBySerialNumber(certificateDetails.getSerialNumber());
+		if (certificateOptional.isPresent()) {
+			throw new CertificateSerialNumberDuplicationException(
+					"Serial number " + certificateDetails.getSerialNumber() + " exists in database."
+			);
+		}
+
 		if (updatedSerialNo != null &&
 				updatedSerialNo.length() > 0 &&
 				!updatedSerialNo.equals(certificateToUpdate.getSerialNumber())
