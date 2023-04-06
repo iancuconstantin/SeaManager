@@ -1,9 +1,6 @@
 package com.codecool.seamanager.service;
 
-import com.codecool.seamanager.model.Certificate;
-import com.codecool.seamanager.model.Employee;
-import com.codecool.seamanager.model.Vessel;
-import com.codecool.seamanager.repository.CertificateRepository;
+import com.codecool.seamanager.model.vessel.Vessel;
 import com.codecool.seamanager.repository.EmployeeRepository;
 import com.codecool.seamanager.repository.VesselRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

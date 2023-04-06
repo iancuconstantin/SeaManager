@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")

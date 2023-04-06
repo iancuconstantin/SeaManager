@@ -1,6 +1,6 @@
 package com.codecool.seamanager.service;
 
-import com.codecool.seamanager.model.User;
+import com.codecool.seamanager.model.user.User;
 import com.codecool.seamanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

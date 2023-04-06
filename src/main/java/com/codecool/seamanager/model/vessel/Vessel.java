@@ -1,13 +1,10 @@
 package com.codecool.seamanager.model.vessel;
 
 import com.codecool.seamanager.model.employee.Employee;
-
-
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "vessels")
@@ -70,7 +67,7 @@ public class Vessel {
 
 	public Employee getCrewMemberById(String employeeID){
 		for (Employee employee : crewList){
-			if(employee.getId().equals(employeeID)){
+			if(employee.getEmployeeId().equals(employeeID)){
 				return employee;
 			}
 		}
@@ -81,7 +78,7 @@ public class Vessel {
 
 	private boolean isPartOfCrewList(Employee employee) {
 		for (Employee e : crewList) {
-			if (e.getId().equals(employee.getId())) {
+			if (e.getEmployeeId().equals(employee.getEmployeeId())) {
 				return true;
 			}
 		}
