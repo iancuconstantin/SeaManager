@@ -23,7 +23,7 @@ public class CertificateController {
 		return certificateService.getCertificates();
 	}
 
-	@GetMapping(path = "{certificateId}")
+	@GetMapping(path = "/{certificateId}")
 	public Certificate getCertificateById(@PathVariable("certificateId") Long certificateId){
 		return certificateService.getCertificateById(certificateId);
 	}
@@ -33,12 +33,12 @@ public class CertificateController {
 		certificateService.addNewCertificate(certificate);
 	}
 
-	@DeleteMapping(path = "{certificateId}")
+	@DeleteMapping(path = "/{certificateId}")
 	public void deleteCertificate(@PathVariable("certificateId") Long certificateId){
 		certificateService.deleteCertificate(certificateId);
 	}
 
-	@PutMapping(path = "{certificateId}")
+	@PutMapping(path = "/{certificateId}")
 	public void updateCertificate(@PathVariable Long certificateId, @RequestBody Certificate certificateDetails){
 		certificateService.updateCertificate(certificateId, certificateDetails);
 	}

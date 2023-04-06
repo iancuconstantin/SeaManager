@@ -1,6 +1,7 @@
 package com.codecool.seamanager.service;
 
 import com.codecool.seamanager.model.vessel.Vessel;
+import com.codecool.seamanager.model.vessel.VesselType;
 import com.codecool.seamanager.repository.EmployeeRepository;
 import com.codecool.seamanager.repository.VesselRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,7 @@ import java.util.Optional;
 public class VesselService {
     @Autowired
     private VesselRepository vesselRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
+
 
     public List<Vessel> getAllVessels(){return vesselRepository.findAll();}
 
@@ -33,7 +33,7 @@ public class VesselService {
     }
     public ResponseEntity<Vessel> createVessel(@RequestBody Vessel vessel) {
         Vessel savedVessel = vesselRepository.save(vessel);
-        return ResponseEntity.created(URI.create("/user/" + savedVessel.getId())).body(savedVessel);
+        return ResponseEntity.created(URI.create("/vessel/" + savedVessel.getId())).body(savedVessel);
     }
 
 
@@ -41,11 +41,11 @@ public class VesselService {
         Optional<Vessel> optionalVessel = vesselRepository.findById(id);
         if (optionalVessel.isPresent()) {
             Vessel existingVessel = optionalVessel.get();
-            existingVessel.setName(vessel.getName());
-            existingVessel.setType(vessel.getType());
-            existingVessel.setFlag(vessel.getFlag());
-            existingVessel.setIMONumber(vessel.getIMONumber());
-            existingVessel.setNextPortOfCall(vessel.getNextPortOfCall());
+            if(vessel.getName().length()>0) existingVessel.setName(vessel.getName());
+            if(vessel.getType() != null && vessel.getType() instanceof VesselType) existingVessel.setType(vessel.getType());
+            if(vessel.getFlag()!= null) existingVessel.setFlag(vessel.getFlag());
+            if(vessel.getIMONumber()!=-1) existingVessel.setIMONumber(vessel.getIMONumber());
+            if(vessel.getNextPortOfCall()!= null) existingVessel.setNextPortOfCall(vessel.getNextPortOfCall());
             Vessel updatedVessel = vesselRepository.save(existingVessel);
             return ResponseEntity.ok(updatedVessel);
         } else {

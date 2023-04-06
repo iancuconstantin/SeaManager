@@ -12,7 +12,7 @@ import java.util.List;
 public class Employee {
 	@Id
 	@GeneratedValue(
-			strategy = GenerationType.AUTO
+			strategy = GenerationType.IDENTITY
 	)
 	@Column(
 			name = "employee_id",
