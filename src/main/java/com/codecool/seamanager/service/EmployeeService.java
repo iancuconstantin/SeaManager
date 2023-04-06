@@ -8,6 +8,7 @@ import com.codecool.seamanager.model.employee.Rank;
 import com.codecool.seamanager.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -52,12 +53,11 @@ public class EmployeeService {
 					"Employee with id " + employeeId + " does not exist."
 			);
 		}
-
 		employeeRepository.deleteById(employeeId);
 	}
 
 	@Transactional
-	public void updateEmployee(Long employeeId, Employee employeeDetails) {
+	public ResponseEntity<Employee> updateEmployee(Long employeeId, Employee employeeDetails) {
 		Employee employeeToUpdate = employeeRepository.findById(employeeId)
 				.orElseThrow(() -> new EmployeeNotFoundException(
 								"Employee not exist with id: " + employeeId
@@ -121,5 +121,6 @@ public class EmployeeService {
 				!updatedGender.equals(employeeToUpdate.getGender())) {
 			employeeToUpdate.setH_gender(updatedGender);
 		}
+		return ResponseEntity.ok(employeeToUpdate);
 	}
 }
