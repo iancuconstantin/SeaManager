@@ -23,8 +23,6 @@ public class VesselService {
     private VesselRepository vesselRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
-    @Autowired
-    private CertificateRepository certificateRepository;
 
     public List<Vessel> getAllVessels(){return vesselRepository.findAll();}
 
@@ -41,66 +39,6 @@ public class VesselService {
         Vessel savedVessel = vesselRepository.save(vessel);
         return ResponseEntity.created(URI.create("/user/" + savedVessel.getId())).body(savedVessel);
     }
-//    public ResponseEntity<Vessel> updateVessel(@PathVariable Long id, @RequestBody Vessel vessel) {
-//        Optional<Vessel> optionalVessel = vesselRepository.findById(id);
-//        if (optionalVessel.isPresent()) {
-//            Vessel existingVessel = optionalVessel.get();
-//            existingVessel.setName(vessel.getName());
-//            existingVessel.setType(vessel.getType());
-//            existingVessel.setFlag(vessel.getFlag());
-//            existingVessel.setIMONumber(vessel.getIMONumber());
-//            existingVessel.setNextPortOfCall(vessel.getNextPortOfCall());
-//            //update crew list
-//            List<Employee> existingCrewList = existingVessel.getCrewList();
-//            List<Employee> updatedCrewList = vessel.getCrewList();
-//            for (int i = 0; i < updatedCrewList.size(); i++) {
-//                Employee updatedCrewMember = updatedCrewList.get(i);
-//                Employee existingCrewMember = existingCrewList.get(i);
-//                existingCrewMember.setFirstName(updatedCrewMember.getFirstName());
-//                existingCrewMember.setLastName(updatedCrewMember.getLastName());
-//                existingCrewMember.setBirthDate(updatedCrewMember.getBirthDate());
-//                existingCrewMember.setAddress(updatedCrewMember.getAddress());
-//                existingCrewMember.setRank(updatedCrewMember.getRank());
-//                existingCrewMember.setCertificates(updatedCrewMember.getCertificates());
-//                Vessel updatedVessel = vesselRepository.save(existingVessel);
-//                return ResponseEntity.ok(updatedVessel);
-//            }
-//        } else{
-//                return ResponseEntity.notFound().build();
-//            }
-//        };
-//    }
-
-//    public ResponseEntity<Vessel> updateVessel(@PathVariable Long id, @RequestBody Vessel vessel) {
-//        Optional<Vessel> optionalVessel = vesselRepository.findById(id);
-//        if (optionalVessel.isPresent()) {
-//            Vessel existingVessel = optionalVessel.get();
-//            existingVessel.setName(vessel.getName());
-//            existingVessel.setType(vessel.getType());
-//            existingVessel.setFlag(vessel.getFlag());
-//            existingVessel.setIMONumber(vessel.getIMONumber());
-//            existingVessel.setNextPortOfCall(vessel.getNextPortOfCall());
-//
-//            // update crew members in existingVessel instance
-//            List<Employee> existingCrewList = existingVessel.getCrewList();
-//            List<Employee> updatedCrewList = vessel.getCrewList();
-//            for (int i = 0; i < updatedCrewList.size(); i++) {
-//                Employee updatedCrewMember = updatedCrewList.get(i);
-//                Employee existingCrewMember = existingCrewList.get(i);
-//                existingCrewMember.setFirstName(updatedCrewMember.getFirstName());
-//                existingCrewMember.setLastName(updatedCrewMember.getLastName());
-//                existingCrewMember.setBirthDate(updatedCrewMember.getBirthDate());
-//                existingCrewMember.setAddress(updatedCrewMember.getAddress());
-//                existingCrewMember.setRank(updatedCrewMember.getRank());
-//                existingCrewMember.setCertificates(updatedCrewMember.getCertificates());
-//            }
-//
-//            Vessel updatedVessel = vesselRepository.save(existingVessel);
-//            return ResponseEntity.ok(updatedVessel);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
 
 
     public ResponseEntity<Vessel> updateVessel(@PathVariable Long id, @RequestBody Vessel vessel) {
@@ -112,42 +50,6 @@ public class VesselService {
             existingVessel.setFlag(vessel.getFlag());
             existingVessel.setIMONumber(vessel.getIMONumber());
             existingVessel.setNextPortOfCall(vessel.getNextPortOfCall());
-
-            // Update crew list
-            List<Employee> existingCrew = existingVessel.getCrewList();
-            List<Employee> newCrew = vessel.getCrewList();
-            existingCrew.clear();
-            for (Employee crewMember : newCrew) {
-                Employee existingCrewMember = employeeRepository.findById(crewMember.getId()).orElse(null);
-                if (existingCrewMember == null) {
-                    // New crew member
-                    existingCrewMember = new Employee();
-                }
-                existingCrewMember.setFirstName(crewMember.getFirstName());
-                existingCrewMember.setLastName(crewMember.getLastName());
-                existingCrewMember.setBirthDate(crewMember.getBirthDate());
-                existingCrewMember.setAddress(crewMember.getAddress());
-                existingCrewMember.setRank(crewMember.getRank());
-
-                // Update certificates for this crew member
-                List<Certificate> existingCertificates = existingCrewMember.getCertificates();
-                List<Certificate> newCertificates = crewMember.getCertificates();
-                existingCertificates.clear();
-                for (Certificate certificate : newCertificates) {
-                    Certificate existingCertificate = certificateRepository.findById(certificate.getId()).orElse(null);
-                    if (existingCertificate == null) {
-                        // New certificate
-                        existingCertificate = new Certificate();
-                    }
-                    existingCertificate.setDescription(certificate.getDescription());
-                    existingCertificate.setSerialNumber(certificate.getSerialNumber());
-                    existingCertificate.setIssueDate(certificate.getIssueDate());
-                    existingCertificate.setExpiryDate(certificate.getExpiryDate());
-                    existingCertificates.add(existingCertificate);
-                }
-                existingCrew.add(existingCrewMember);
-            }
-
             Vessel updatedVessel = vesselRepository.save(existingVessel);
             return ResponseEntity.ok(updatedVessel);
         } else {

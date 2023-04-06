@@ -32,7 +32,7 @@ public class VesselController {
         return  vesselService.createVessel(vessel);
     }
 
-    //TODO solve the bugs
+
     @PutMapping("/{id}")
     public ResponseEntity<Vessel> updateVessel(@PathVariable Long id, @RequestBody Vessel vessel) {
         return vesselService.updateVessel(id,vessel);
