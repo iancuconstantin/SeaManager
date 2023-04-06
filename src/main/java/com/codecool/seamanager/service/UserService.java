@@ -1,6 +1,6 @@
 package com.codecool.seamanager.service;
 
-import com.codecool.seamanager.model.User;
+import com.codecool.seamanager.model.user.User;
 import com.codecool.seamanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,9 +40,13 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(user.getPassword());
-            existingUser.setAccessLevel(user.getAccessLevel());
+            if(user.getUsername()!=null)existingUser.setUsername(user.getUsername());
+            if(user.getPassword()!=null)existingUser.setPassword(user.getPassword());
+            if(user.getAccessLevel()!=null && (user.getAccessLevel() >= 1 && user.getAccessLevel()<=3)){
+                existingUser.setAccessLevel(user.getAccessLevel());
+            }  else {
+                throw new IllegalArgumentException("Access level must be between 1 and 3.");
+            }
             User updatedUser = userRepository.save(existingUser);
             return ResponseEntity.ok(updatedUser);
         } else {

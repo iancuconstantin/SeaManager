@@ -1,13 +1,9 @@
 package com.codecool.seamanager.model.vessel;
 
 import com.codecool.seamanager.model.employee.Employee;
-
-
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "vessels")
@@ -29,6 +25,7 @@ public class Vessel {
 	@Column(name = "imonumber")
 	private long IMONumber;
 	@NotNull
+	@Column(name = "crewList")
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "vessel_id")
 	private List<Employee> crewList;
@@ -36,6 +33,18 @@ public class Vessel {
 	@NotNull
 	@Column(name = "nextPortOfCall")
 	private String nextPortOfCall;
+
+	public Vessel() {}
+
+	public Vessel(@NotNull String name, @NotNull VesselType type, @NotNull String flag, @NotNull long IMONumber, @NotNull List<Employee> crewList, @NotNull String nextPortOfCall) {
+		this.name = name;
+		this.type = type;
+		this.flag = flag;
+		this.IMONumber = IMONumber;
+		this.crewList = crewList;
+		this.nextPortOfCall = nextPortOfCall;
+	}
+
 
 
 	public void changeCrew(Employee offSigner, Employee onSigner) {
@@ -70,7 +79,7 @@ public class Vessel {
 
 	public Employee getCrewMemberById(String employeeID){
 		for (Employee employee : crewList){
-			if(employee.getId().equals(employeeID)){
+			if(employee.getEmployeeId().equals(employeeID)){
 				return employee;
 			}
 		}
@@ -81,7 +90,7 @@ public class Vessel {
 
 	private boolean isPartOfCrewList(Employee employee) {
 		for (Employee e : crewList) {
-			if (e.getId().equals(employee.getId())) {
+			if (e.getEmployeeId().equals(employee.getEmployeeId())) {
 				return true;
 			}
 		}

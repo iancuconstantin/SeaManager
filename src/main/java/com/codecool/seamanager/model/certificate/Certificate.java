@@ -2,6 +2,8 @@ package com.codecool.seamanager.model.certificate;
 
 import com.codecool.seamanager.model.employee.Employee;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table
@@ -22,6 +24,7 @@ public class Certificate {
 			nullable = false,
 			columnDefinition = "BIGINT"
 	)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Employee a_owner;
 	@Column(
 			name = "description",

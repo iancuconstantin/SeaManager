@@ -2,16 +2,22 @@ package com.codecool.seamanager.config;
 
 import com.codecool.seamanager.model.certificate.Certificate;
 import com.codecool.seamanager.model.employee.Employee;
+import com.codecool.seamanager.model.user.User;
+import com.codecool.seamanager.model.vessel.Vessel;
 import com.codecool.seamanager.repository.CertificateRepository;
 import com.codecool.seamanager.repository.EmployeeRepository;
+import com.codecool.seamanager.repository.UserRepository;
+import com.codecool.seamanager.repository.VesselRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.codecool.seamanager.model.employee.Gender.FEMALE;
 import static com.codecool.seamanager.model.employee.Gender.MALE;
+import static com.codecool.seamanager.model.vessel.VesselType.*;
 import static com.codecool.seamanager.model.employee.Rank.*;
 
 @Configuration
@@ -19,7 +25,8 @@ public class SeamanagerConfiguration {
 
 	@Bean
 	CommandLineRunner commandLineRunner(
-			EmployeeRepository employeeRepository, CertificateRepository certificateRepository
+			EmployeeRepository employeeRepository, CertificateRepository certificateRepository,
+			VesselRepository vesselRepository, UserRepository userRepository
 	) {
 		return args -> {
 			Employee johnDoe = new Employee(
@@ -282,6 +289,71 @@ public class SeamanagerConfiguration {
 					"26-12-2025"
 			);
 
+			User user1 = new User("john123", "password123", 1);
+			User user2 = new User("jane456", "myp@ssword", 2);
+			User user3 = new User("user789", "secure123", 3);
+			User user4 = new User("admin123", "adminpass", 3);
+			User user5 = new User("user321", "password123", 2);
+			User user6 = new User("jdoe", "pass123", 1);
+			User user7 = new User("jsmith", "mypassword", 1);
+			User user8 = new User("user456", "securepass", 2);
+			User user9 = new User("user789", "myp@ssword", 3);
+			User user10 = new User("johndoe", "mypassword123", 2);
+
+
+			//vessel 1
+			List<Employee> crewList1 = new ArrayList<>();
+
+			// Captain
+			Employee captain = new Employee("Maria", "Garcia", "1985-04-15", "1234567890", "10 Elm Street", "maria.garcia@email.com", CAPTAIN, FEMALE);
+			List<Certificate> certificates1 = new ArrayList<>();
+			certificates1.addAll(List.of(certificate1,certificate2));
+			captain.setCertificates(certificates1);
+			crewList1.add(captain);
+
+			// Chief Officer
+			Employee chiefOfficer = new Employee("John", "Smith", "1988-09-20", "9876543210", "15 Oak Avenue", "john.smith@email.com", CHIEF_OFFICER, MALE);
+			List<Certificate> certificates2 = new ArrayList<>();
+			certificates2.addAll(List.of(certificate7,certificate12));
+			chiefOfficer.setCertificates(certificates2);
+			crewList1.add(chiefOfficer);
+
+			// Second Engineer
+			Employee secondEngineer = new Employee("Sarah", "Johnson", "1992-11-10", "5678901234", "25 Maple Street", "sarah.johnson@email.com", SECOND_ENGINEER, FEMALE);
+			List<Certificate> certificates3 = new ArrayList<>();
+			certificates3.addAll(List.of(certificate3,certificate4));
+			secondEngineer.setCertificates(certificates3);
+			crewList1.add(secondEngineer);
+
+			Vessel vessel1 = new Vessel("Ocean Queen", TANKER, "USA", 1234567890, crewList1, "Singapore");
+
+
+			//vessel 2
+			List<Employee> crewList2 = new ArrayList<>();
+
+			// Third Officer
+			Employee thirdOfficer = new Employee("Michael", "Brown", "1991-06-05", "4567890123", "5 Pine Road", "michael.brown@email.com", THIRD_OFFICER, MALE);
+			List<Certificate> certificates4 = new ArrayList<>();
+			certificates4.addAll(List.of(certificate5,certificate1));
+			thirdOfficer.setCertificates(certificates4);
+			crewList2.add(thirdOfficer);
+
+			// Junior Engineer
+			Employee juniorEngineer = new Employee("Emily", "Davis", "1994-08-18", "2345678901", "12 Birch Lane", "emily.davis@email.com", JUNIOR_ENGINEER, FEMALE);
+			List<Certificate> certificates5 = new ArrayList<>();
+			certificates5.addAll(List.of(certificate2,certificate22));
+			juniorEngineer.setCertificates(certificates5);
+			crewList2.add(juniorEngineer);
+
+			// Bosun
+			Employee bosun = new Employee("Robert", "Wilson", "1987-03-25", "1234567890", "8 Cedar Avenue", "robert.wilson@email.com", BOSUN, MALE);
+			List<Certificate> certificates6 = new ArrayList<>();
+			certificates6.addAll(List.of(certificate4,certificate1));
+			bosun.setCertificates(certificates6);
+			crewList2.add(bosun);
+
+			Vessel vessel2 = new Vessel("SS Pacific Voyager", TANKER, "Canada", 98765210, crewList2, "Port of Vancouver");
+
 
 			employeeRepository.saveAll(
 					List.of(
@@ -320,6 +392,28 @@ public class SeamanagerConfiguration {
 							certificate23,
 							certificate24,
 							certificate25
+					)
+			);
+
+			userRepository.saveAll(
+				List.of(
+						user1,
+						user2,
+						user3,
+						user4,
+						user5,
+						user6,
+						user7,
+						user8,
+						user9,
+						user10
+				)
+			);
+
+			vesselRepository.saveAll(
+					List.of(
+							vessel1,
+							vessel2
 					)
 			);
 		};

@@ -3,10 +3,10 @@ package com.codecool.seamanager.model.user;
 
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -26,11 +26,17 @@ public class User {
 	@Max(value = 3, message = "Access level cannot be greater than 3")
 	private Integer accessLevel;
 
-
-	public Long getId() {
-
-		return id;
+	public User(@NotNull String username, @NotNull String password, @NotNull Integer accessLevel) {
+		this.username = username;
+		this.password = password;
+		this.accessLevel = accessLevel;
 	}
+
+	public User() {
+
+	}
+
+	public Long getId() {return id;}
 
 	public String getUsername() {
 		return username;
