@@ -2,6 +2,7 @@ package com.codecool.seamanager.model.vessel;
 
 import com.codecool.seamanager.model.employee.Employee;
 
+
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,6 +36,7 @@ public class Vessel {
 	@NotNull
 	@Column(name = "nextPortOfCall")
 	private String nextPortOfCall;
+
 
 	public void changeCrew(Employee offSigner, Employee onSigner) {
 		if (!offSigner.getRank().equals(onSigner.getRank())) {
@@ -86,6 +88,7 @@ public class Vessel {
 		return false;
 	}
 
+
 	public Long getId() {
 		return id;
 	}
@@ -98,6 +101,7 @@ public class Vessel {
 		return name;
 	}
 
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -105,6 +109,7 @@ public class Vessel {
 	public VesselType getType() {
 		return type;
 	}
+
 
 	public void setType(VesselType type) {
 		this.type = type;
@@ -114,25 +119,31 @@ public class Vessel {
 		return flag;
 	}
 
+
 	public void setFlag(String flag) {
 		this.flag = flag;
 	}
+
 
 	public long getIMONumber() {
 		return IMONumber;
 	}
 
+
 	public void setIMONumber(long IMONumber) {
 		this.IMONumber = IMONumber;
 	}
+
 
 	public List<Employee> getCrewList() {
 		return crewList;
 	}
 
+
 	public void setCrewList(List<Employee> crewList) {
 		this.crewList = crewList;
 	}
+
 
 	public String getNextPortOfCall() {
 		return nextPortOfCall;

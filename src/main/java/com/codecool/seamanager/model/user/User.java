@@ -1,5 +1,6 @@
 package com.codecool.seamanager.model.user;
 
+
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,12 +28,14 @@ public class User {
 
 
 	public Long getId() {
+
 		return id;
 	}
 
 	public String getUsername() {
 		return username;
 	}
+
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -52,5 +55,6 @@ public class User {
 
 	public void setAccessLevel(Integer accessLevel) {
 		this.accessLevel = accessLevel;
+
 	}
 }
