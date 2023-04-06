@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table
@@ -163,6 +164,10 @@ public class Employee {
 		this.h_gender = gender;
 	}
 
+	public void setEmployeeId(Long employeeId) {
+		this.employeeId = employeeId;
+	}
+
 	public void setCertificates(List<Certificate> certificates) {
 		this.certificates = certificates;
 	}
@@ -170,6 +175,27 @@ public class Employee {
 	@JsonIgnore
 	public List<Certificate> getCertificates() {
 		return certificates;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Employee employee = (Employee) o;
+		return Objects.equals(employeeId, employee.employeeId) &&
+				Objects.equals(a_firstName, employee.a_firstName) &&
+				Objects.equals(b_lastName, employee.b_lastName) &&
+				Objects.equals(c_email, employee.c_email) &&
+				Objects.equals(d_birthDate, employee.d_birthDate) &&
+				Objects.equals(e_address, employee.e_address) &&
+				Objects.equals(f_contactNo, employee.f_contactNo) &&
+				g_rank == employee.g_rank &&
+				h_gender == employee.h_gender;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(employeeId, a_firstName, b_lastName, c_email, d_birthDate, e_address, f_contactNo, g_rank, h_gender);
 	}
 
 	@Override
