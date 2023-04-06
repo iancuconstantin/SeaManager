@@ -1,4 +1,4 @@
-package com.codecool.seamanager.model;
+package com.codecool.seamanager.model.employee;
 
 public enum Rank {
 	CAPTAIN,
@@ -13,6 +13,7 @@ public enum Rank {
 	JUNIOR_ENGINEER,
 	ETO,
 	PUMPMAN,
+	GAS_ENGINEER,
 	BOSUN,
 	ABLE_SEAMAN,
 	ORDINARY_SEAMAN,

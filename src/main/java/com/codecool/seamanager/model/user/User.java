@@ -1,4 +1,4 @@
-package com.codecool.seamanager.model;
+package com.codecool.seamanager.model.user;
 
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;

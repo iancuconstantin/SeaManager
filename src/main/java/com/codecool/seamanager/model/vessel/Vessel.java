@@ -1,4 +1,6 @@
-package com.codecool.seamanager.model;
+package com.codecool.seamanager.model.vessel;
+
+import com.codecool.seamanager.model.employee.Employee;
 
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
