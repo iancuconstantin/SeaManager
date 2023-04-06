@@ -3,7 +3,6 @@ package com.codecool.seamanager.model.vessel;
 import com.codecool.seamanager.model.employee.Employee;
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 
 @Entity
@@ -26,6 +25,7 @@ public class Vessel {
 	@Column(name = "imonumber")
 	private long IMONumber;
 	@NotNull
+	@Column(name = "crewList")
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "vessel_id")
 	private List<Employee> crewList;
@@ -33,6 +33,18 @@ public class Vessel {
 	@NotNull
 	@Column(name = "nextPortOfCall")
 	private String nextPortOfCall;
+
+	public Vessel() {}
+
+	public Vessel(@NotNull String name, @NotNull VesselType type, @NotNull String flag, @NotNull long IMONumber, @NotNull List<Employee> crewList, @NotNull String nextPortOfCall) {
+		this.name = name;
+		this.type = type;
+		this.flag = flag;
+		this.IMONumber = IMONumber;
+		this.crewList = crewList;
+		this.nextPortOfCall = nextPortOfCall;
+	}
+
 
 
 	public void changeCrew(Employee offSigner, Employee onSigner) {
