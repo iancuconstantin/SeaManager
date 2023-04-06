@@ -161,4 +161,27 @@ public class EmployeeTest {
 		);
 		assertNotEquals(employee, employee2);
 	}
+
+	@Test
+	public void testCertificatesAddedToEmployeeOnConstruction(){
+		Certificate certificate = new Certificate(
+				employee,
+				"Passport",
+				"571231212",
+				"12-12-2018",
+				"12-12-2023"
+		);
+
+		Certificate certificate2 = new Certificate(
+				employee,
+				"US VISA",
+				"12345",
+				"12-12-2022",
+				"12-12-2025"
+		);
+
+		assertEquals(2, employee.getCertificates().size());
+		assertEquals(certificate, employee.getCertificates().get(0));
+		assertEquals(certificate2, employee.getCertificates().get(1));
+	}
 }
