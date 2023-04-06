@@ -3,6 +3,7 @@ package com.codecool.seamanager.controller;
 import com.codecool.seamanager.model.certificate.Certificate;
 import com.codecool.seamanager.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class CertificateController {
 	}
 
 	@PutMapping(path = "/{certificateId}")
-	public void updateCertificate(@PathVariable Long certificateId, @RequestBody Certificate certificateDetails){
-		certificateService.updateCertificate(certificateId, certificateDetails);
+	public ResponseEntity<Certificate> updateCertificate(@PathVariable Long certificateId, @RequestBody Certificate certificateDetails){
+		return certificateService.updateCertificate(certificateId, certificateDetails);
 	}
 }
