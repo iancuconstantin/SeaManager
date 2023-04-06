@@ -129,7 +129,9 @@ public class EmployeeControllerTest {
 
 		when(employeeService.updateEmployee(eq(employeeId), any(Employee.class))).thenReturn(ResponseEntity.of(Optional.of(updatedEmployee)));
 
-		mockMvc.perform(put(END_POINT_PATH + "/" + employeeId).contentType(APPLICATION_JSON).content(employeeJson))
+		mockMvc.perform(put(END_POINT_PATH + "/" + employeeId)
+						.contentType(APPLICATION_JSON)
+						.content(employeeJson))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.firstName").value(updatedEmployee.getFirstName()))
 				.andExpect(jsonPath("$.lastName").value(updatedEmployee.getLastName()))
