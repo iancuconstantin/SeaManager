@@ -1,8 +1,11 @@
 package com.codecool.seamanager.model.vessel;
 
 import com.codecool.seamanager.model.employee.Employee;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,8 +29,12 @@ public class Vessel {
 	private long IMONumber;
 	@NotNull
 	@Column(name = "crewList")
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "vessel_id")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			orphanRemoval = true,
+			mappedBy = "i_vessel"
+	)
+//	@JoinColumn(name = "vessel_id")
 	private List<Employee> crewList;
 
 	@NotNull
@@ -36,14 +43,15 @@ public class Vessel {
 
 	public Vessel() {}
 
-	public Vessel(@NotNull String name, @NotNull VesselType type, @NotNull String flag, @NotNull long IMONumber, @NotNull List<Employee> crewList, @NotNull String nextPortOfCall) {
+	public Vessel(@NotNull String name, @NotNull VesselType type, @NotNull String flag, @NotNull long IMONumber, @NotNull String nextPortOfCall) {
 		this.name = name;
 		this.type = type;
 		this.flag = flag;
 		this.IMONumber = IMONumber;
-		this.crewList = crewList;
+		this.crewList = new ArrayList<>();
 		this.nextPortOfCall = nextPortOfCall;
 	}
+
 
 
 
@@ -72,6 +80,7 @@ public class Vessel {
 			);
 		}
 	}
+
 
 	public void addCrew(Employee employee) {
 		crewList.add(employee);

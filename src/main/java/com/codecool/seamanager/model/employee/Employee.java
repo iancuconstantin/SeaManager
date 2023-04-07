@@ -1,6 +1,7 @@
 package com.codecool.seamanager.model.employee;
 
 import com.codecool.seamanager.model.certificate.Certificate;
+import com.codecool.seamanager.model.vessel.Vessel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -12,9 +13,7 @@ import java.util.Objects;
 @Table
 public class Employee {
 	@Id
-	@GeneratedValue(
-			strategy = GenerationType.IDENTITY
-	)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(
 			name = "employee_id",
 			updatable = false
@@ -71,11 +70,21 @@ public class Employee {
 	)
 	@Enumerated(EnumType.STRING)
 	private Gender h_gender;
+
 	@OneToMany(
 			targetEntity = Certificate.class,
 			mappedBy = "a_owner"
 	)
 	private List<Certificate> certificates;
+
+
+	@ManyToOne
+	@JoinColumn(
+			name = "vessel_id",
+			referencedColumnName = "id",
+			columnDefinition = "BIGINT"
+	)
+	private Vessel i_vessel;
 
 	public Employee() {
 	}
@@ -90,6 +99,7 @@ public class Employee {
 		this.g_rank = rank;
 		this.h_gender = gender;
 		this.certificates = new ArrayList<>();
+		this.i_vessel = null;
 	}
 
 	public void addNewCertificate(Certificate certificate) {
@@ -175,6 +185,14 @@ public class Employee {
 	@JsonIgnore
 	public List<Certificate> getCertificates() {
 		return certificates;
+	}
+
+	public Vessel getI_vessel() {
+		return i_vessel;
+	}
+
+	public void setI_vessel(Vessel i_vessel) {
+		this.i_vessel = i_vessel;
 	}
 
 	@Override
