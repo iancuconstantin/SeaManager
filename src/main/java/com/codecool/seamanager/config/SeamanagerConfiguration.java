@@ -302,57 +302,58 @@ public class SeamanagerConfiguration {
 
 
 			//vessel 1
-			List<Employee> crewList1 = new ArrayList<>();
+//			List<Employee> crewList1 = new ArrayList<>();
+//			crewList1.addAll(List.of(johnDoe,janeDoe));
 
 			// Captain
-			Employee captain = new Employee("Maria", "Garcia", "1985-04-15", "1234567890", "10 Elm Street", "maria.garcia@email.com", CAPTAIN, FEMALE);
-			List<Certificate> certificates1 = new ArrayList<>();
-			certificates1.addAll(List.of(certificate1,certificate2));
-			captain.setCertificates(certificates1);
-			crewList1.add(captain);
+//			Employee captain = new Employee("Maria", "Garcia", "1985-04-15", "1234567890", "10 Elm Street", "maria.garcia@email.com", CAPTAIN, FEMALE);
+//			List<Certificate> certificates1 = new ArrayList<>();
+//			certificates1.addAll(List.of(certificate1,certificate2));
+//			captain.setCertificates(certificates1);
+//			crewList1.add(captain);
 
 			// Chief Officer
-			Employee chiefOfficer = new Employee("John", "Smith", "1988-09-20", "9876543210", "15 Oak Avenue", "john.smith@email.com", CHIEF_OFFICER, MALE);
-			List<Certificate> certificates2 = new ArrayList<>();
-			certificates2.addAll(List.of(certificate7,certificate12));
-			chiefOfficer.setCertificates(certificates2);
-			crewList1.add(chiefOfficer);
+//			Employee chiefOfficer = new Employee("John", "Smith", "1988-09-20", "9876543210", "15 Oak Avenue", "john.smith@email.com", CHIEF_OFFICER, MALE);
+//			List<Certificate> certificates2 = new ArrayList<>();
+//			certificates2.addAll(List.of(certificate7,certificate12));
+//			chiefOfficer.setCertificates(certificates2);
+//			crewList1.add(chiefOfficer);
 
 			// Second Engineer
-			Employee secondEngineer = new Employee("Sarah", "Johnson", "1992-11-10", "5678901234", "25 Maple Street", "sarah.johnson@email.com", SECOND_ENGINEER, FEMALE);
-			List<Certificate> certificates3 = new ArrayList<>();
-			certificates3.addAll(List.of(certificate3,certificate4));
-			secondEngineer.setCertificates(certificates3);
-			crewList1.add(secondEngineer);
+//			Employee secondEngineer = new Employee("Sarah", "Johnson", "1992-11-10", "5678901234", "25 Maple Street", "sarah.johnson@email.com", SECOND_ENGINEER, FEMALE);
+//			List<Certificate> certificates3 = new ArrayList<>();
+//			certificates3.addAll(List.of(certificate3,certificate4));
+//			secondEngineer.setCertificates(certificates3);
+//			crewList1.add(secondEngineer);
 
-			Vessel vessel1 = new Vessel("Ocean Queen", TANKER, "USA", 1234567890, crewList1, "Singapore");
+			Vessel vessel1 = new Vessel("Ocean Queen", TANKER, "USA", 1234567890, "Singapore");
 
 
 			//vessel 2
-			List<Employee> crewList2 = new ArrayList<>();
-
+//			List<Employee> crewList2 = new ArrayList<>();
+//			crewList2.addAll(List.of(marian,george));
 			// Third Officer
-			Employee thirdOfficer = new Employee("Michael", "Brown", "1991-06-05", "4567890123", "5 Pine Road", "michael.brown@email.com", THIRD_OFFICER, MALE);
-			List<Certificate> certificates4 = new ArrayList<>();
-			certificates4.addAll(List.of(certificate5,certificate1));
-			thirdOfficer.setCertificates(certificates4);
-			crewList2.add(thirdOfficer);
+//			Employee thirdOfficer = new Employee("Michael", "Brown", "1991-06-05", "4567890123", "5 Pine Road", "michael.brown@email.com", THIRD_OFFICER, MALE);
+//			List<Certificate> certificates4 = new ArrayList<>();
+//			certificates4.addAll(List.of(certificate5,certificate1));
+//			thirdOfficer.setCertificates(certificates4);
+//			crewList2.add(thirdOfficer);
 
 			// Junior Engineer
-			Employee juniorEngineer = new Employee("Emily", "Davis", "1994-08-18", "2345678901", "12 Birch Lane", "emily.davis@email.com", JUNIOR_ENGINEER, FEMALE);
-			List<Certificate> certificates5 = new ArrayList<>();
-			certificates5.addAll(List.of(certificate2,certificate22));
-			juniorEngineer.setCertificates(certificates5);
-			crewList2.add(juniorEngineer);
+//			Employee juniorEngineer = new Employee("Emily", "Davis", "1994-08-18", "2345678901", "12 Birch Lane", "emily.davis@email.com", JUNIOR_ENGINEER, FEMALE);
+//			List<Certificate> certificates5 = new ArrayList<>();
+//			certificates5.addAll(List.of(certificate2,certificate22));
+//			juniorEngineer.setCertificates(certificates5);
+//			crewList2.add(juniorEngineer);
 
 			// Bosun
-			Employee bosun = new Employee("Robert", "Wilson", "1987-03-25", "1234567890", "8 Cedar Avenue", "robert.wilson@email.com", BOSUN, MALE);
-			List<Certificate> certificates6 = new ArrayList<>();
-			certificates6.addAll(List.of(certificate4,certificate1));
-			bosun.setCertificates(certificates6);
-			crewList2.add(bosun);
+//			Employee bosun = new Employee("Robert", "Wilson", "1987-03-25", "1234567890", "8 Cedar Avenue", "robert.wilson@email.com", BOSUN, MALE);
+//			List<Certificate> certificates6 = new ArrayList<>();
+//			certificates6.addAll(List.of(certificate4,certificate1));
+//			bosun.setCertificates(certificates6);
+//			crewList2.add(bosun);
 
-			Vessel vessel2 = new Vessel("SS Pacific Voyager", TANKER, "Canada", 98765210, crewList2, "Port of Vancouver");
+			Vessel vessel2 = new Vessel("SS Pacific Voyager", TANKER, "Canada", 98765210, "Port of Vancouver");
 
 
 			employeeRepository.saveAll(

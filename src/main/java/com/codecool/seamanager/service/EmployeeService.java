@@ -5,6 +5,7 @@ import com.codecool.seamanager.exceptions.email.EmployeeNotFoundException;
 import com.codecool.seamanager.model.employee.Employee;
 import com.codecool.seamanager.model.employee.Gender;
 import com.codecool.seamanager.model.employee.Rank;
+import com.codecool.seamanager.model.vessel.Vessel;
 import com.codecool.seamanager.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Vector;
 
 @Service
 public class EmployeeService {
@@ -47,7 +49,10 @@ public class EmployeeService {
 
 	public void deleteEmployee(Long employeeId) {
 		boolean exists = employeeRepository.existsById(employeeId);
-		if (!exists) {
+
+		Vessel isOnJob = employeeRepository.getById(employeeId).getI_vessel();
+
+		if (!exists && isOnJob != null) {
 			throw new EmployeeNotFoundException(
 					"Employee with id " + employeeId + " does not exist."
 			);
