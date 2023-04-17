@@ -13,6 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,6 +80,7 @@ public class Sailor {
 //	@JsonDeserialize(using = LocalDateDeserializer.class)
 //	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate birthDate;
+	private int age;
 	@NotBlank
 	@Size(
 			min = 5,
@@ -142,6 +144,15 @@ public class Sailor {
 		this.gender = gender;
 		this.certificates = new HashSet<>();
 		this.vessel = null;
+	}
+
+	@PrePersist
+	public void prePersist(){
+		calculateAge();
+	}
+
+	private void calculateAge() {
+		this.age = Period.between(birthDate, LocalDate.now()).getYears();
 	}
 
 	public void addNewCertificate(Certificate certificate) {
