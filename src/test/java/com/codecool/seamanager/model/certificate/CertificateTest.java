@@ -1,24 +1,27 @@
 package com.codecool.seamanager.model.certificate;
 
-import com.codecool.seamanager.model.employee.Employee;
+import com.codecool.seamanager.model.employee.Sailor;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
+
+import static com.codecool.seamanager.model.certificate.CertificateType.*;
 import static com.codecool.seamanager.model.employee.Gender.FEMALE;
 import static com.codecool.seamanager.model.employee.Gender.MALE;
 import static com.codecool.seamanager.model.employee.Rank.THIRD_ENGINEER;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CertificateTest {
-	private Employee employee;
+	private Sailor sailor;
 	private Certificate certificate;
 
 	@Before
-	public void setUp(){
-		employee = new Employee(
+	public void setUp() {
+		sailor = new Sailor(
 				"John",
 				"Doe",
-				"01-01-1990",
+				LocalDate.of(1990, 1, 1),
 				"+123456789",
 				"123 Main St",
 				"johndoe@gmail.com",
@@ -26,86 +29,89 @@ public class CertificateTest {
 				MALE
 		);
 		certificate = new Certificate(
-				employee,
-				"Seaman's Book",
+				sailor,
+				SEAMANS_BOOK,
 				"12345",
-				"01-01-2022",
-				"01-01-2025"
-				);
+				LocalDate.of(2021, 1, 1),
+				LocalDate.of(2023, 1, 1)
+		);
 	}
 
 	@Test
-	public void testGetDescription(){
-		assertEquals("Seaman's Book", certificate.getDescription());
+	public void testGetDescription() {
+		assertEquals(SEAMANS_BOOK, certificate.getType());
 	}
 
 	@Test
-	public void testGetSerialNumber(){
+	public void testGetSerialNumber() {
 		assertEquals("12345", certificate.getSerialNumber());
 	}
 
 	@Test
-	public void testGetIssueDate(){
-		assertEquals("01-01-2022", certificate.getIssueDate());
+	public void testGetIssueDate() {
+		assertEquals((LocalDate.of(2021, 1, 1)), certificate.getIssueDate());
 	}
 
 	@Test
-	public void testGetExpiryDate(){
-		assertEquals("01-01-2025", certificate.getExpiryDate());
+	public void testGetExpiryDate() {
+		assertEquals((LocalDate.of(2023, 1, 1)), certificate.getExpiryDate());
 	}
 
 	@Test
-	public void testSetOwner(){
-		Employee employee2 = new Employee(
+	public void testSetOwner() {
+		Sailor sailor2 = new Sailor(
 				"Jane",
 				"Doe",
-				"01-01-1990",
+				LocalDate.of(1990, 1, 1),
 				"+123456789",
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
 				FEMALE
 		);
-		certificate.setA_owner(employee2);
-		assertEquals(employee2, certificate.getOwner());
+		certificate.setOwner(sailor2);
+		assertEquals(sailor2, certificate.getOwner());
 	}
+
 	@Test
-	public void testSetDescription(){
-		certificate.setB_description("Passport");
-		assertEquals("Passport", certificate.getDescription());
+	public void testSetDescription() {
+		certificate.setType(FLAG_SEAMANS_BOOK);
+		assertEquals(FLAG_SEAMANS_BOOK, certificate.getType());
 	}
+
 	@Test
-	public void testSetSerialNumber(){
-		certificate.setC_serialNumber("45678T");
+	public void testSetSerialNumber() {
+		certificate.setSerialNumber("45678T");
 		assertEquals("45678T", certificate.getSerialNumber());
 	}
 
 	@Test
-	public void testSetIssueDate(){
-		certificate.setD_issueDate("02-03-2023");
-		assertEquals("02-03-2023", certificate.getIssueDate());
+	public void testSetIssueDate() {
+		certificate.setIssueDate(LocalDate.of(2021, 1, 1));
+		assertEquals(LocalDate.of(2021, 1, 1), certificate.getIssueDate());
 	}
 
 	@Test
-	public void testSetNullExpiryDate(){
-		certificate.setE_expiryDate(null);
+	public void testSetNullExpiryDate() {
+		certificate.setExpiryDate(null);
 		assertNull(certificate.getExpiryDate());
 	}
 
 	@Test
-	public void testSetNotNullExpiryDate(){
-		certificate.setE_expiryDate("04-12-2028");
-		assertEquals("04-12-2028", certificate.getExpiryDate());
+	public void testSetNotNullExpiryDate() {
+		LocalDate date = LocalDate.of(2025, 2, 1);
+		certificate.setExpiryDate(date);
+		assertEquals(date, certificate.getExpiryDate());
 	}
 
 	@Test
-	public void testNotEquals(){
+	public void testNotEquals() {
 		Certificate certificate2 = new Certificate(
-				employee,
-				"Passport",
+				sailor,
+				FLAG_ENDORSEMENT,
 				"123456",
-				"01-01-2022",
-				"01-01-2025"
+				LocalDate.of(2021, 1, 1),
+				LocalDate.of(2023, 1, 1)
 		);
 		assertNotEquals(certificate, certificate2);
 	}
