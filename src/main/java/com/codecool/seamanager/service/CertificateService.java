@@ -2,28 +2,29 @@ package com.codecool.seamanager.service;
 
 import com.codecool.seamanager.exceptions.certificate.CertificateNotFoundException;
 import com.codecool.seamanager.exceptions.certificate.CertificateSerialNumberDuplicationException;
-import com.codecool.seamanager.exceptions.email.EmployeeNotFoundException;
+import com.codecool.seamanager.exceptions.email.SailorNotFoundException;
 import com.codecool.seamanager.model.certificate.Certificate;
-import com.codecool.seamanager.model.employee.Employee;
+import com.codecool.seamanager.model.certificate.CertificateType;
+import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.repository.CertificateRepository;
-import com.codecool.seamanager.repository.EmployeeRepository;
-import jakarta.transaction.Transactional;
+import com.codecool.seamanager.repository.SailorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CertificateService {
 	private final CertificateRepository certificateRepository;
-	private final EmployeeRepository employeeRepository;
+	private final SailorRepository sailorRepository;
 
 	@Autowired
-	public CertificateService(CertificateRepository certificateRepository, EmployeeRepository employeeRepository) {
+	public CertificateService(CertificateRepository certificateRepository, SailorRepository sailorRepository) {
 		this.certificateRepository = certificateRepository;
-		this.employeeRepository = employeeRepository;
+		this.sailorRepository = sailorRepository;
 	}
 
 	public List<Certificate> getCertificates() {
@@ -60,51 +61,45 @@ public class CertificateService {
 		certificateRepository.deleteById(certificateId);
 	}
 
-	@Transactional
 	public ResponseEntity<Certificate> updateCertificate(Long certificateId, Certificate certificateDetails) {
 		Certificate certificateToUpdate = certificateRepository.findById(certificateId)
 				.orElseThrow(() -> new CertificateNotFoundException(
 						"Certificate with id " + certificateId + " does not exist."
 				));
 
-		Employee updatedOwner = certificateDetails.getOwner();
+		Sailor updatedOwner = certificateDetails.getOwner();
 		if (updatedOwner != null &&
 				!certificateToUpdate.getOwner().getEmployeeId()
 						.equals(certificateDetails.getOwner().getEmployeeId())
 		) {
-			boolean ownerExists = employeeRepository.existsById(certificateDetails.getOwner().getEmployeeId());
+			boolean ownerExists = sailorRepository.existsById(certificateDetails.getOwner().getEmployeeId());
 			if (!ownerExists) {
-				throw new EmployeeNotFoundException(
+				throw new SailorNotFoundException(
 						"Owner of this certificate with id " + certificateDetails.getOwner().getEmployeeId() + " does not exist."
 				);
 			}
-			certificateToUpdate.setA_owner(updatedOwner);
+			certificateToUpdate.setOwner(updatedOwner);
 		}
 
-		String updatedDescription = certificateDetails.getDescription();
+		CertificateType updatedDescription = certificateDetails.getType();
 		if (updatedDescription != null &&
-				updatedDescription.length() > 0 &&
-				!updatedDescription.equals(certificateToUpdate.getDescription())
+				!updatedDescription.equals(certificateToUpdate.getType())
 		) {
-			certificateToUpdate.setB_description(updatedDescription);
+			certificateToUpdate.setType(updatedDescription);
 		}
 
-		String updatedIssueDate = certificateDetails.getIssueDate();
+		LocalDate updatedIssueDate = certificateDetails.getIssueDate();
 		if (updatedIssueDate != null &&
-				updatedIssueDate.length() > 0 &&
 				!updatedIssueDate.equals(certificateToUpdate.getIssueDate())
 		) {
-			System.out.println("IN ISSUE UPDATE");
-			certificateToUpdate.setD_issueDate(updatedIssueDate);
+			certificateToUpdate.setIssueDate(updatedIssueDate);
 		}
 
-		String updatedExpiryDate = certificateDetails.getExpiryDate();
+		LocalDate updatedExpiryDate = certificateDetails.getExpiryDate();
 		if (updatedExpiryDate != null &&
-				updatedExpiryDate.length() > 0 &&
 				!updatedExpiryDate.equals(certificateToUpdate.getExpiryDate())
 		) {
-			System.out.println("IN EXP UPDATE");
-			certificateToUpdate.setE_expiryDate(updatedExpiryDate);
+			certificateToUpdate.setExpiryDate(updatedExpiryDate);
 		}
 
 		String updatedSerialNo = certificateDetails.getSerialNumber();
@@ -119,10 +114,9 @@ public class CertificateService {
 				updatedSerialNo.length() > 0 &&
 				!updatedSerialNo.equals(certificateToUpdate.getSerialNumber())
 		) {
-			System.out.println("IN SERIALNO UPDATE");
-			certificateToUpdate.setC_serialNumber(updatedSerialNo);
+			certificateToUpdate.setSerialNumber(updatedSerialNo);
 		}
-
-		return ResponseEntity.ok(certificateToUpdate);
+		Certificate updatedCertificate = certificateRepository.saveAndFlush(certificateToUpdate);
+		return ResponseEntity.ok(updatedCertificate);
 	}
 }
