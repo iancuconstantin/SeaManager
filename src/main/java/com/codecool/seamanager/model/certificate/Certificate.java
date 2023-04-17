@@ -1,12 +1,31 @@
 package com.codecool.seamanager.model.certificate;
 
-import com.codecool.seamanager.model.employee.Employee;
+import com.codecool.seamanager.model.employee.Sailor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 @Entity
-@Table
+@Table(
+		uniqueConstraints = {
+				@UniqueConstraint(name = "serialNumber_uk", columnNames = {"serial_number"})
+		}
+)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Certificate {
 	@Id
 	@GeneratedValue(
@@ -17,104 +36,73 @@ public class Certificate {
 			updatable = false
 	)
 	private Long certificateId;
+	@NotNull(
+			message = "Certificate should have an owner."
+	)
 	@ManyToOne
 	@JoinColumn(
 			name = "employee_id",
 			referencedColumnName = "employee_id",
-			nullable = false,
-			columnDefinition = "BIGINT"
+			columnDefinition = "BIGINT",
+			foreignKey = @ForeignKey(name = "owner_id_foreign")
 	)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Employee a_owner;
+	private Sailor owner;
+	@NotNull(
+			message = "Certificate type cannot be empty."
+	)
 	@Column(
 			name = "description",
-			nullable = false,
 			columnDefinition = "TEXT"
 	)
-	private String b_description;
+	@Enumerated(EnumType.STRING)
+	private CertificateType type;
+	@NotBlank(message = "Serial number cannot be empty.")
 	@Column(
 			name = "serial_number",
-			nullable = false,
 			columnDefinition = "TEXT"
 	)
-	private String c_serialNumber;
+	private String serialNumber;
+	@NotNull(message = "Issue date cannot be empty")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@PastOrPresent(message = "Issue date cannot be in the future.")
 	@Column(
 			name = "issue_date",
-			nullable = false,
-			columnDefinition = "TEXT"
+			columnDefinition = "DATE"
 	)
-	private String d_issueDate;
+	@JsonFormat(
+			shape = STRING,
+			pattern = "yyyy-MM-dd"
+	)
+	private LocalDate issueDate;
 	@Column(
 			name = "expiry_date",
-			columnDefinition = "TEXT"
+			columnDefinition = "DATE"
 	)
-	private String e_expiryDate;
+	@JsonFormat(
+			shape = STRING,
+			pattern = "yyyy-MM-dd"
+	)
+	private LocalDate expiryDate;
 
-	public Certificate() {
-	}
-
-	public Certificate(Employee owner, String description, String serialNumber, String issueDate, String expiryDate) {
-		this.a_owner = owner;
-		this.b_description = description;
-		this.c_serialNumber = serialNumber;
-		this.d_issueDate = issueDate;
-		this.e_expiryDate = expiryDate;
+	public Certificate(Sailor owner, CertificateType description, String serialNumber, LocalDate issueDate, LocalDate expiryDate) {
+		this.owner = owner;
+		this.type = description;
+		this.serialNumber = serialNumber;
+		this.issueDate = issueDate;
+		this.expiryDate = expiryDate;
 		owner.addNewCertificate(this);
-	}
-
-	public Long getCertificateId() {
-		return certificateId;
-	}
-
-	public Employee getOwner() {
-		return a_owner;
-	}
-
-	public String getDescription() {
-		return b_description;
-	}
-
-	public String getIssueDate() {
-		return d_issueDate;
-	}
-
-	public void setD_issueDate(String issueDate) {
-		this.d_issueDate = issueDate;
-	}
-
-	public String getExpiryDate() {
-		return e_expiryDate;
-	}
-
-	public void setE_expiryDate(String expiryDate) {
-		this.e_expiryDate = expiryDate;
-	}
-
-	public String getSerialNumber() {
-		return c_serialNumber;
-	}
-
-	public void setA_owner(Employee owner) {
-		this.a_owner = owner;
-	}
-
-	public void setB_description(String description) {
-		this.b_description = description;
-	}
-
-	public void setC_serialNumber(String serialNumber) {
-		this.c_serialNumber = serialNumber;
 	}
 
 	@Override
 	public String toString() {
 		return "Certificate{" +
 				"id=" + certificateId +
-				", ownerId=" + a_owner +
-				", description='" + b_description + '\'' +
-				", serialNumber='" + c_serialNumber + '\'' +
-				", issueDate='" + d_issueDate + '\'' +
-				", expiryDate='" + e_expiryDate + '\'' +
+				", ownerId=" + owner +
+				", description='" + type + '\'' +
+				", serialNumber='" + serialNumber + '\'' +
+				", issueDate='" + issueDate + '\'' +
+				", expiryDate='" + expiryDate + '\'' +
 				'}';
 	}
 }

@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface CertificateRepository extends JpaRepository<Certificate, Long> {
 
-	@Query("SELECT c FROM Certificate c WHERE c.c_serialNumber = ?1")
+	@Query("SELECT c FROM Certificate c WHERE c.serialNumber = ?1")
 	Optional<Certificate> findCertificateBySerialNumber(String serialNumber);
 }

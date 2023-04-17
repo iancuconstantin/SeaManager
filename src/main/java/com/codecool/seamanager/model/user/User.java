@@ -2,11 +2,9 @@ package com.codecool.seamanager.model.user;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Range;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "users")

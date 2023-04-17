@@ -1,7 +1,7 @@
 package com.codecool.seamanager.controller;
 
 import com.codecool.seamanager.model.certificate.Certificate;
-import com.codecool.seamanager.model.employee.Employee;
+import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.service.CertificateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -14,10 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codecool.seamanager.model.certificate.CertificateType.COC;
+import static com.codecool.seamanager.model.certificate.CertificateType.SEAMANS_BOOK;
 import static com.codecool.seamanager.model.employee.Gender.MALE;
 import static com.codecool.seamanager.model.employee.Rank.THIRD_ENGINEER;
 import static org.hamcrest.Matchers.hasSize;
@@ -32,7 +35,7 @@ public class CertificateControllerTest {
 
 	private static final String END_POINT_PATH = "/api/certificate";
 	private Certificate certificate;
-	private Employee employee;
+	private Sailor sailor;
 	private MockMvc mockMvc;
 	@Mock
 	private CertificateService certificateService;
@@ -40,25 +43,25 @@ public class CertificateControllerTest {
 	private CertificateController certificateController;
 
 	@Before
-	public void setUp(){
-		employee = new Employee(
+	public void setUp() {
+		sailor = new Sailor(
 				"John",
 				"Doe",
-				"01-01-1990",
+				LocalDate.of(1990, 11, 1),
 				"+123456789",
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
 				MALE
 		);
-		employee.setEmployeeId(1L);
+		sailor.setEmployeeId(1L);
 
 		certificate = new Certificate(
-				employee,
-				"Seaman's Book",
+				sailor,
+				SEAMANS_BOOK,
 				"49681DD",
-				"11-01-2023",
-				"11-01-2029"
+				LocalDate.of(2023, 1, 11),
+				LocalDate.of(2029, 1, 11)
 		);
 
 		mockMvc = MockMvcBuilders.standaloneSetup(certificateController).build();
@@ -66,39 +69,38 @@ public class CertificateControllerTest {
 
 	@Test
 	public void shouldReturnListOfCertificates() throws Exception {
-		List<Certificate> certificates = Arrays.asList(certificate);
+		List<Certificate> certificates = List.of(certificate);
 		when(certificateService.getCertificates()).thenReturn(certificates);
 
 		mockMvc.perform(get(END_POINT_PATH))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_VALUE))
 				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$[0].owner.employeeId").value(employee.getEmployeeId()))
-				.andExpect(jsonPath("$[0].description").value(certificate.getDescription()))
+				.andExpect(jsonPath("$[0].owner.employeeId").value(sailor.getEmployeeId()))
+				.andExpect(jsonPath("$[0].type").value(certificate.getType().toString()))
 				.andExpect(jsonPath("$[0].serialNumber").value(certificate.getSerialNumber()))
-				.andExpect(jsonPath("$[0].issueDate").value(certificate.getIssueDate()))
-				.andExpect(jsonPath("$[0].expiryDate").value(certificate.getExpiryDate()));
+				.andExpect(jsonPath("$[0].issueDate").value(certificate.getIssueDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
+				.andExpect(jsonPath("$[0].expiryDate").value(certificate.getExpiryDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
 	}
 
 	@Test
-	public void shouldReturnCertificateById() throws Exception{
+	public void shouldReturnCertificateById() throws Exception {
 		Long certificateId = 1L;
 		when(certificateService.getCertificateById(certificateId)).thenReturn(certificate);
 
-		//TODO - handle checking id without id setter, if possible
 		mockMvc.perform(get(END_POINT_PATH + "/" + certificateId))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$.owner.employeeId").value(employee.getEmployeeId()))
-				.andExpect(jsonPath("$.description").value(certificate.getDescription()))
+				.andExpect(jsonPath("$.owner.employeeId").value(sailor.getEmployeeId()))
+				.andExpect(jsonPath("$.type").value(certificate.getType().toString()))
 				.andExpect(jsonPath("$.serialNumber").value(certificate.getSerialNumber()))
-				.andExpect(jsonPath("$.issueDate").value(certificate.getIssueDate()))
-				.andExpect(jsonPath("$.expiryDate").value(certificate.getExpiryDate()));
+				.andExpect(jsonPath("$.issueDate").value(certificate.getIssueDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
+				.andExpect(jsonPath("$.expiryDate").value(certificate.getExpiryDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
 	}
 
 	@Test
 	public void shouldAddNewEmployee() throws Exception {
-		String certificateJson = new ObjectMapper().writeValueAsString(certificate);
+		String certificateJson = new ObjectMapper().findAndRegisterModules().writeValueAsString(certificate);
 
 		mockMvc.perform(post(END_POINT_PATH).contentType(APPLICATION_JSON).content(certificateJson))
 				.andExpect(status().isOk());
@@ -121,19 +123,24 @@ public class CertificateControllerTest {
 		// Prepare test data
 		Long certificateId = 1L;
 		Certificate updatedCertificate = new Certificate(
-				employee,
-				"Updated Certificate",
+				sailor,
+				COC,
 				"12345",
-				"01-01-2023",
-				"01-01-2029"
+				LocalDate.of(2023, 1, 1),
+				LocalDate.of(2029, 1, 1)
 		);
 
 		when(certificateService.updateCertificate(eq(certificateId), any(Certificate.class))).thenReturn(ResponseEntity.of(Optional.of(updatedCertificate)));
 
-		String updatedCertificateJson = new ObjectMapper().writeValueAsString(updatedCertificate);
+		String updatedCertificateJson = new ObjectMapper().findAndRegisterModules().writeValueAsString(updatedCertificate);
 		mockMvc.perform(put(END_POINT_PATH + "/" + certificateId).contentType(APPLICATION_JSON).content(updatedCertificateJson))
-				.andExpect(status().isOk());
-				//TODO - add andExpects (breaks at "$.owner.employeeId")
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_VALUE))
+				.andExpect(jsonPath("$.owner.employeeId").value(sailor.getEmployeeId()))
+				.andExpect(jsonPath("$.type").value(updatedCertificate.getType().toString()))
+				.andExpect(jsonPath("$.serialNumber").value(updatedCertificate.getSerialNumber()))
+				.andExpect(jsonPath("$.issueDate").value(updatedCertificate.getIssueDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
+				.andExpect(jsonPath("$.expiryDate").value(updatedCertificate.getExpiryDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
 		verify(certificateService, times(1)).updateCertificate(eq(certificateId), any(Certificate.class));
 	}
 }

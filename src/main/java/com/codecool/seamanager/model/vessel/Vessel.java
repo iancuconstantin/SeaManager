@@ -1,7 +1,6 @@
 package com.codecool.seamanager.model.vessel;
 
-import com.codecool.seamanager.model.employee.Employee;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.codecool.seamanager.model.employee.Sailor;
 import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,10 +31,10 @@ public class Vessel {
 	@OneToMany(
 			cascade = CascadeType.ALL,
 			orphanRemoval = true,
-			mappedBy = "i_vessel"
+			mappedBy = "vessel"
 	)
 //	@JoinColumn(name = "vessel_id")
-	private List<Employee> crewList;
+	private List<Sailor> crewList;
 
 	@NotNull
 	@Column(name = "nextPortOfCall")
@@ -55,7 +54,7 @@ public class Vessel {
 
 
 
-	public void changeCrew(Employee offSigner, Employee onSigner) {
+	public void changeCrew(Sailor offSigner, Sailor onSigner) {
 		if (!offSigner.getRank().equals(onSigner.getRank())) {
 			throw new IllegalArgumentException(
 					"Off-signer: " + offSigner.getLastName() + ", rank: " + offSigner.getRank()
@@ -71,25 +70,25 @@ public class Vessel {
 		removeCrew(offSigner);
 	}
 
-	public void removeCrew(Employee employee) {
-		if (isPartOfCrewList(employee)) {
-			crewList.remove(employee);
+	public void removeCrew(Sailor sailor) {
+		if (isPartOfCrewList(sailor)) {
+			crewList.remove(sailor);
 		} else {
 			throw new IllegalArgumentException(
-					"Employee " + employee.getLastName() + " is not part of of vessel's " + name + " crew list."
+					"Employee " + sailor.getLastName() + " is not part of of vessel's " + name + " crew list."
 			);
 		}
 	}
 
 
-	public void addCrew(Employee employee) {
-		crewList.add(employee);
+	public void addCrew(Sailor sailor) {
+		crewList.add(sailor);
 	}
 
-	public Employee getCrewMemberById(String employeeID){
-		for (Employee employee : crewList){
-			if(employee.getEmployeeId().equals(employeeID)){
-				return employee;
+	public Sailor getCrewMemberById(String employeeID){
+		for (Sailor sailor : crewList){
+			if(sailor.getEmployeeId().equals(employeeID)){
+				return sailor;
 			}
 		}
 		throw new IllegalArgumentException(
@@ -97,9 +96,9 @@ public class Vessel {
 		);
 	}
 
-	private boolean isPartOfCrewList(Employee employee) {
-		for (Employee e : crewList) {
-			if (e.getEmployeeId().equals(employee.getEmployeeId())) {
+	private boolean isPartOfCrewList(Sailor sailor) {
+		for (Sailor e : crewList) {
+			if (e.getEmployeeId().equals(sailor.getEmployeeId())) {
 				return true;
 			}
 		}
@@ -153,12 +152,12 @@ public class Vessel {
 	}
 
 
-	public List<Employee> getCrewList() {
+	public List<Sailor> getCrewList() {
 		return crewList;
 	}
 
 
-	public void setCrewList(List<Employee> crewList) {
+	public void setCrewList(List<Sailor> crewList) {
 		this.crewList = crewList;
 	}
 

@@ -1,6 +1,5 @@
 package com.codecool.seamanager.controller;
 
-import com.codecool.seamanager.model.employee.Employee;
 import com.codecool.seamanager.model.vessel.Vessel;
 import com.codecool.seamanager.service.VesselService;
 import org.springframework.beans.factory.annotation.Autowired;

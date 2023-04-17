@@ -4,7 +4,7 @@ package com.codecool.seamanager.service;
 import com.codecool.seamanager.exceptions.certificate.CertificateNotFoundException;
 import com.codecool.seamanager.exceptions.certificate.CertificateSerialNumberDuplicationException;
 import com.codecool.seamanager.model.certificate.Certificate;
-import com.codecool.seamanager.model.employee.Employee;
+import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.repository.CertificateRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,10 +15,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codecool.seamanager.model.certificate.CertificateType.ECDIS;
+import static com.codecool.seamanager.model.certificate.CertificateType.SEAMANS_BOOK;
 import static com.codecool.seamanager.model.employee.Gender.MALE;
 import static com.codecool.seamanager.model.employee.Rank.THIRD_ENGINEER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,28 +36,28 @@ public class CertificateServiceTest {
 	@InjectMocks
 	private CertificateService certificateService;
 	private Certificate certificate;
-	private Employee employee;
+	private Sailor sailor;
 
 	@Before
 	public void setUp() {
-		employee = new Employee(
+		sailor = new Sailor(
 				"John",
 				"Doe",
-				"01-01-1990",
+				LocalDate.of(1990, 1, 1),
 				"+123456789",
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
 				MALE
 		);
-		employee.setEmployeeId(1L);
+		sailor.setEmployeeId(1L);
 
 		certificate = new Certificate(
-				employee,
-				"Seaman's Book",
+				sailor,
+				SEAMANS_BOOK,
 				"49681DD",
-				"11-01-2023",
-				"11-01-2029"
+				LocalDate.of(2023,1,11),
+				LocalDate.of(2029,1,11)
 		);
 	}
 
@@ -109,10 +112,10 @@ public class CertificateServiceTest {
 	public void testUpdateCertificate() {
 		when(certificateRepository.findById(1L)).thenReturn(Optional.of(certificate));
 		Certificate updatedCertificateDetails = new Certificate();
-		updatedCertificateDetails.setB_description("New Description");
+		updatedCertificateDetails.setType(ECDIS);
 		ResponseEntity<Certificate> responseEntity = certificateService.updateCertificate(1L, updatedCertificateDetails);
 		certificateService.updateCertificate(1L, updatedCertificateDetails);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals("New Description", responseEntity.getBody().getDescription());
+		assertEquals(ECDIS, responseEntity.getBody().getType());
 	}
 }
