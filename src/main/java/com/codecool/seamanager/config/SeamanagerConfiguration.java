@@ -1,39 +1,40 @@
 package com.codecool.seamanager.config;
 
 import com.codecool.seamanager.model.certificate.Certificate;
-import com.codecool.seamanager.model.employee.Employee;
+import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.model.user.User;
 import com.codecool.seamanager.model.vessel.Vessel;
 import com.codecool.seamanager.repository.CertificateRepository;
-import com.codecool.seamanager.repository.EmployeeRepository;
+import com.codecool.seamanager.repository.SailorRepository;
 import com.codecool.seamanager.repository.UserRepository;
 import com.codecool.seamanager.repository.VesselRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
+import static com.codecool.seamanager.model.certificate.CertificateType.*;
 import static com.codecool.seamanager.model.employee.Gender.FEMALE;
 import static com.codecool.seamanager.model.employee.Gender.MALE;
-import static com.codecool.seamanager.model.vessel.VesselType.*;
 import static com.codecool.seamanager.model.employee.Rank.*;
+import static com.codecool.seamanager.model.vessel.VesselType.TANKER;
 
 @Configuration
 public class SeamanagerConfiguration {
 
 	@Bean
 	CommandLineRunner commandLineRunner(
-			EmployeeRepository employeeRepository, CertificateRepository certificateRepository,
+			SailorRepository sailorRepository, CertificateRepository certificateRepository,
 			VesselRepository vesselRepository, UserRepository userRepository
 	) {
 		return args -> {
-			Employee johnDoe = new Employee(
+			Sailor johnDoe = new Sailor(
 					"John",
 					"Doe",
-					"01-01-1990",
-					"+123456789",
+					LocalDate.of(1990, 11, 1),
+					"1234567890",
 					"123 Main St",
 					"johndoe@gmail.com",
 					THIRD_ENGINEER,
@@ -42,50 +43,50 @@ public class SeamanagerConfiguration {
 
 			Certificate certificate1 = new Certificate(
 					johnDoe,
-					"Seaman's Book",
+					SEAMANS_BOOK,
 					"123TT45",
-					"01-01-2022",
-					"01-01-2025"
+					LocalDate.of(2022, 1, 1),
+					LocalDate.of(2025, 1, 1)
 			);
 
 
 			Certificate certificate2 = new Certificate(
 					johnDoe,
-					"Passport",
-					"5555666890",
-					"01-01-2020",
-					"01-01-2030"
+					PASSPORT,
+					"1234567890",
+					LocalDate.of(2020, 1, 1),
+					LocalDate.of(2030, 1, 1)
 			);
 
 			Certificate certificate3 = new Certificate(
 					johnDoe,
-					"US Visa",
+					US_VISA,
 					"001122334455",
-					"05-05-2021",
-					"05-05-2026"
+					LocalDate.of(2021, 5, 5),
+					LocalDate.of(2026, 5, 5)
 			);
 
 			Certificate certificate4 = new Certificate(
 					johnDoe,
-					"IMO Basic Course",
+					BT,
 					"004412312",
-					"10-02-2019",
-					"01-01-2023"
+					LocalDate.of(2019, 2, 10),
+					LocalDate.of(2023, 1, 1)
 			);
 
 			Certificate certificate5 = new Certificate(
 					johnDoe,
-					"CoC",
+					COC,
 					"12345",
-					"01-01-2022",
-					"01-01-2025"
+					LocalDate.of(2022, 1, 1),
+					LocalDate.of(2025, 1, 1)
 			);
 
-			Employee janeDoe = new Employee(
+			Sailor janeDoe = new Sailor(
 					"Jane",
 					"Doe",
-					"01-01-1990",
-					"+1223556789",
+					LocalDate.of(1990, 11, 1),
+					"1223556789",
 					"123 Main St",
 					"janedoe@yahoo.com",
 					DECK_CADET,
@@ -94,50 +95,50 @@ public class SeamanagerConfiguration {
 
 			Certificate certificate6 = new Certificate(
 					janeDoe,
-					"Seaman's Book",
+					SEAMANS_BOOK,
 					"312XT25",
-					"01-01-2022",
-					"01-01-2025"
+					LocalDate.of(2022, 1, 1),
+					LocalDate.of(2025, 1, 1)
 			);
 
 
 			Certificate certificate7 = new Certificate(
 					janeDoe,
-					"Passport",
+					PASSPORT,
 					"444666890",
-					"01-02-2020",
-					"01-02-2030"
+					LocalDate.of(2020, 1, 1),
+					LocalDate.of(2030, 1, 1)
 			);
 
 			Certificate certificate8 = new Certificate(
 					janeDoe,
-					"US Visa",
-					"001155398456",
-					"04-05-2022",
-					"04-05-2028"
+					US_VISA,
+					"0101155398456",
+					LocalDate.of(2022, 4, 5),
+					LocalDate.of(2028, 4, 5)
 			);
 
 			Certificate certificate9 = new Certificate(
 					janeDoe,
-					"IMO Basic Course",
-					"014412999",
-					"10-02-2018",
-					"01-01-2028"
+					BT,
+					"0124412999",
+					LocalDate.of(2018, 2, 10),
+					LocalDate.of(2028, 1, 1)
 			);
 
 			Certificate certificate10 = new Certificate(
 					janeDoe,
-					"CoC",
-					"3216658",
-					"19-09-2023",
-					"19-09-2028"
+					COC,
+					"33216658",
+					LocalDate.of(2022, 9, 19),
+					LocalDate.of(2028, 9, 19)
 			);
 
-			Employee marian = new Employee(
+			Sailor marian = new Sailor(
 					"Marian",
 					"Ionescu",
-					"11-02-1977",
-					"+4072355678",
+					LocalDate.of(1990, 11, 1),
+					"4072355678",
 					"Str. Virtutii 15D",
 					"marian_i@yahoo.com",
 					CHIEF_ENGINEER,
@@ -146,50 +147,50 @@ public class SeamanagerConfiguration {
 
 			Certificate certificate11 = new Certificate(
 					marian,
-					"Seaman's Book",
-					"3217DD",
-					"11-01-2022",
-					"11-01-2025"
+					SEAMANS_BOOK,
+					"3A217DD",
+					LocalDate.of(2022, 1, 11),
+					LocalDate.of(2025, 1, 11)
 			);
 
 
 			Certificate certificate12 = new Certificate(
 					marian,
-					"Passport",
-					"973821122",
-					"21-02-2020",
-					"21-02-2030"
+					PASSPORT,
+					"9738211A22",
+					LocalDate.of(2020, 3, 21),
+					LocalDate.of(2030, 3, 21)
 			);
 
 			Certificate certificate13 = new Certificate(
 					marian,
-					"US Visa",
-					"0012321399458",
-					"12-05-2022",
-					"12-05-2028"
+					US_VISA,
+					"1A2321399458",
+					LocalDate.of(2022, 1, 11),
+					LocalDate.of(2025, 1, 11)
 			);
 
 			Certificate certificate14 = new Certificate(
 					marian,
-					"IMO Basic Course",
-					"014412999",
-					"10-02-2018",
-					"01-01-2028"
+					BT,
+					"A014412999",
+					LocalDate.of(2022, 1, 11),
+					LocalDate.of(2025, 1, 11)
 			);
 
 			Certificate certificate15 = new Certificate(
 					marian,
-					"CoC",
-					"657123",
-					"28-11-2023",
-					"28-11-2028"
+					COC,
+					"657A123",
+					LocalDate.of(2022, 9, 19),
+					LocalDate.of(2028, 9, 19)
 			);
 
-			Employee claudiu = new Employee(
+			Sailor claudiu = new Sailor(
 					"Claudiu Mihai",
 					"Tudor",
-					"13-02-1992",
-					"+40728949363",
+					LocalDate.of(1990, 11, 1),
+					"1234567890",
 					"Semilunei 4-6",
 					"claudium.tudor@gmail.com",
 					SECOND_OFFICER,
@@ -198,95 +199,95 @@ public class SeamanagerConfiguration {
 
 			Certificate certificate16 = new Certificate(
 					claudiu,
-					"Seaman's Book",
+					SEAMANS_BOOK,
 					"30681CA",
-					"11-01-2022",
-					"11-01-2025"
+					LocalDate.of(2022, 9, 19),
+					LocalDate.of(2028, 9, 19)
 			);
 
 
 			Certificate certificate17 = new Certificate(
 					claudiu,
-					"Passport",
+					PASSPORT,
 					"571231212",
-					"14-02-2018",
-					"14-02-2028"
+					LocalDate.of(2020, 9, 19),
+					LocalDate.of(2025, 9, 19)
 			);
 
 			Certificate certificate18 = new Certificate(
 					claudiu,
-					"US Visa",
-					"001232139125463",
-					"12-05-2021",
-					"12-05-2029"
+					US_VISA,
+					"BB232139125463",
+					LocalDate.of(2020, 9, 19),
+					LocalDate.of(2025, 9, 19)
 			);
 
 			Certificate certificate19 = new Certificate(
 					claudiu,
-					"IMO Basic Course",
-					"015512000",
-					"10-05-2015",
-					"10-05-2020"
+					BT,
+					"01B5512000",
+					LocalDate.of(2020, 9, 19),
+					LocalDate.of(2025, 9, 19)
 			);
 
 			Certificate certificate20 = new Certificate(
 					claudiu,
-					"CoC",
+					HV,
 					"33333",
-					"25-12-2021",
+					LocalDate.of(2020, 9, 19),
 					null
 			);
 
-			Employee george = new Employee(
+			Sailor george = new Sailor(
 					"George",
 					"Popescu",
-					"15-12-1995",
-					"+992556789",
+					LocalDate.of(1990, 11, 1),
+					"1234567890",
 					"Calea Crangasi 69",
 					"george@yahoo.com",
-					CAPTAIN,
+					COOK,
 					MALE
 			);
 
 			Certificate certificate21 = new Certificate(
 					george,
-					"Seaman's Book",
+					ARPA,
 					"49681DD",
-					"11-01-2023",
-					"11-01-2029"
+					LocalDate.of(2020, 9, 19),
+					LocalDate.of(2024, 9, 19)
 			);
 
 
 			Certificate certificate22 = new Certificate(
 					george,
-					"Passport",
-					"571231212",
-					"12-12-2018",
-					"12-12-2023"
+					BTRM,
+					"A571231212",
+					LocalDate.of(2020, 9, 19),
+					LocalDate.of(2024, 9, 19)
 			);
 
 			Certificate certificate23 = new Certificate(
 					george,
-					"US Visa",
-					"0012333111",
-					"12-08-2017",
-					"12-08-2027"
+					US_VISA,
+					"0C012333111",
+					LocalDate.of(2020, 9, 19),
+					LocalDate.of(2024, 9, 19)
 			);
 
 			Certificate certificate24 = new Certificate(
 					george,
-					"IMO Basic Course",
-					"015512000",
-					"10-05-2015",
+					BT,
+					"0C15512000",
+					LocalDate.of(2020, 9, 19),
 					null
 			);
 
 			Certificate certificate25 = new Certificate(
 					george,
-					"CoC",
-					"99999",
-					"25-12-2015",
-					"26-12-2025"
+					COC,
+					"99999C",
+					LocalDate.of(2020, 9, 19),
+					LocalDate.of(2024, 9, 19)
 			);
 
 			User user1 = new User("john123", "password123", 1);
@@ -300,63 +301,13 @@ public class SeamanagerConfiguration {
 			User user9 = new User("user789", "myp@ssword", 3);
 			User user10 = new User("johndoe", "mypassword123", 2);
 
+			Vessel vessel1 = new Vessel("Ocean Queen", TANKER, "USA", 1234578900, "Singapore");
 
-			//vessel 1
-//			List<Employee> crewList1 = new ArrayList<>();
-//			crewList1.addAll(List.of(johnDoe,janeDoe));
-
-			// Captain
-//			Employee captain = new Employee("Maria", "Garcia", "1985-04-15", "1234567890", "10 Elm Street", "maria.garcia@email.com", CAPTAIN, FEMALE);
-//			List<Certificate> certificates1 = new ArrayList<>();
-//			certificates1.addAll(List.of(certificate1,certificate2));
-//			captain.setCertificates(certificates1);
-//			crewList1.add(captain);
-
-			// Chief Officer
-//			Employee chiefOfficer = new Employee("John", "Smith", "1988-09-20", "9876543210", "15 Oak Avenue", "john.smith@email.com", CHIEF_OFFICER, MALE);
-//			List<Certificate> certificates2 = new ArrayList<>();
-//			certificates2.addAll(List.of(certificate7,certificate12));
-//			chiefOfficer.setCertificates(certificates2);
-//			crewList1.add(chiefOfficer);
-
-			// Second Engineer
-//			Employee secondEngineer = new Employee("Sarah", "Johnson", "1992-11-10", "5678901234", "25 Maple Street", "sarah.johnson@email.com", SECOND_ENGINEER, FEMALE);
-//			List<Certificate> certificates3 = new ArrayList<>();
-//			certificates3.addAll(List.of(certificate3,certificate4));
-//			secondEngineer.setCertificates(certificates3);
-//			crewList1.add(secondEngineer);
-
-			Vessel vessel1 = new Vessel("Ocean Queen", TANKER, "USA", 1234567890, "Singapore");
-
-
-			//vessel 2
-//			List<Employee> crewList2 = new ArrayList<>();
-//			crewList2.addAll(List.of(marian,george));
-			// Third Officer
-//			Employee thirdOfficer = new Employee("Michael", "Brown", "1991-06-05", "4567890123", "5 Pine Road", "michael.brown@email.com", THIRD_OFFICER, MALE);
-//			List<Certificate> certificates4 = new ArrayList<>();
-//			certificates4.addAll(List.of(certificate5,certificate1));
-//			thirdOfficer.setCertificates(certificates4);
-//			crewList2.add(thirdOfficer);
-
-			// Junior Engineer
-//			Employee juniorEngineer = new Employee("Emily", "Davis", "1994-08-18", "2345678901", "12 Birch Lane", "emily.davis@email.com", JUNIOR_ENGINEER, FEMALE);
-//			List<Certificate> certificates5 = new ArrayList<>();
-//			certificates5.addAll(List.of(certificate2,certificate22));
-//			juniorEngineer.setCertificates(certificates5);
-//			crewList2.add(juniorEngineer);
-
-			// Bosun
-//			Employee bosun = new Employee("Robert", "Wilson", "1987-03-25", "1234567890", "8 Cedar Avenue", "robert.wilson@email.com", BOSUN, MALE);
-//			List<Certificate> certificates6 = new ArrayList<>();
-//			certificates6.addAll(List.of(certificate4,certificate1));
-//			bosun.setCertificates(certificates6);
-//			crewList2.add(bosun);
 
 			Vessel vessel2 = new Vessel("SS Pacific Voyager", TANKER, "Canada", 98765210, "Port of Vancouver");
 
 
-			employeeRepository.saveAll(
+			sailorRepository.saveAll(
 					List.of(
 							johnDoe,
 							janeDoe,
@@ -397,18 +348,18 @@ public class SeamanagerConfiguration {
 			);
 
 			userRepository.saveAll(
-				List.of(
-						user1,
-						user2,
-						user3,
-						user4,
-						user5,
-						user6,
-						user7,
-						user8,
-						user9,
-						user10
-				)
+					List.of(
+							user1,
+							user2,
+							user3,
+							user4,
+							user5,
+							user6,
+							user7,
+							user8,
+							user9,
+							user10
+					)
 			);
 
 			vesselRepository.saveAll(
