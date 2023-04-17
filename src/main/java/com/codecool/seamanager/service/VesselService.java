@@ -1,22 +1,18 @@
 package com.codecool.seamanager.service;
 
-import com.codecool.seamanager.model.employee.Employee;
+import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.model.vessel.Vessel;
 import com.codecool.seamanager.model.vessel.VesselType;
-import com.codecool.seamanager.repository.EmployeeRepository;
+import com.codecool.seamanager.repository.SailorRepository;
 import com.codecool.seamanager.repository.VesselRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.net.URI;
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +21,7 @@ public class VesselService {
     @Autowired
     private VesselRepository vesselRepository;
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private SailorRepository sailorRepository;
 
 
     public List<Vessel> getAllVessels(){return vesselRepository.findAll();}
@@ -73,15 +69,15 @@ public class VesselService {
 
     public void addEmployeeOnCrew(@PathVariable Long vesselId, @PathVariable Long employeeId){
         Optional<Vessel> optionalVessel = vesselRepository.findById(vesselId);
-        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        Optional<Sailor> optionalEmployee = sailorRepository.findById(employeeId);
 
         if(optionalVessel.isPresent() && optionalEmployee.isPresent()) {
             Vessel existingVessel = optionalVessel.get();
-            Employee existingEmployee = optionalEmployee.get();
-            existingVessel.addCrew(existingEmployee);
+            Sailor existingSailor = optionalEmployee.get();
+            existingVessel.addCrew(existingSailor);
             vesselRepository.save(existingVessel);
-            existingEmployee.setI_vessel(existingVessel);
-            employeeRepository.save(existingEmployee);
+            existingSailor.setVessel(existingVessel);
+            sailorRepository.save(existingSailor);
             System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvv "+existingVessel.getCrewList().size());
 //            return ResponseEntity.ok(existingVessel);
         }
