@@ -2,6 +2,7 @@ package com.codecool.seamanager.controller;
 
 import com.codecool.seamanager.model.vessel.Vessel;
 import com.codecool.seamanager.service.VesselService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,28 +24,22 @@ public class VesselController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vessel> getById(@PathVariable Long id) {
+    public Vessel getById(@PathVariable Long id) {
         return vesselService.getById(id);
     }
 
-
     @PostMapping()
-    public ResponseEntity<Vessel> createVessel(@RequestBody Vessel vessel) {
+    public ResponseEntity<Vessel> createVessel(@RequestBody @Valid Vessel vessel) {
         return  vesselService.createVessel(vessel);
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<Vessel> updateVessel(@PathVariable Long id, @RequestBody Vessel vessel) {
+    public ResponseEntity<Vessel> updateVessel(@PathVariable Long id, @RequestBody @Valid Vessel vessel) {
         return vesselService.updateVessel(id,vessel);
-    }
-    @PutMapping("/add/{vesselId}/{employeeId}")
-    public void addNewCrewMember(@PathVariable Long vesselId, @PathVariable Long employeeId){
-        vesselService.addEmployeeOnCrew(vesselId,employeeId);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVessel(@PathVariable Long id) {
-        return vesselService.deleteVessel(id);
+    public void deleteVessel(@PathVariable Long id) {
+        vesselService.deleteVessel(id);
     }
 }
