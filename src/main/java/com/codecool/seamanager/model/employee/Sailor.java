@@ -2,7 +2,7 @@ package com.codecool.seamanager.model.employee;
 
 import com.codecool.seamanager.constraints.BirthDate;
 import com.codecool.seamanager.model.certificate.Certificate;
-import com.codecool.seamanager.model.vessel.Vessel;
+import com.codecool.seamanager.model.voyage.Voyage;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -91,8 +91,6 @@ public class Sailor {
 			columnDefinition = "TEXT"
 	)
 	private String address;
-
-
 	@Column(
 			columnDefinition = "TEXT"
 	)
@@ -126,12 +124,16 @@ public class Sailor {
 	private Set<Certificate> certificates;
 
 	@ManyToOne
-	@JoinColumn(
-			referencedColumnName = "id",
-			columnDefinition = "BIGINT",
-			foreignKey = @ForeignKey(name = "vessel_id_foreign")
+	@JoinTable(
+			name = "sailor_voyage",
+			joinColumns = @JoinColumn(name = "employee_id"),
+			inverseJoinColumns = @JoinColumn(
+					referencedColumnName = "voyageId",
+					name = "voyage_id"
+			)
 	)
-	private Vessel vessel;
+	@JoinColumn(name="voyage_id")
+	private Voyage currentVoyage;
 
 	public Sailor(String firstName, String lastName, LocalDate birthDate, String contactNo, String address, String email, Rank rank, Gender gender) {
 		this.firstName = firstName;
@@ -143,11 +145,11 @@ public class Sailor {
 		this.rank = rank;
 		this.gender = gender;
 		this.certificates = new HashSet<>();
-		this.vessel = null;
+		this.currentVoyage = null;
 	}
 
 	@PrePersist
-	public void prePersist(){
+	public void prePersist() {
 		calculateAge();
 	}
 
