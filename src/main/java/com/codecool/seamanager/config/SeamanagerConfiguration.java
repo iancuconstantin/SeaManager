@@ -21,6 +21,7 @@ import static com.codecool.seamanager.model.employee.Gender.FEMALE;
 import static com.codecool.seamanager.model.employee.Gender.MALE;
 import static com.codecool.seamanager.model.employee.Rank.*;
 import static com.codecool.seamanager.model.portinteraction.PortInteractionType.LOAD;
+import static com.codecool.seamanager.model.vessel.VesselType.BULK;
 import static com.codecool.seamanager.model.vessel.VesselType.TANKER;
 
 @Configuration
@@ -318,8 +319,8 @@ public class SeamanagerConfiguration {
 			PortInteraction pi5 = new PortInteraction(LOAD, port1, LocalDate.of(2023, 8, 7));
 			PortInteraction pi6 = new PortInteraction(LOAD, port3, LocalDate.of(2023, 9, 7));
 
-			Vessel vessel1 = new Vessel("Ocean Queen", TANKER, "USA", "1234567", new HashSet<>());
-			Vessel vessel2 = new Vessel("SS Pacific Voyager", TANKER, "Canada", "6789000", new HashSet<>());
+			Vessel vessel1 = new Vessel("Ocean Queen", TANKER, "Denmark", "222333444", "vessel1@company.com", "A5BB3", "1234567", "2020","23456", "25412");
+			Vessel vessel2 = new Vessel("SS Pacific Voyager", BULK, "Liberia", "123456789", "vessel2@company.com", "D7WF1", "9903133", "2015","24856", "28992");
 
 			Voyage vv1 = new Voyage(vessel1, new HashSet<>(), pi1, pi2);
 			Voyage vv2 = new Voyage(vessel2, new HashSet<>(), pi3, pi4);
