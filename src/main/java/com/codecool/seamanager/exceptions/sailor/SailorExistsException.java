@@ -1,11 +1,11 @@
-package com.codecool.seamanager.exceptions.email;
+package com.codecool.seamanager.exceptions.sailor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class SailorNotFoundException extends RuntimeException {
-	public SailorNotFoundException(String message) {
+public class SailorExistsException extends RuntimeException {
+	public SailorExistsException(String message) {
 		super(message);
 	}
 }

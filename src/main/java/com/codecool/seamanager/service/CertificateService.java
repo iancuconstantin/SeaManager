@@ -2,9 +2,8 @@ package com.codecool.seamanager.service;
 
 import com.codecool.seamanager.exceptions.certificate.CertificateNotFoundException;
 import com.codecool.seamanager.exceptions.certificate.CertificateSerialNumberDuplicationException;
-import com.codecool.seamanager.exceptions.email.SailorNotFoundException;
+import com.codecool.seamanager.exceptions.sailor.SailorNotFoundException;
 import com.codecool.seamanager.model.certificate.Certificate;
-import com.codecool.seamanager.model.certificate.CertificateType;
 import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.repository.CertificateRepository;
 import com.codecool.seamanager.repository.SailorRepository;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,26 +79,9 @@ public class CertificateService {
 			certificateToUpdate.setOwner(updatedOwner);
 		}
 
-		CertificateType updatedDescription = certificateDetails.getType();
-		if (updatedDescription != null &&
-				!updatedDescription.equals(certificateToUpdate.getType())
-		) {
-			certificateToUpdate.setType(updatedDescription);
-		}
-
-		LocalDate updatedIssueDate = certificateDetails.getIssueDate();
-		if (updatedIssueDate != null &&
-				!updatedIssueDate.equals(certificateToUpdate.getIssueDate())
-		) {
-			certificateToUpdate.setIssueDate(updatedIssueDate);
-		}
-
-		LocalDate updatedExpiryDate = certificateDetails.getExpiryDate();
-		if (updatedExpiryDate != null &&
-				!updatedExpiryDate.equals(certificateToUpdate.getExpiryDate())
-		) {
-			certificateToUpdate.setExpiryDate(updatedExpiryDate);
-		}
+		certificateToUpdate.setType(certificateDetails.getType());
+		certificateToUpdate.setIssueDate(certificateDetails.getIssueDate());
+		certificateToUpdate.setExpiryDate(certificateDetails.getExpiryDate());
 
 		String updatedSerialNo = certificateDetails.getSerialNumber();
 		Optional<Certificate> certificateOptional = certificateRepository.findCertificateBySerialNumber(certificateDetails.getSerialNumber());
@@ -110,12 +91,7 @@ public class CertificateService {
 			);
 		}
 
-		if (updatedSerialNo != null &&
-				updatedSerialNo.length() > 0 &&
-				!updatedSerialNo.equals(certificateToUpdate.getSerialNumber())
-		) {
-			certificateToUpdate.setSerialNumber(updatedSerialNo);
-		}
+		certificateToUpdate.setSerialNumber(updatedSerialNo);
 		Certificate updatedCertificate = certificateRepository.saveAndFlush(certificateToUpdate);
 		return ResponseEntity.ok(updatedCertificate);
 	}

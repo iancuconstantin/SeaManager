@@ -14,6 +14,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"certificates", "currentVoyage"})
 public class Sailor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -132,7 +133,8 @@ public class Sailor {
 					name = "voyage_id"
 			)
 	)
-	@JoinColumn(name="voyage_id")
+	@JoinColumn(name = "voyage_id")
+	@JsonIgnore
 	private Voyage currentVoyage;
 
 	public Sailor(String firstName, String lastName, LocalDate birthDate, String contactNo, String address, String email, Rank rank, Gender gender) {
@@ -154,7 +156,8 @@ public class Sailor {
 	}
 
 	private void calculateAge() {
-		this.age = Period.between(birthDate, LocalDate.now()).getYears();
+		ZoneId zoneId = ZoneId.of("Europe/Bucharest");
+		this.age = Period.between(birthDate, LocalDate.now(zoneId)).getYears();
 	}
 
 	public void addNewCertificate(Certificate certificate) {

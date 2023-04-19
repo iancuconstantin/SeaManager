@@ -12,19 +12,21 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codecool.seamanager.model.certificate.CertificateType.ECDIS;
+import static com.codecool.seamanager.model.certificate.CertificateType.ARPA;
 import static com.codecool.seamanager.model.certificate.CertificateType.SEAMANS_BOOK;
 import static com.codecool.seamanager.model.employee.Gender.MALE;
 import static com.codecool.seamanager.model.employee.Rank.THIRD_ENGINEER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,6 +39,7 @@ public class CertificateServiceTest {
 	private CertificateService certificateService;
 	private Certificate certificate;
 	private Sailor sailor;
+	private TestRestTemplate restTemplate;
 
 	@Before
 	public void setUp() {
@@ -59,6 +62,8 @@ public class CertificateServiceTest {
 				LocalDate.of(2023,1,11),
 				LocalDate.of(2029,1,11)
 		);
+
+		restTemplate = new TestRestTemplate(new RestTemplateBuilder());
 	}
 
 	@Test
@@ -110,12 +115,34 @@ public class CertificateServiceTest {
 
 	@Test
 	public void testUpdateCertificate() {
-		when(certificateRepository.findById(1L)).thenReturn(Optional.of(certificate));
-		Certificate updatedCertificateDetails = new Certificate();
-		updatedCertificateDetails.setType(ECDIS);
-		ResponseEntity<Certificate> responseEntity = certificateService.updateCertificate(1L, updatedCertificateDetails);
-		certificateService.updateCertificate(1L, updatedCertificateDetails);
+		//when(certificateRepository.findById(1L)).thenReturn(Optional.of(certificate));
+		Certificate updatedCertificateDetails = new Certificate(
+				sailor,
+				ARPA,
+				"49AA681DD",
+				LocalDate.of(2020, 9, 19),
+				LocalDate.of(2024, 9, 19)
+		);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		// Create a HttpEntity object with the updatedVesselDetails and headers
+		HttpEntity<Certificate> request = new HttpEntity<>(updatedCertificateDetails, headers);
+
+		// Send a PUT request to the updateVessel endpoint using RestTemplate
+		ResponseEntity<Certificate> responseEntity = restTemplate.exchange(
+				"http://localhost:8080/api/certificate/{id}",
+				HttpMethod.PUT,
+				request,
+				Certificate.class,
+				1L
+		);
+		assertNotNull(responseEntity);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(ECDIS, responseEntity.getBody().getType());
+		Certificate updatedCertificate = responseEntity.getBody();
+		assertEquals(ARPA, updatedCertificate.getType());
+		assertEquals(LocalDate.of(2020, 9, 19), updatedCertificate.getIssueDate());
+		assertEquals(LocalDate.of(2024, 9, 19), updatedCertificate.getExpiryDate());
 	}
 }
