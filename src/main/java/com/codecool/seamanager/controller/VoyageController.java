@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/voyage")
 public class VoyageController {
 
-	private final VoyageService voyageService ;
+	private final VoyageService voyageService;
 
 	@Autowired
 	public VoyageController(VoyageService voyageService) {
@@ -28,18 +28,18 @@ public class VoyageController {
 		return voyageService.getAllVoyages();
 	}
 
-	@GetMapping("/{id}")
-	public Voyage getById(@PathVariable Long id) {
-		return voyageService.getById(id);
+	@GetMapping("/{voyageId}")
+	public Voyage getById(@PathVariable("voyageId") Long voyageId) {
+		return voyageService.getById(voyageId);
 	}
 
 	@PutMapping(path = "{voyageId}/add")
-	public ResponseEntity<Voyage> addNewCrewMember(@PathVariable("voyageId") Long voyageId, @Valid @RequestBody Sailor sailor){
+	public ResponseEntity<Voyage> addNewCrewMember(@PathVariable("voyageId") Long voyageId, @Valid @RequestBody Sailor sailor) {
 		return voyageService.addNewCrewMember(voyageId, sailor);
 	}
 
-	@DeleteMapping("/{id}")
-	public void deleteVoyage(@PathVariable Long id) {
-		voyageService.deleteVoyage(id);
+	@DeleteMapping("/{voyageId}")
+	public void deleteVoyage(@PathVariable("voyageId") Long voyageId) {
+		voyageService.deleteVoyage(voyageId);
 	}
 }

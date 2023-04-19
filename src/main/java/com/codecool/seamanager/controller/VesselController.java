@@ -15,31 +15,35 @@ import java.util.List;
 @RequestMapping("/api/vessel")
 public class VesselController {
 
-    @Autowired
-    private VesselService vesselService;
+	private final VesselService vesselService;
 
-    @GetMapping
-    public List<Vessel> getAllVessels() {
-        return vesselService.getAllVessels();
-    }
+	@Autowired
+	public VesselController(VesselService vesselService) {
+		this.vesselService = vesselService;
+	}
 
-    @GetMapping("/{id}")
-    public Vessel getById(@PathVariable Long id) {
-        return vesselService.getById(id);
-    }
+	@GetMapping
+	public List<Vessel> getAllVessels() {
+		return vesselService.getAllVessels();
+	}
 
-    @PostMapping()
-    public void createVessel(@RequestBody @Valid Vessel vessel) {
-        vesselService.createVessel(vessel);
-    }
+	@GetMapping("/{vesselId}")
+	public Vessel getById(@PathVariable Long vesselId) {
+		return vesselService.getById(vesselId);
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Vessel> updateVessel(@PathVariable Long id, @RequestBody @Valid Vessel vessel) {
-        return vesselService.updateVessel(id,vessel);
-    }
+	@PostMapping()
+	public void createVessel(@RequestBody @Valid Vessel vessel) {
+		vesselService.createVessel(vessel);
+	}
 
-    @DeleteMapping("/{id}")
-    public void deleteVessel(@PathVariable Long id) {
-        vesselService.deleteVessel(id);
-    }
+	@PutMapping("/{vesselId}")
+	public ResponseEntity<Vessel> updateVessel(@PathVariable("vesselId") Long vesselId, @RequestBody @Valid Vessel vessel) {
+		return vesselService.updateVessel(vesselId, vessel);
+	}
+
+	@DeleteMapping("/{vesselId}")
+	public void deleteVessel(@PathVariable("vesselId") Long vesselId) {
+		vesselService.deleteVessel(vesselId);
+	}
 }
