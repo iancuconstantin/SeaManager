@@ -16,7 +16,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(
+		uniqueConstraints = {
+				@UniqueConstraint(name = "imo_number_uk", columnNames = {"imo_number"})
+		}
+)
 @Getter
 @Setter
 @NoArgsConstructor
