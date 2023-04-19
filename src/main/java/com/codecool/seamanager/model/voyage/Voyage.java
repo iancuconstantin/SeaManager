@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Set;
 
@@ -34,6 +36,7 @@ public class Voyage {
 					name = "vessel_id"
 			)
 	)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Vessel vessel;
 	private String name;
 	@NotNull
@@ -77,11 +80,12 @@ public class Voyage {
 		this.crewList = crewList;
 		this.departure = departure;
 		this.arrival = arrival;
+		vessel.getVoyages().add(this); //TODO -ask?
 	}
 
 	@PrePersist
 	public void prePersist() {
-		vessel.getVoyages().add(this);
+		//vessel.getVoyages().add(this);
 		assignName();
 	}
 
