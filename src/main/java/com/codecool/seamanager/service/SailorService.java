@@ -1,15 +1,13 @@
 package com.codecool.seamanager.service;
 
-import com.codecool.seamanager.exceptions.email.EmailTakenException;
-import com.codecool.seamanager.exceptions.email.SailorNotFoundException;
+import com.codecool.seamanager.exceptions.sailor.EmailTakenException;
+import com.codecool.seamanager.exceptions.sailor.SailorNotFoundException;
 import com.codecool.seamanager.model.employee.Sailor;
-import com.codecool.seamanager.model.employee.Gender;
 import com.codecool.seamanager.repository.SailorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,8 +49,9 @@ public class SailorService {
 					"Employee with id " + employeeId + " does not exist."
 			);
 		}
-		boolean isOnboard = sailorRepository.findById(employeeId).get().getVessel() != null;
-		if(isOnboard){
+
+		boolean isOnboard = sailorRepository.findById(employeeId).get().getCurrentVoyage() != null;
+		if (isOnboard) {
 			//TODO - custom exception
 			throw new IllegalArgumentException(
 					"Cannot delete employee with id " + employeeId + " because is on board vessel"
@@ -71,40 +70,15 @@ public class SailorService {
 
 		validateEmail(sailorDetails.getEmail(), sailorToUpdate.getEmployeeId());
 
-		if (sailorDetails.getFirstName() != null) {
-			sailorToUpdate.setFirstName(sailorDetails.getFirstName());
-		}
+		sailorToUpdate.setFirstName(sailorDetails.getFirstName());
+		sailorToUpdate.setLastName(sailorDetails.getLastName());
+		sailorToUpdate.setEmail(sailorDetails.getEmail());
+		sailorToUpdate.setBirthDate(sailorDetails.getBirthDate());
+		sailorToUpdate.setAddress(sailorDetails.getAddress());
+		sailorToUpdate.setContactNo(sailorDetails.getContactNo());
+		sailorToUpdate.setRank(sailorDetails.getRank());
+		sailorToUpdate.setGender(sailorDetails.getGender());
 
-		if(sailorDetails.getLastName()!=null){
-			sailorToUpdate.setLastName(sailorDetails.getLastName());
-		}
-
-		if(sailorDetails.getEmail()!=null){
-			sailorToUpdate.setEmail(sailorDetails.getEmail());
-		}
-
-		if(sailorDetails.getBirthDate()!= null){
-			sailorToUpdate.setBirthDate(sailorDetails.getBirthDate());
-		}
-
-		if(sailorDetails.getAddress()!= null){
-			sailorToUpdate.setAddress(sailorDetails.getAddress());
-		}
-
-		if(sailorDetails.getContactNo() != null){
-			sailorToUpdate.setContactNo(sailorDetails.getContactNo());
-		}
-
-		if(sailorDetails.getRank() != null){
-			sailorToUpdate.setRank(sailorDetails.getRank());
-		}
-
-		Gender updatedGender = sailorDetails.getGender();
-		if (updatedGender != null &&
-				Arrays.asList(Gender.values()).contains(updatedGender) &&
-				!updatedGender.equals(sailorToUpdate.getGender())) {
-			sailorToUpdate.setGender(updatedGender);
-		}
 		Sailor updatedSailor = sailorRepository.saveAndFlush(sailorToUpdate);
 		return ResponseEntity.ok(updatedSailor);
 	}
