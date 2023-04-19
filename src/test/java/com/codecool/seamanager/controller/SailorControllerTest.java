@@ -123,7 +123,7 @@ public class SailorControllerTest {
 				"Jane",
 				"Doe",
 				LocalDate.of(1991, 11, 1),
-				"+987654321",
+				"987654321",
 				"456 Main St",
 				"janedoe@gmail.com",
 				SECOND_ENGINEER,

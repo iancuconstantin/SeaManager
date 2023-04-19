@@ -1,7 +1,7 @@
 package com.codecool.seamanager.service;
 
-import com.codecool.seamanager.exceptions.email.EmailTakenException;
-import com.codecool.seamanager.exceptions.email.SailorNotFoundException;
+import com.codecool.seamanager.exceptions.sailor.EmailTakenException;
+import com.codecool.seamanager.exceptions.sailor.SailorNotFoundException;
 import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.repository.SailorRepository;
 import org.junit.Before;
@@ -10,17 +10,21 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codecool.seamanager.model.employee.Gender.FEMALE;
 import static com.codecool.seamanager.model.employee.Gender.MALE;
+import static com.codecool.seamanager.model.employee.Rank.SECOND_ENGINEER;
 import static com.codecool.seamanager.model.employee.Rank.THIRD_ENGINEER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,11 +32,10 @@ import static org.mockito.Mockito.when;
 public class SailorServiceTest {
 	@Mock
 	private SailorRepository sailorRepository;
-
 	@InjectMocks
 	private SailorService sailorService;
-
 	private Sailor sailor;
+	private TestRestTemplate restTemplate;
 
 	@Before
 	public void setUp() {
@@ -40,12 +43,14 @@ public class SailorServiceTest {
 				"John",
 				"Doe",
 				LocalDate.of(1990, 1, 1),
-				"+123456789",
+				"123456789",
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
 				MALE
 		);
+
+		restTemplate = new TestRestTemplate(new RestTemplateBuilder());
 	}
 
 	@Test
@@ -98,14 +103,31 @@ public class SailorServiceTest {
 
 	@Test
 	public void testUpdateEmployee(){
-		when(sailorRepository.findById(1L)).thenReturn(Optional.of(sailor));
-		Sailor updatedSailorDetails = new Sailor();
-		updatedSailorDetails.setFirstName("New Name");
-		updatedSailorDetails.setBirthDate(LocalDate.of(1992,2,13));
-		ResponseEntity<Sailor> responseEntity = sailorService.updateEmployee(1L, updatedSailorDetails);
-		sailorService.updateEmployee(1L, updatedSailorDetails);
+		Sailor updatedSailorDetails = new Sailor(
+				"Gigel",
+				"Dorel",
+				LocalDate.of(1991, 4, 20),
+				"123456788",
+				"123 Strada",
+				"johndoe@company.co.uk",
+				SECOND_ENGINEER,
+				FEMALE
+		);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Sailor> request = new HttpEntity<>(updatedSailorDetails, headers);
+		ResponseEntity<Sailor> responseEntity = restTemplate.exchange(
+				"http://localhost:8080/api/employee/{id}",
+				HttpMethod.PUT,
+				request,
+				Sailor.class,
+				1L
+		);
+		assertNotNull(responseEntity);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals("New Name", responseEntity.getBody().getFirstName());
-		assertEquals(LocalDate.of(1992,2,13), responseEntity.getBody().getBirthDate());
+		Sailor updatedSailor = responseEntity.getBody();
+		assertEquals("Gigel", updatedSailor.getFirstName());
+		assertEquals(LocalDate.of(1991,4,20), updatedSailor.getBirthDate());
 	}
 }
