@@ -29,8 +29,8 @@ public class VesselController {
     }
 
     @PostMapping()
-    public ResponseEntity<Vessel> createVessel(@RequestBody @Valid Vessel vessel) {
-        return  vesselService.createVessel(vessel);
+    public void createVessel(@RequestBody @Valid Vessel vessel) {
+        vesselService.createVessel(vessel);
     }
 
     @PutMapping("/{id}")
