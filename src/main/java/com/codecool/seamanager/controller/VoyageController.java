@@ -1,8 +1,11 @@
 package com.codecool.seamanager.controller;
 
+import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.model.voyage.Voyage;
 import com.codecool.seamanager.service.VoyageService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +31,11 @@ public class VoyageController {
 	@GetMapping("/{id}")
 	public Voyage getById(@PathVariable Long id) {
 		return voyageService.getById(id);
+	}
+
+	@PutMapping(path = "{voyageId}/add")
+	public ResponseEntity<Voyage> addNewCrewMember(@PathVariable("voyageId") Long voyageId, @Valid @RequestBody Sailor sailor){
+		return voyageService.addNewCrewMember(voyageId, sailor);
 	}
 
 	@DeleteMapping("/{id}")
