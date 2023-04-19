@@ -1,4 +1,4 @@
-package com.codecool.seamanager.exceptions.email;
+package com.codecool.seamanager.exceptions.sailor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

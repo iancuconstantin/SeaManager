@@ -1,4 +1,4 @@
-package com.codecool.seamanager.exceptions.email;
+package com.codecool.seamanager.exceptions.sailor;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
