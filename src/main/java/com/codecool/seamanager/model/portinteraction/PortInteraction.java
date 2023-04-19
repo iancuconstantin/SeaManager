@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@Table(name = "portInteraction")
+@Table(name = "port_interaction")
 @Entity
 @Getter
 @Setter
