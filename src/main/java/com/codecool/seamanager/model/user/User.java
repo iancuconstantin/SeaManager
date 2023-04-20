@@ -82,7 +82,7 @@ public class User {
 	}
 
 	private void setCreationDate(){
-		if (this.createdAt != null) this.createdAt = LocalDate.now();
+		if (this.createdAt == null) this.createdAt = LocalDate.now();
 	}
 
 }
