@@ -1,64 +1,88 @@
 package com.codecool.seamanager.model.user;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import org.jetbrains.annotations.NotNull;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 @Entity
-@Table(name = "users")
+@Table(
+		uniqueConstraints = {
+				@UniqueConstraint(name = "username_uk", columnNames = {"username"})
+		}
+)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@NotNull
-	@Column(name = "username")
+	private Long userId;
+	@Column(unique = true)
+	@NotBlank(message = "Username is required.")
+	@Pattern(regexp = "^[a-zA-Z0-9]{4,20}$", message = "Username must be alphanumeric and have 4 to 20 characters")
 	private String username;
-	@NotNull
-	@Column(name = "password")
+	@NotBlank(message = "Password is required.")
+	@Pattern(
+			regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$",
+			message = "Password must have at least 8 characters, one uppercase letter, one lowercase letter, and one digit"
+	)
+	@JsonIgnore
 	private String password;
-	@NotNull
-	@Column(name = "accessLevel")
+	@NotBlank(message = "First name is required")
+	@Size(
+			min = 2,
+			max = 25,
+			message = "First name should be between 2 and 25 characters long"
+	)
+	private String firstName;
+	@Size(
+			min = 2,
+			max = 15,
+			message = "Last name should be between 2 and 15 characters long"
+	)
+	private String lastName;
+	@Column(unique = true)
+	@Email(message = "Invalid email.")
+	private String email;
 	@Min(value = 1, message = "Access level must be at least 1")
 	@Max(value = 3, message = "Access level cannot be greater than 3")
-	private Integer accessLevel;
+	private int accessLevel;
+	@Column(
+			columnDefinition = "DATE"
+	)
+	@JsonFormat(
+			shape = STRING,
+			pattern = "yyyy-MM-dd"
+	)
+	private LocalDate createdAt;
 
-	public User(@NotNull String username, @NotNull String password, @NotNull Integer accessLevel) {
+	public User(String username, String password, String firstName, String lastName, String email, Integer accessLevel) {
 		this.username = username;
 		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
 		this.accessLevel = accessLevel;
 	}
 
-	public User() {
-
+	@PrePersist
+	public void prePersist(){
+		setCreationDate();
 	}
 
-	public Long getId() {return id;}
-
-	public String getUsername() {
-		return username;
+	private void setCreationDate(){
+		if (this.createdAt == null) this.createdAt = LocalDate.now();
 	}
 
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Integer getAccessLevel() {
-		return accessLevel;
-	}
-
-	public void setAccessLevel(Integer accessLevel) {
-		this.accessLevel = accessLevel;
-
-	}
 }

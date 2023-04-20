@@ -2,6 +2,7 @@ package com.codecool.seamanager.model.employee;
 
 import com.codecool.seamanager.constraints.BirthDate;
 import com.codecool.seamanager.model.certificate.Certificate;
+import com.codecool.seamanager.model.contract.Contract;
 import com.codecool.seamanager.model.voyage.Voyage;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,21 +39,21 @@ public class Sailor {
 			updatable = false
 	)
 	private Long employeeId;
-	@NotBlank
+	@NotBlank(message = "First name is required")
 	@Size(
 			min = 2,
 			max = 25,
-			message = "First name should be min 3 and max 25 characters long"
+			message = "First name should be between 2 and 25 characters long"
 	)
 	@Column(
 			columnDefinition = "TEXT"
 	)
 	private String firstName;
-	@NotBlank
+	@NotBlank(message = "Last name is required")
 	@Size(
 			min = 2,
 			max = 15,
-			message = "Last name should be min 2 and max 15 characters long"
+			message = "Last name should be between 2 and 15 characters long"
 	)
 	@Column(
 			columnDefinition = "TEXT"
@@ -123,7 +124,23 @@ public class Sailor {
 			mappedBy = "owner"
 	)
 	private Set<Certificate> certificates;
-
+	@JsonIgnore
+	@OneToMany(
+			targetEntity = Contract.class,
+			mappedBy = "owner"
+	)
+	private Set<Contract> contracts;
+	@Future(
+			message = "Readiness date must be in the future."
+	)
+	@Column(
+			columnDefinition = "DATE"
+	)
+	@JsonFormat(
+			shape = STRING,
+			pattern = "yyyy-MM-dd"
+	)
+	private LocalDate readinessDate;
 	@ManyToOne
 	@JoinTable(
 			name = "sailor_voyage",
@@ -137,7 +154,7 @@ public class Sailor {
 	@JsonIgnore
 	private Voyage currentVoyage;
 
-	public Sailor(String firstName, String lastName, LocalDate birthDate, String contactNo, String address, String email, Rank rank, Gender gender) {
+	public Sailor(String firstName, String lastName, LocalDate birthDate, String contactNo, String address, String email, Rank rank, Gender gender, LocalDate readinessDate) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -146,7 +163,9 @@ public class Sailor {
 		this.contactNo = contactNo;
 		this.rank = rank;
 		this.gender = gender;
+		this.readinessDate = readinessDate;
 		this.certificates = new HashSet<>();
+		this.contracts = new HashSet<>();
 		this.currentVoyage = null;
 	}
 
@@ -162,6 +181,10 @@ public class Sailor {
 
 	public void addNewCertificate(Certificate certificate) {
 		certificates.add(certificate);
+	}
+
+	public void addNewContract(Contract contract) {
+		contracts.add(contract);
 	}
 }
 
