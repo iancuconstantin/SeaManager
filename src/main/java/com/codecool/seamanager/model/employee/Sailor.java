@@ -38,21 +38,21 @@ public class Sailor {
 			updatable = false
 	)
 	private Long employeeId;
-	@NotBlank
+	@NotBlank(message = "First name is required")
 	@Size(
 			min = 2,
 			max = 25,
-			message = "First name should be min 3 and max 25 characters long"
+			message = "First name should be between 2 and 25 characters long"
 	)
 	@Column(
 			columnDefinition = "TEXT"
 	)
 	private String firstName;
-	@NotBlank
+	@NotBlank(message = "Last name is required")
 	@Size(
 			min = 2,
 			max = 15,
-			message = "Last name should be min 2 and max 15 characters long"
+			message = "Last name should be between 2 and 15 characters long"
 	)
 	@Column(
 			columnDefinition = "TEXT"
