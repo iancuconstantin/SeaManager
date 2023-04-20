@@ -4,7 +4,6 @@ import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.model.voyage.Voyage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +26,7 @@ public class Contract {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
+
 	@ManyToOne
 	@JoinColumn(
 			name = "employee_id",
@@ -36,10 +36,19 @@ public class Contract {
 	)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Sailor owner;
-	@PastOrPresent(message = "Start date cannot be in the future.")
+	@Future(message = "Start date cannot be in the past.")
 	private LocalDate startDate;
-	@Future(message = "End date cannot be today or in the past.")
+	@Future(message = "End date should be in the future.")
 	private LocalDate finishDate;
-	@OneToOne //TODO - ask?
+	@ManyToOne //TODO - ask?
 	private Voyage vesselVoyageAtStart;
+	private boolean isActive = true;
+
+	public Contract(Sailor owner, LocalDate startDate, LocalDate finishDate, Voyage vesselVoyageAtStart) {
+		this.owner = owner;
+		this.startDate = startDate;
+		this.finishDate = finishDate;
+		this.vesselVoyageAtStart = vesselVoyageAtStart;
+		owner.addNewContract(this);
+	}
 }
