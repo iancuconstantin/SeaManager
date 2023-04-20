@@ -2,6 +2,7 @@ package com.codecool.seamanager.model.contract;
 
 import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.model.voyage.Voyage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class Contract {
 			foreignKey = @ForeignKey(name = "owner_id_foreign")
 	)
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	private Sailor owner;
 	@Future(message = "Start date cannot be in the past.")
 	private LocalDate startDate;

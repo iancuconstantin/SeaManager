@@ -5,17 +5,17 @@
 - Create Spring Boot project (2 points)
 - Add required dependencies to project (1 point)
 
-### 1.2 Implement backend API for managing employees in the database (5 points)
+### 1.2 Implement backend API for managing sailors in the database (5 points)
 
 - Create Employee model class (1 point)
 - Create Employee repository (1 point)
-- Implement CRUD operations for employee to database (3 points)
+- Implement CRUD operations for sailor to database (3 points)
 
 ### 1.3 Implement backend API for managing certificates (type, issue date, expiry date, etc.) (5 points)
 
 - Create Certificate model class (1 point)
 - Create Certificate repository (1 point)
-- Implement CRUD operations for at home employee to database (3 points)
+- Implement CRUD operations for at home sailor to database (3 points)
 
 ### 1.4 Implement backend API for viewing vessel data (5 points)
 

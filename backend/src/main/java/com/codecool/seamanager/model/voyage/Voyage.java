@@ -80,7 +80,7 @@ public class Voyage {
 		this.crewList = crewList;
 		this.departure = departure;
 		this.arrival = arrival;
-		vessel.getVoyages().add(this); //TODO -ask?
+		//vessel.getVoyages().add(this); //TODO -ask?
 	}
 
 	@PrePersist
