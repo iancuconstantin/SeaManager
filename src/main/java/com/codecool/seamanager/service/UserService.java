@@ -33,20 +33,16 @@ public class UserService {
 
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = userRepository.save(user);
-        return ResponseEntity.created(URI.create("/user/" + savedUser.getId())).body(savedUser);
+        return ResponseEntity.created(URI.create("/user/" + savedUser.getUserId())).body(savedUser);
     }
 
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
-            if(user.getUsername()!=null)existingUser.setUsername(user.getUsername());
-            if(user.getPassword()!=null)existingUser.setPassword(user.getPassword());
-            if(user.getAccessLevel()!=null && (user.getAccessLevel() >= 1 && user.getAccessLevel()<=3)){
-                existingUser.setAccessLevel(user.getAccessLevel());
-            }  else {
-                throw new IllegalArgumentException("Access level must be between 1 and 3.");
-            }
+            existingUser.setUsername(user.getUsername());
+            existingUser.setPassword(user.getPassword());
+            existingUser.setAccessLevel(user.getAccessLevel());
             User updatedUser = userRepository.save(existingUser);
             return ResponseEntity.ok(updatedUser);
         } else {
