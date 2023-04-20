@@ -124,7 +124,6 @@ public class Sailor {
 			mappedBy = "owner"
 	)
 	private Set<Certificate> certificates;
-	@JsonIgnore
 	@OneToMany(
 			targetEntity = Contract.class,
 			mappedBy = "owner"
