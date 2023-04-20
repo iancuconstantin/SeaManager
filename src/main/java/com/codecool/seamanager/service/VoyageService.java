@@ -1,7 +1,6 @@
 package com.codecool.seamanager.service;
 
 import com.codecool.seamanager.exceptions.sailor.SailorExistsException;
-import com.codecool.seamanager.exceptions.sailor.SailorNotFoundException;
 import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.model.voyage.Voyage;
 import com.codecool.seamanager.repository.SailorRepository;
@@ -11,18 +10,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VoyageService {
 
 	private final VoyageRepository voyageRepository;
 	private final SailorRepository sailorRepository;
+	private final SailorService sailorService;
 
 	@Autowired
-	public VoyageService(VoyageRepository voyageRepository, SailorRepository sailorRepository) {
+	public VoyageService(VoyageRepository voyageRepository, SailorRepository sailorRepository, SailorService sailorService) {
 		this.voyageRepository = voyageRepository;
 		this.sailorRepository = sailorRepository;
+		this.sailorService = sailorService;
 	}
 
 	public List<Voyage> getAllVoyages() {
@@ -46,22 +46,18 @@ public class VoyageService {
 		voyageRepository.deleteById(id);
 	}
 
-	public ResponseEntity<Voyage> addNewCrewMember(Long voyageId, Sailor sailor) {
+	public ResponseEntity<Voyage> addNewCrewMember(Long voyageId, Long employeeId) {
 		Voyage voyageToUpdate = getById(voyageId);
-		Optional<Sailor> sailorToAdd = sailorRepository.findEmployeeByEmail(sailor.getEmail());
+		Sailor sailorToAdd = sailorService.getEmployeeById(employeeId);
 
-		if (sailorToAdd.isEmpty()) {
-			throw new SailorNotFoundException(
-					"Sailor with e-mail: " + sailor.getEmail() + " not found."
-			);
-		}
 
-		if (isNotPartOfCrewList(voyageToUpdate, sailorToAdd)){
-			addNewCrewMember(voyageToUpdate, sailorToAdd.get());
-			sailorToAdd.get().setCurrentVoyage(voyageToUpdate);
+		if (isNotPartOfCrewList(voyageToUpdate, sailorToAdd) && sailorToAdd.getCurrentVoyage() != null ){
+			addNewCrewMember(voyageToUpdate, sailorToAdd);
+			sailorToAdd.setCurrentVoyage(voyageToUpdate);
+			sailorToAdd.setReadinessDate(null);
 		} else{
 			throw new SailorExistsException(
-					"Sailor with id: " + sailorToAdd.get().getEmployeeId() + " already part of vessel's " + voyageToUpdate.getVessel().getName() + " crew list."
+					"Sailor with id: " + sailorToAdd.getEmployeeId() + " already part of a crew list."
 			);
 		}
 
@@ -73,8 +69,8 @@ public class VoyageService {
 		voyageToUpdate.getCrewList().add(sailorToAdd);
 	}
 
-	private boolean isNotPartOfCrewList(Voyage voyageToUpdate, Optional<Sailor> sailorToAdd) {
+	private boolean isNotPartOfCrewList(Voyage voyageToUpdate, Sailor sailorToAdd) {
 		return voyageToUpdate.getCrewList().stream()
-				.noneMatch(s -> s.getEmployeeId().equals(sailorToAdd.get().getEmployeeId()));
+				.noneMatch(s -> s.getEmployeeId().equals(sailorToAdd.getEmployeeId()));
 	}
 }
