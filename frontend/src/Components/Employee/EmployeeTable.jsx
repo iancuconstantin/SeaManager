@@ -14,6 +14,31 @@ const EmployeeTable = ({ employees, fetchData }) => {
         setOpen(prevOpen => ({ ...prevOpen, [employeeId]: !prevOpen[employeeId] }));
     }
 
+    async function deleteEmp(employeeId) {
+        const confirmed = window.confirm('Are you sure you want to delete this employee?');
+        if (confirmed) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/employee/${employeeId}`, {
+                method: 'DELETE'
+                });
+            
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                // Do something with the successful response
+                window.location.reload();
+                alert("DELETE SUCCESS!")
+
+            } catch (error) {
+                console.error('There was a problem with the delete request:', error);
+            }
+        }
+    }
+
+    async function updateEmp(employeeId){
+        alert("UPDATE will be avaible soon.")
+    }
+
     return (
         <div style={{ width: "90%" }} className="d-flex justify-content-center mx-auto my-3">
             <table>
@@ -29,7 +54,7 @@ const EmployeeTable = ({ employees, fetchData }) => {
                     <th>Contact No</th>
                     <th>Rank</th>
                     <th>Gender</th>
-                    <th>Current Voyage</th>
+                    <th>Readiness Date</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -46,17 +71,31 @@ const EmployeeTable = ({ employees, fetchData }) => {
                             <td className="py-3">{employee.contactNo}</td>
                             <td className="py-3">{employee.rank}</td>
                             <td className="py-3">{employee.gender}</td>
-                            <td className="py-3">{employee.currentVoyage || "N/A"}</td>
-                            <Button variant="danger">Delete</Button>{' '}
-                            {/* <Button variant="primary" onClick={()=>fetchData(employee.employeeId)}>✅</Button>{' '} */}
+                            <td className="py-3">{employee.readinessDate || "N/A"}</td>
                             <Button 
-                                variant="primary" 
+                                variant="primary"
+                                className="mx-1"
                                 onClick={()=>trigger(employee.employeeId)}
                                 aria-controls={`example-collapse-text-${employee.employeeId}`}
                                 aria-expanded={open[employee.employeeId]}
-                                >
-                                    ✅
+                            >
+                                📑
                             </Button>{' '}
+                            <Button 
+                                variant="info" 
+                                className="mx-1"
+                                onClick={()=>updateEmp(employee.employeeId)}
+                            >
+                                ✍️
+                            </Button>{' '}
+                            <Button 
+                                variant="danger"
+                                className="mx-1"
+                                onClick={()=>deleteEmp(employee.employeeId)}
+                            >
+                                    ❌
+                            </Button>{' '}
+
                         </tr>
                         <tr>
                             <td colSpan="10">

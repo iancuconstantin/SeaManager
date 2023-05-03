@@ -1,15 +1,14 @@
 import { useLoaderData,useNavigation } from "react-router-dom";
 import { useState } from "react";
 import EmployeeTable from "./EmployeeTable";
-import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
-import { Form } from 'react-bootstrap';
-import RankList from './RankList';
+import Collapse from 'react-bootstrap/Collapse';
+import AddEmployeeForm from "./EmployeeAdd";
 
 export const Employees = () => {
     const employeesFetch = useLoaderData();
     const navigation = useNavigation();
-    const [rank, setRank] = useState('');
+    const [open, setOpen] = useState(false);
     
 
     if(navigation.state === "loading"){
@@ -17,44 +16,23 @@ export const Employees = () => {
     }
     
 
-    const handleRankChange = (event) => {
-        setRank(event.target.value);
-    };
-
     return(
         <>
             <h2>Employees page</h2>
+            {/* ADD EMPLOYEE */}
+            <Button
+                onClick={() => setOpen(!open)}
+                aria-controls="example-collapse-text"
+                aria-expanded={open}
+                variant="success"
+            >
+                Add New Employee
+            </Button>{' '}
+            <Collapse in={open}>
+                <AddEmployeeForm open={open}/>
+            </Collapse>
+            {/* ADD EMPLOYEE */}
             <EmployeeTable employees={employeesFetch} fetchData={fetchCertificates}/>
-            <Form.Group className="d-flex justify-content-center mx-auto" style={{ width: "90%" }}>
-                <InputGroup>
-                    <Form.Control
-                        placeholder="FirstName"
-                        aria-label="FirstName"
-                        aria-describedby="basic-addon1"
-                    />
-                    <Form.Control
-                    placeholder="LastName"
-                    aria-label="LastName"
-                    aria-describedby="basic-addon1"
-                    />
-                    <Form.Control type="email" placeholder="Email" />
-                    <Form.Control type="date" placeholder="Date Of Birth" />
-                    <Form.Control placeholder="Address"/>
-                    <Form.Control type='number' placeholder="Contact No"/>
-                    <Form.Control as="select" value={rank} onChange={handleRankChange}>
-                        <option value="">Select a rank...</option>
-                        {RankList.map((rankOption, index) => (
-                            <option key={index} value={rankOption}>{rankOption}</option>
-                        ))}
-                    </Form.Control>
-                    <Form.Select aria-label="Default select example">
-                        <option>Gender</option>
-                        <option value="MALE">MALE</option>
-                        <option value="FEMALE">FEMALE</option>
-                    </Form.Select>
-                    <Button variant="success">Add Employee</Button>{' '}
-                </InputGroup>
-            </Form.Group>
         </>
         
     )

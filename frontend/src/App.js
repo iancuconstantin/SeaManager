@@ -7,6 +7,7 @@ import { createBrowserRouter, createRoutesFromElements, Route, Link, Outlet, Rou
 import { Employees, employeeLoader } from './Components/Employee/Employees';
 import {Vessels, vesselsLoader} from './Components/Vessels/Vessels';
 import { Voyages, voyageLoader } from './Components/Voyages/Voyages';
+import { Button} from 'react-bootstrap';
 
 function App() {
 
@@ -39,12 +40,24 @@ const Root = () => {
   return(
     <>
       <div>
-        <Link to={"/"}>Home</Link>
-        <Link to={"/data"}>Data</Link>
-        <Link to={"/contact"}>Contact</Link>
-        <Link to={"/employees"}>Employees</Link>
-        <Link to={"/vessels"}>Vessels</Link>
-        <Link to={"/voyages"}>Voyages</Link>
+      <Link to="/">
+        <Button variant="info" className="mx-2 mt-3">Home</Button>
+      </Link>
+      <Link to="/data">
+        <Button variant="info" className="mx-2 mt-3">Data</Button>
+      </Link>
+      <Link to="/contact">
+        <Button variant="info" className="mx-2 mt-3">Contact</Button>
+      </Link>
+      <Link to="/employees">
+        <Button variant="info" className="mx-2 mt-3">Employees</Button>
+      </Link>
+      <Link to="/vessels">
+        <Button variant="info" className="mx-2 mt-3">Vessels</Button>
+      </Link>
+      <Link to="/voyages">
+        <Button variant="info" className="mx-2 mt-3">Voyages</Button>
+      </Link>
       </div>
 
       <div>
