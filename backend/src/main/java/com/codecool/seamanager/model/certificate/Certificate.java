@@ -2,6 +2,7 @@ package com.codecool.seamanager.model.certificate;
 
 import com.codecool.seamanager.model.employee.Sailor;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,6 +47,7 @@ public class Certificate {
 			columnDefinition = "BIGINT",
 			foreignKey = @ForeignKey(name = "owner_id_foreign")
 	)
+	@JsonIgnore
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Sailor owner;
 	@NotNull(

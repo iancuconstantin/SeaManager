@@ -84,10 +84,6 @@ npm-shrinkwrap.json
 *.vscode/
 *.idea/
 
-# Compiled output
-*.css
-*.js
-*.js.map
 
 # Cache files
 *.cache

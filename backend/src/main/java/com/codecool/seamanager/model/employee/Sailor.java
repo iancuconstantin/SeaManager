@@ -118,7 +118,7 @@ public class Sailor {
 			EnumType.STRING
 	)
 	private Gender gender;
-	@JsonIgnore
+
 	@OneToMany(
 			targetEntity = Certificate.class,
 			mappedBy = "owner"
