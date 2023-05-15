@@ -8,6 +8,7 @@ import { Employees, employeeLoader } from './Components/Employee/Employees';
 import {Vessels, vesselsLoader} from './Components/Vessels/Vessels';
 import { Voyages, voyageLoader } from './Components/Voyages/Voyages';
 import { Button} from 'react-bootstrap';
+window.Buffer = window.Buffer || require("buffer").Buffer;
 
 function App() {
 

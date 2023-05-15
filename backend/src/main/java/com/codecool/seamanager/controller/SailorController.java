@@ -31,10 +31,9 @@ public class SailorController {
 		return sailorService.getEmployeeById(employeeId);
 	}
 
-	@GetMapping
+	@GetMapping(path = "/byRank")
 	public List<Sailor> getEmployeesByRank(@RequestParam Rank rank){
 		return sailorService.getEmployeesByRank(rank);
-
 	}
 
 	@PostMapping()

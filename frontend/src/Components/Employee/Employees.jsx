@@ -3,6 +3,7 @@ import { useState,useEffect } from "react";
 import AddEmployeeForm from "./EmployeeAdd";
 import EmployeeTable from "./EmployeeTable";
 import EmployeeSearch from "./EmployeeSearch";
+import { getAuthHeaders } from '../../authUtils';
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
 
@@ -14,7 +15,8 @@ export const Employees = () => {
     const [feedBackStatus, setFeedBackStatus] = useState(false);
     const [sortColumn, setSortColumn] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
-    
+
+
     const maxId = Math.max(...employeesFetch.map(emp=>emp.employeeId))
 
     async function addNewEmployee(formData) {
@@ -158,15 +160,18 @@ export const Employees = () => {
     )
 }
 
-
-
 export const employeeLoader = async () => {
-    const response = await fetch('http://localhost:8080/api/employee');
+    const response = await fetch('http://localhost:8080/api/employee', {
+        headers: getAuthHeaders()
+    });
     const data = await response.json();
     return data;
 }
+
 export const fetchCertificates = async (employeeId) => {
-    const response = await fetch(`http://localhost:8080/api/employee/${employeeId}`);
+    const response = await fetch(`http://localhost:8080/api/employee/${employeeId}`, {
+        headers: getAuthHeaders()
+    });
     const data = await response.json();
     return data;
 }
