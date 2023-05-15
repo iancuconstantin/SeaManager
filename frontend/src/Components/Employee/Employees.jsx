@@ -1,26 +1,147 @@
 import { useLoaderData,useNavigation } from "react-router-dom";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import AddEmployeeForm from "./EmployeeAdd";
 import EmployeeTable from "./EmployeeTable";
+import EmployeeSearch from "./EmployeeSearch";
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
-import AddEmployeeForm from "./EmployeeAdd";
 
 export const Employees = () => {
-    const employeesFetch = useLoaderData();
+    const [employeesFetch, setEmployeesFetch] = useState(useLoaderData());
     const navigation = useNavigation();
     const [open, setOpen] = useState(false);
+    const [feedBackMsg, setFeedBackMsg] = useState("");
+    const [feedBackStatus, setFeedBackStatus] = useState(false);
+    const [sortColumn, setSortColumn] = useState('');
+    const [sortOrder, setSortOrder] = useState('asc');
     
+    const maxId = Math.max(...employeesFetch.map(emp=>emp.employeeId))
+
+    async function addNewEmployee(formData) {
+        try {
+            const response = await fetch("http://localhost:8080/api/employee", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
+            },
+            body: JSON.stringify(formData)
+            });
+            if (response.ok) {
+                setFeedBackStatus(true);
+                setFeedBackMsg('New employee was added!');
+                formData.employeeId = maxId + 1;
+                setEmployeesFetch([...employeesFetch, formData]);
+            } else {
+                if(response.status === 422){
+                    setFeedBackStatus(true);
+                    setFeedBackMsg(`Email ${formData.email} already exist!`);
+                } else {
+                    setFeedBackStatus(true);
+                    setFeedBackMsg("Something went wrong! Try again later.");
+                }
+            }
+        } catch (error) {
+            setFeedBackStatus(true);
+            setFeedBackMsg("Connection error!");
+        }
+    }
+
+    async function updateEmployee(formData, employeeID) {
+        try{
+            const response = await fetch(`http://localhost:8080/api/employee/${employeeID}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
+            },
+            body: JSON.stringify(formData)
+            });
+
+            if(response.ok){
+                setFeedBackStatus(true);
+                setFeedBackMsg('Employee was successfuly updated!');
+                setEmployeesFetch((prevEmployees) =>
+                    prevEmployees.map((employee) =>
+                        employee.employeeId === formData.employeeId ? formData : employee
+                    )
+                );
+                setEmployeesFetch([...employeesFetch, formData]);
+                
+
+            } else {
+                setFeedBackStatus(true);
+                setFeedBackMsg("Something went wrong! Try again later.");
+            }
+
+        } catch (e) {
+            console.error("Connection error:", e);
+            setFeedBackStatus(true);
+            setFeedBackMsg("Connection error!");
+        }
+    }
+
+    async function deleteEmp(employeeId) {
+        const confirmed = window.confirm('Are you sure you want to delete this employee?');
+        if (confirmed) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/employee/${employeeId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Do something with the successful response
+                const updatedEmployees = employeesFetch.filter(employee => employee.employeeId !== employeeId);
+                setEmployeesFetch(updatedEmployees);
+                // window.location.reload();
+                // alert("DELETE SUCCESS!")
+
+            } catch (error) {
+                console.error('There was a problem with the delete request:', error);
+            }
+        }
+    }
+
+    const handleSort = (column) => {
+        let newOrder = 'asc';
+        if (sortColumn === column && sortOrder === 'asc') {
+        newOrder = 'desc';
+        }
+        setSortColumn(column);
+        setSortOrder(newOrder);
+
+        const sortedEmployees = [...employeesFetch].sort((a, b) => {
+        let result = 0;
+        if (a[column] > b[column]) {
+            result = 1;
+        } else if (a[column] < b[column]) {
+            result = -1;
+        }
+        if (newOrder === 'desc') {
+            result *= -1;
+        }
+        return result;
+        });
+        setEmployeesFetch(sortedEmployees);
+    };
+
 
     if(navigation.state === "loading"){
         return <h3>Loading...</h3>
     }
-    
 
     return(
         <>
             <h2>Employees page</h2>
             {/* ADD EMPLOYEE */}
             <Button
+                className="btn-sm"
                 onClick={() => setOpen(!open)}
                 aria-controls="example-collapse-text"
                 aria-expanded={open}
@@ -29,12 +150,11 @@ export const Employees = () => {
                 Add New Employee
             </Button>{' '}
             <Collapse in={open}>
-                <AddEmployeeForm open={open}/>
+                <AddEmployeeForm open={open} addNewEmployee={addNewEmployee} feedBackStatus={feedBackStatus} setFeedBackStatus={setFeedBackStatus} feedBackMsg={feedBackMsg} setOpen={setOpen}/>
             </Collapse>
             {/* ADD EMPLOYEE */}
-            <EmployeeTable employees={employeesFetch} fetchData={fetchCertificates}/>
+            <EmployeeTable employees={employeesFetch} fetchData={fetchCertificates} updateEmployee={updateEmployee} deleteEmp={deleteEmp} handleSort={handleSort}/>
         </>
-        
     )
 }
 
@@ -48,5 +168,5 @@ export const employeeLoader = async () => {
 export const fetchCertificates = async (employeeId) => {
     const response = await fetch(`http://localhost:8080/api/employee/${employeeId}`);
     const data = await response.json();
-    console.log("verificare certif. :", data.certificates);
+    return data;
 }
