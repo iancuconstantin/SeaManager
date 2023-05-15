@@ -72,7 +72,7 @@ public class VesselControllerTest {
 
 	@Test
 	public void shouldReturnListOfVessels() throws Exception {
-		List<Vessel> vessels = Arrays.asList(vessel1, vessel2);
+		List<Vessel> vessels = List.of(vessel1, vessel2);
 		when(vesselService.getAllVessels()).thenReturn(vessels);
 
 		mockMvc.perform(get(END_POINT_PATH))

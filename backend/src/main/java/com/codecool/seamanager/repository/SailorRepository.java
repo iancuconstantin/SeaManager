@@ -1,5 +1,6 @@
 package com.codecool.seamanager.repository;
 
+import com.codecool.seamanager.model.employee.Rank;
 import com.codecool.seamanager.model.employee.Sailor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,7 @@ public interface SailorRepository extends JpaRepository<Sailor, Long> {
 
 	@Query("SELECT s FROM Sailor s ORDER BY s.employeeId ASC")
 	List<Sailor> findAll();
+
+	@Query("SELECT s FROM Sailor s WHERE s.rank = ?1")
+	List<Sailor> findByRank(Rank rank);
 }

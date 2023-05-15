@@ -51,7 +51,8 @@ public class CertificateServiceTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				MALE
+				MALE,
+				null
 		);
 		sailor.setEmployeeId(1L);
 
@@ -68,7 +69,7 @@ public class CertificateServiceTest {
 
 	@Test
 	public void testGetCertificates() {
-		List<Certificate> expectedCertificates = Arrays.asList(certificate);
+		List<Certificate> expectedCertificates = List.of(certificate);
 		when(certificateRepository.findAll()).thenReturn(expectedCertificates);
 		List<Certificate> actualCertificates = certificateService.getCertificates();
 		assertEquals(expectedCertificates, actualCertificates);

@@ -51,7 +51,8 @@ public class SailorControllerTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				MALE
+				MALE,
+				null
 		);
 
 		mockMvc = MockMvcBuilders.standaloneSetup(sailorController).build();
@@ -59,7 +60,7 @@ public class SailorControllerTest {
 
 	@Test
 	public void shouldReturnListOfEmployees() throws Exception {
-		List<Sailor> sailors = Arrays.asList(sailor);
+		List<Sailor> sailors = List.of(sailor);
 		when(sailorService.getEmployees()).thenReturn(sailors);
 
 		mockMvc.perform(get(END_POINT_PATH))
@@ -127,7 +128,8 @@ public class SailorControllerTest {
 				"456 Main St",
 				"janedoe@gmail.com",
 				SECOND_ENGINEER,
-				FEMALE
+				FEMALE,
+				null
 		);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();

@@ -67,7 +67,7 @@ public class VesselServiceTest {
 
 	@Test
 	public void testGetVessels() {
-		List<Vessel> expectedVessels = Arrays.asList(vessel1, vessel2);
+		List<Vessel> expectedVessels = List.of(vessel1, vessel2);
 		when(vesselRepository.findAll()).thenReturn(expectedVessels);
 		List<Vessel> actualVessels = vesselService.getAllVessels();
 		assertEquals(expectedVessels, actualVessels);

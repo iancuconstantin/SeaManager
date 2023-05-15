@@ -47,7 +47,8 @@ public class SailorServiceTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				MALE
+				MALE,
+				null
 		);
 
 		restTemplate = new TestRestTemplate(new RestTemplateBuilder());
@@ -55,7 +56,7 @@ public class SailorServiceTest {
 
 	@Test
 	public void testGetEmployees() {
-		List<Sailor> expectedSailors = Arrays.asList(sailor);
+		List<Sailor> expectedSailors = List.of(sailor);
 		when(sailorRepository.findAll()).thenReturn(expectedSailors);
 		List<Sailor> actualSailors = sailorService.getEmployees();
 		assertEquals(expectedSailors, actualSailors);
@@ -111,7 +112,8 @@ public class SailorServiceTest {
 				"123 Strada",
 				"johndoe@company.co.uk",
 				SECOND_ENGINEER,
-				FEMALE
+				FEMALE,
+				null
 		);
 
 		HttpHeaders headers = new HttpHeaders();
