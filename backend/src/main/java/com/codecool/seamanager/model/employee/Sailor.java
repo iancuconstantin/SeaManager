@@ -149,7 +149,7 @@ public class Sailor {
 					name = "voyage_id"
 			)
 	)
-	@JoinColumn(name = "voyage_id")
+	//@JoinColumn(name = "voyage_id")
 	@JsonIgnore
 	private Voyage currentVoyage;
 

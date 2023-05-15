@@ -52,7 +52,8 @@ public class CertificateControllerTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				MALE
+				MALE,
+				null
 		);
 		sailor.setEmployeeId(1L);
 

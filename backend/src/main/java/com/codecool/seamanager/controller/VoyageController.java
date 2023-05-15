@@ -1,5 +1,6 @@
 package com.codecool.seamanager.controller;
 
+import com.codecool.seamanager.model.request.ContractRequest;
 import com.codecool.seamanager.model.voyage.Voyage;
 import com.codecool.seamanager.service.VoyageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -32,8 +34,14 @@ public class VoyageController {
 	}
 
 	@PutMapping(path = "{voyageId}/add/{employeeId}")
-	public ResponseEntity<Voyage> addNewCrewMember(@PathVariable("voyageId") Long voyageId, @PathVariable("employeeId") Long employeeId) {
-		return voyageService.addNewCrewMember(voyageId, employeeId);
+	public ResponseEntity<Voyage> addNewCrewMember(@PathVariable("voyageId") Long voyageId, @PathVariable("employeeId") Long employeeId, @RequestBody ContractRequest contractRequest) {
+		return voyageService.addNewCrewMember(voyageId, employeeId, contractRequest.startDate(), contractRequest.endDate());
+
+	}
+
+	@PutMapping(path = "{voyageId}/remove/{employeeId}")
+	public ResponseEntity<Voyage> removeCrewMember(@PathVariable("voyageId") Long voyageId, @PathVariable("employeeId") Long employeeId) {
+		return voyageService.removeCrewMember(voyageId, employeeId);
 	}
 
 	@DeleteMapping("/{voyageId}")
