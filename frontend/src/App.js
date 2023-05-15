@@ -41,22 +41,22 @@ const Root = () => {
     <>
       <div>
       <Link to="/">
-        <Button variant="info" className="mx-2 mt-3">Home</Button>
+        <Button variant="info" className="mx-2 mt-3 btn-sm">Home</Button>
       </Link>
       <Link to="/data">
-        <Button variant="info" className="mx-2 mt-3">Data</Button>
+        <Button variant="info" className="mx-2 mt-3 btn-sm">Data</Button>
       </Link>
       <Link to="/contact">
-        <Button variant="info" className="mx-2 mt-3">Contact</Button>
+        <Button variant="info" className="mx-2 mt-3 btn-sm">Contact</Button>
       </Link>
       <Link to="/employees">
-        <Button variant="info" className="mx-2 mt-3">Employees</Button>
+        <Button variant="info" className="mx-2 mt-3 btn-sm">Employees</Button>
       </Link>
       <Link to="/vessels">
-        <Button variant="info" className="mx-2 mt-3">Vessels</Button>
+        <Button variant="info" className="mx-2 mt-3 btn-sm">Vessels</Button>
       </Link>
       <Link to="/voyages">
-        <Button variant="info" className="mx-2 mt-3">Voyages</Button>
+        <Button variant="info" className="mx-2 mt-3 btn-sm">Voyages</Button>
       </Link>
       </div>
 

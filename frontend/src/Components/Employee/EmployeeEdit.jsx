@@ -2,28 +2,15 @@ import { useState, useEffect } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import RankList from './RankList';
 
-function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeedBackStatus, feedBackMsg}) {
+function EditEmployeeForm({openEdit,employeeObj, updateEmployee, feedBackMsg, feedBackStatus, setFeedBackStatus}) {
     const today = new Date();
     const minDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
     const maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3);
     const [validated, setValidated] = useState(false);
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        birthDate: '',
-        address: '',
-        contactNo: null,
-        rank: '',
-        gender: '',
-        age:'',
-        certificates:[],
-        contracts:[],
-        employeeId:'',
-        readinessDate:''
-    });
+    const [formData, setFormData] = useState({ ...employeeObj });
 
 
+    
     useEffect(() => {
         if (feedBackStatus) {
             const timer = setTimeout(() => {
@@ -33,31 +20,31 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
         }
     }, [feedBackStatus]);
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
+        // console.log("name: ",name,"value: ", value)
         if(name==="contactNo"){
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 [name]: parseInt(value)
             }));
-        } else if(name==="birthDate" || name==="readinessDate"){
+        } else if(name==="birthDate"){
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 [name]: new Date(value).toISOString().slice(0, 10)
             }));
-        } else {
+            
+        } else if(name==="readinessDate"){
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [name]: new Date(value).toISOString().slice(0, 10)
+            }));
+        }else {
             setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value
             }));
         }
-    };
-
-    const calculateAge = (dob) => {
-        const diffMs = Date.now() - dob.getTime();
-        const ageDate = new Date(diffMs);
-        return Math.abs(ageDate.getUTCFullYear() - 1970);
     };
 
     const handleSubmit = (e) => {
@@ -68,45 +55,27 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
         } else {
             e.preventDefault();
             e.stopPropagation();
-            const dob = new Date(formData.birthDate);
-            const age = calculateAge(dob);
-            formData.age = age;
-            addNewEmployee(formData);
-            setFormData({
-                firstName: '',
-                lastName: '',
-                email: '',
-                birthDate: '',
-                address: '',
-                contactNo: 0,
-                rank: '',
-                gender: '',
-                age:'',
-                certificates:[],
-                contracts:[],
-                employeeId:'',
-                readinessDate:''
-            })
+            // updateEmployee(formData, employeeObj.employeeId);
+            console.log("formData: ",formData)
         }
-        setOpen(!open)
         setValidated(true);
     };
 
     return (
         <>
-            {open && (
+            {( openEdit && !feedBackStatus &&
             <Form noValidate validated={validated} onSubmit={handleSubmit} className="justify-content-center">
                 <Form.Group className="d-flex" style={{ width: "90%" }}>
-                    <InputGroup className="justify-content-center m-3">
+                    <InputGroup className="justify-content-center">
                         <Form.Group className="p-1">
                             <Form.Control
+                                className='form-control-sm'
                                 name="firstName"
                                 placeholder="FirstName"
                                 aria-label="FirstName"
                                 aria-describedby="basic-addon1"
                                 required
                                 value={formData.firstName}
-                                className='form-control-sm'
                                 onChange={handleChange}
                                 pattern="^[a-zA-Z]{2,25}(([',. -][a-zA-Z ])?[a-zA-Z]*)$"
                             />
@@ -115,13 +84,13 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                         </Form.Group>
                         <Form.Group className="p-1">
                             <Form.Control
+                                className='form-control-sm'
                                 name="lastName"
                                 placeholder="LastName"
                                 aria-label="LastName"
                                 aria-describedby="basic-addon1"
                                 required
                                 value={formData.lastName}
-                                className='form-control-sm'
                                 onChange={handleChange}
                                 pattern="^[a-zA-Z]{2,25}(([',. -][a-zA-Z ])?[a-zA-Z]*)$"
                             />
@@ -130,12 +99,12 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                         </Form.Group>
                         <Form.Group className="p-1">
                             <Form.Control 
+                                className='form-control-sm'
                                 name="email"
                                 type="email" 
                                 placeholder="Email" 
                                 required
                                 value={formData.email} 
-                                className='form-control-sm'
                                 onChange={handleChange}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -143,12 +112,12 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                         </Form.Group>
                         <Form.Group className="p-1">
                             <Form.Control 
+                                className='form-control-sm'
                                 name="birthDate"
                                 type="date" 
                                 placeholder="Date Of Birth" 
                                 required
                                 value={formData.birthDate} 
-                                className='form-control-sm'
                                 onChange={handleChange}
                                 max={minDate.toISOString().split('T')[0]}
                             />
@@ -157,11 +126,11 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                         </Form.Group>
                         <Form.Group className="p-1">
                             <Form.Control 
+                                className='form-control-sm'
                                 name="address"
                                 placeholder="Address" 
                                 required
                                 value={formData.address} 
-                                className='form-control-sm'
                                 onChange={handleChange}
                                 pattern="^.{5,150}$"
                             />
@@ -170,6 +139,7 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                         </Form.Group>
                         <Form.Group className="p-1">
                             <Form.Control 
+                                className='form-control-sm'
                                 name="contactNo"
                                 type='number' 
                                 min="100000000"
@@ -177,7 +147,6 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                                 placeholder="Contact No" 
                                 required
                                 value={formData.contactNo} 
-                                className='form-control-sm'
                                 onChange={handleChange}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -185,9 +154,9 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                         </Form.Group>
                         <Form.Group className="p-1">
                             <Form.Select 
+                                className='form-select-sm'
                                 name="rank"
                                 as="select"
-                                className='form-select-sm'
                                 onChange={handleChange}
                                 required
                                 value={formData.rank} 
@@ -202,11 +171,11 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                         </Form.Group>
                         <Form.Group className="p-1">
                             <Form.Select 
+                                className='form-select-sm'
                                 name="gender"
                                 aria-label="Default select example"
                                 required
                                 value={formData.gender}
-                                className='form-select-sm'
                                 onChange={handleChange}
                             >
                                 <option value="">Gender</option>
@@ -218,20 +187,20 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                         </Form.Group>
                         <Form.Group className="p-1">
                             <Form.Control 
+                                className='form-control-sm'
                                 name="readinessDate"
                                 type="date" 
                                 placeholder="Readiness Date" 
                                 required
                                 value={formData.readinessDate} 
-                                className='form-control-sm'
                                 onChange={handleChange}
                                 min={maxDate.toISOString().split('T')[0]}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid Readiness Date</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">Please enter a valid Date Of Birth</Form.Control.Feedback>
                         </Form.Group>
                     </InputGroup>
-                    <Button className="btn-sm" variant="success" type="submit">Add</Button>{' '}
+                        <Button className='btn-sm' variant="success" type="submit">UPDATE</Button>{' '}
                 </Form.Group>
             </Form>
             )}
@@ -242,4 +211,4 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
     );
 }
 
-export default AddEmployeeForm;
+export default EditEmployeeForm;
