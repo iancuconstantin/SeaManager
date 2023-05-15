@@ -1,5 +1,4 @@
 import './App.css';
-// import Navbar from './Components/Navbar';
 import {Data, dataLoader} from './Components/Data';
 import {Contact} from './Components/Contact';
 import {Home} from './Components/Home';
@@ -26,8 +25,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* <Navbar/>
-      <p>Hello World!</p> */}
       <RouterProvider router={router}/>
     </div>
   );

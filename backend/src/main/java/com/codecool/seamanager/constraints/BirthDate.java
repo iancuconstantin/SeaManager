@@ -20,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 )
 @Documented
 public @interface BirthDate {
-	String message() default "{com.codecool.seamanager.constraints.BirthDate.mesage}";
+	String message() default "{com.codecool.seamanager.constraints.BirthDate.message}";
 	Class<?> [] groups() default {};
 	Class <? extends Payload> [] payload() default {};
 }

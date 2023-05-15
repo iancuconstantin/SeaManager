@@ -1,16 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
+import Collapse from "react-bootstrap/Collapse";
 import RankList from './RankList';
 
-function EditEmployeeForm({openEdit,employeeObj, updateEmployee, feedBackMsg, feedBackStatus, setFeedBackStatus}) {
+function EditEmployeeForm({openEdit,employeeObj, updateEmployee, feedBackMsg, feedBackStatus, setFeedBackStatus, setEmployeesFetch}) {
     const today = new Date();
     const minDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
     const maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3);
     const [validated, setValidated] = useState(false);
-    const [formData, setFormData] = useState({ ...employeeObj });
+    const [formData, setFormData] = useState();
 
 
-    
+    useEffect(()=>{
+        setFormData({...employeeObj})
+    },[employeeObj])
+
     useEffect(() => {
         if (feedBackStatus) {
             const timer = setTimeout(() => {
@@ -22,7 +26,6 @@ function EditEmployeeForm({openEdit,employeeObj, updateEmployee, feedBackMsg, fe
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // console.log("name: ",name,"value: ", value)
         if(name==="contactNo"){
             setFormData((prevFormData) => ({
                 ...prevFormData,
@@ -55,8 +58,12 @@ function EditEmployeeForm({openEdit,employeeObj, updateEmployee, feedBackMsg, fe
         } else {
             e.preventDefault();
             e.stopPropagation();
-            // updateEmployee(formData, employeeObj.employeeId);
-            console.log("formData: ",formData)
+            updateEmployee(formData, employeeObj.employeeId);
+            setEmployeesFetch((prevEmployees) =>
+                    prevEmployees.map((employee) =>
+                        employee.employeeId === formData.employeeId ? formData : employee
+                    )
+                );
         }
         setValidated(true);
     };
@@ -64,6 +71,7 @@ function EditEmployeeForm({openEdit,employeeObj, updateEmployee, feedBackMsg, fe
     return (
         <>
             {( openEdit && !feedBackStatus &&
+            <Collapse in={openEdit}>
             <Form noValidate validated={validated} onSubmit={handleSubmit} className="justify-content-center">
                 <Form.Group className="d-flex" style={{ width: "90%" }}>
                     <InputGroup className="justify-content-center">
@@ -203,6 +211,7 @@ function EditEmployeeForm({openEdit,employeeObj, updateEmployee, feedBackMsg, fe
                         <Button className='btn-sm' variant="success" type="submit">UPDATE</Button>{' '}
                 </Form.Group>
             </Form>
+            </Collapse>
             )}
             {feedBackStatus && (
                 <h3>{feedBackMsg}</h3>

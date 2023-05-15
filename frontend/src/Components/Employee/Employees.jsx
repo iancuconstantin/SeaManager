@@ -33,7 +33,7 @@ export const Employees = () => {
                 setFeedBackStatus(true);
                 setFeedBackMsg('New employee was added!');
                 formData.employeeId = maxId + 1;
-                setEmployeesFetch([...employeesFetch, formData]);
+                setEmployeesFetch([formData, ...employeesFetch]);
             } else {
                 if(response.status === 422){
                     setFeedBackStatus(true);
@@ -70,7 +70,7 @@ export const Employees = () => {
                         employee.employeeId === formData.employeeId ? formData : employee
                     )
                 );
-                setEmployeesFetch([...employeesFetch, formData]);
+                // setEmployeesFetch([...employeesFetch, formData]);
                 
 
             } else {
@@ -109,9 +109,9 @@ export const Employees = () => {
     }
 
     const handleSort = (column) => {
-        let newOrder = 'asc';
-        if (sortColumn === column && sortOrder === 'asc') {
-        newOrder = 'desc';
+        let newOrder = 'desc';
+        if (sortColumn === column && sortOrder === 'desc') {
+        newOrder = 'asc';
         }
         setSortColumn(column);
         setSortOrder(newOrder);
@@ -123,7 +123,7 @@ export const Employees = () => {
         } else if (a[column] < b[column]) {
             result = -1;
         }
-        if (newOrder === 'desc') {
+        if (newOrder === 'asc') {
             result *= -1;
         }
         return result;
@@ -153,7 +153,7 @@ export const Employees = () => {
                 <AddEmployeeForm open={open} addNewEmployee={addNewEmployee} feedBackStatus={feedBackStatus} setFeedBackStatus={setFeedBackStatus} feedBackMsg={feedBackMsg} setOpen={setOpen}/>
             </Collapse>
             {/* ADD EMPLOYEE */}
-            <EmployeeTable employees={employeesFetch} fetchData={fetchCertificates} updateEmployee={updateEmployee} deleteEmp={deleteEmp} handleSort={handleSort}/>
+            <EmployeeTable employees={employeesFetch} fetchData={fetchCertificates} updateEmployee={updateEmployee} deleteEmp={deleteEmp} handleSort={handleSort} setEmployeesFetch={setEmployeesFetch}/>
         </>
     )
 }

@@ -78,6 +78,7 @@ public class SailorService {
 		sailorToUpdate.setContactNo(sailorDetails.getContactNo());
 		sailorToUpdate.setRank(sailorDetails.getRank());
 		sailorToUpdate.setGender(sailorDetails.getGender());
+		sailorToUpdate.setReadinessDate(sailorDetails.getReadinessDate());
 
 		Sailor updatedSailor = sailorRepository.saveAndFlush(sailorToUpdate);
 		return ResponseEntity.ok(updatedSailor);
