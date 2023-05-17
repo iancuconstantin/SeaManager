@@ -36,7 +36,7 @@ const EmployeeTable = ({
     fetchData(employeeId);
     setOpen((prevOpen) => ({
       ...prevOpen,
-      [employeeId]: !prevOpen[employeeId],
+      [employeeId]: !prevOpen[employeeId]
     }));
   };
 
@@ -118,7 +118,8 @@ const EmployeeTable = ({
                         variant="primary"
                         className="mx-1 btn-sm"
                         onClick={() => trigger(employee.employeeId)}
-                        aria-controls={`example-collapse-text-${employee.employeeId}`}
+                        // aria-controls={`example-collapse-text-${employee.employeeId}`}
+                        aria-controls={`certificates-${employee.employeeId}`}
                         aria-expanded={open[employee.employeeId]}
                       >
                         📑
@@ -141,10 +142,11 @@ const EmployeeTable = ({
                   </tr>
                   <tr>
                     <td colSpan="10">
-                      <Collapse in={open[idx]}>
+                      <Collapse in={open[employee.employeeId]}>
                         <div
                           style={{ textAlign: "center" }}
-                          id={`${employee.employeeId}`}
+                          // id={`${idx}`}
+                          id={`certificates-${employee.employeeId}`}
                         >
                           <table style={{ margin: "auto", width: "70%" }}>
                             <thead>
@@ -173,13 +175,13 @@ const EmployeeTable = ({
                   <tr>
                     <td colSpan="10">
                         <EmployeeEdit
-                        openEdit={openEdit[idx]}
-                        employeeObj={employee}
-                        updateEmployee={updateEmployee}
-                        feedBackMsg={feedBackMsg}
-                        feedBackStatus={feedBackStatus}
-                        setFeedBackStatus={setFeedBackStatus}
-                        setEmployeesFetch={setEmployeesFetch}
+                          openEdit={openEdit[idx]}
+                          employeeObj={employee}
+                          updateEmployee={updateEmployee}
+                          feedBackMsg={feedBackMsg}
+                          feedBackStatus={feedBackStatus}
+                          setFeedBackStatus={setFeedBackStatus}
+                          setEmployeesFetch={setEmployeesFetch}
                         />
                     </td>
                   </tr>

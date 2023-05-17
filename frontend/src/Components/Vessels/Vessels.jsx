@@ -1,5 +1,5 @@
-import { useLoaderData,useNavigation } from "react-router-dom";
-import { useState } from "react";
+import { useLoaderData,useNavigation,useNavigate } from "react-router-dom";
+import { useState,useEffect } from "react";
 import VesselsTable from "./VesselsTable";
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -8,11 +8,18 @@ import VesselType from "./VesselType";
 import Collapse from 'react-bootstrap/Collapse';
 import AddVesselForm from './VesselAdd';
 
-export const Vessels = () => {
+export const Vessels = ({ isLoggedIn }) => {
     const vesselsFetch = useLoaderData();
     const navigation = useNavigation();
     const [vesselType, setVesselType] = useState('');
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+        navigate('/login')
+        }
+    }, [isLoggedIn]);
 
     if(navigation.state === "loading"){
         return <h3>Loading...</h3>
