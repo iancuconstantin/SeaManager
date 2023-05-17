@@ -1,5 +1,7 @@
 package com.codecool.seamanager.service;
 
+import com.codecool.seamanager.exceptions.sailor.EmailTakenException;
+import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.model.user.User;
 import com.codecool.seamanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -32,8 +35,14 @@ public class UserService {
     }
 
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        Optional<User> userOptional = userRepository.findUserByEmail(user.getEmail());
+        if (userOptional.isPresent()) {
+            throw new EmailTakenException(
+                    "Email " + user.getEmail() + " is taken"
+            );
+        }
         User savedUser = userRepository.save(user);
-        return ResponseEntity.created(URI.create("/user/" + savedUser.getUserId())).body(savedUser);
+        return ResponseEntity.ok(savedUser);
     }
 
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
@@ -42,7 +51,7 @@ public class UserService {
             User existingUser = optionalUser.get();
             existingUser.setUsername(user.getUsername());
             existingUser.setPassword(user.getPassword());
-            existingUser.setAccessLevel(user.getAccessLevel());
+            existingUser.setRoles(user.getRoles());
             User updatedUser = userRepository.save(existingUser);
             return ResponseEntity.ok(updatedUser);
         } else {
