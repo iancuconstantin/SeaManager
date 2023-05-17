@@ -66,28 +66,30 @@ public class SecurityConfig {
 				.exceptionHandling(
 						(ex) -> ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
 								.accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
+				.httpBasic(withDefaults())
 				.build();
 	}
 
 	// This will allow the /token endpoint to use basic auth and everything else uses the SFC above
-	@Order(Ordered.HIGHEST_PRECEDENCE)
-	@Bean
-	SecurityFilterChain tokenSecurityFilterChain(HttpSecurity http) throws Exception {
-		return http
-				.cors(withDefaults())//by default use a bean by the name of corsConfiguration
-				.csrf(AbstractHttpConfigurer::disable)
-				.authorizeHttpRequests(auth -> {
-							auth.requestMatchers("/token").authenticated();
-						}
-				)
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.exceptionHandling(ex -> {
-					ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
-					ex.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
-				})
-				.httpBasic(withDefaults())
-				.build();
-	}
+//	@Order(Ordered.HIGHEST_PRECEDENCE)
+//	@Bean
+//	SecurityFilterChain tokenSecurityFilterChain(HttpSecurity http) throws Exception {
+//		return http
+//				.cors(withDefaults())//by default use a bean by the name of corsConfiguration
+//				.csrf(AbstractHttpConfigurer::disable)
+//				.authorizeHttpRequests(auth -> {
+//							auth.requestMatchers("/token").authenticated();
+//							auth.anyRequest().authenticated();
+//						}
+//				)
+//				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//				.exceptionHandling(ex -> {
+//					ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
+//					ex.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
+//				})
+//				.httpBasic(withDefaults())
+//				.build();
+//	}
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
