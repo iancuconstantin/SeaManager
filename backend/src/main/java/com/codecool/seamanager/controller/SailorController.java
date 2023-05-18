@@ -1,10 +1,12 @@
 package com.codecool.seamanager.controller;
 
+import com.codecool.seamanager.exceptions.sailor.EmailTakenException;
 import com.codecool.seamanager.model.employee.Rank;
 import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.service.SailorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +39,17 @@ public class SailorController {
 	}
 
 	@PostMapping()
-	public void registerNewEmployee(@RequestBody Sailor sailor) {
-		sailorService.addNewEmployee(sailor);
+	public ResponseEntity<String> registerNewEmployee(@RequestBody Sailor sailor) {
+		try{
+			sailorService.addNewEmployee(sailor);
+			return ResponseEntity.status(HttpStatus.OK)
+					.body("New employee was added!");
+		} catch (EmailTakenException e){
+//			return ResponseEntity.badRequest()
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+//					.body("Email was already used!");
+					.body(HttpStatus.UNPROCESSABLE_ENTITY.toString());
+		}
 	}
 
 	@DeleteMapping(path = "{employeeId}")

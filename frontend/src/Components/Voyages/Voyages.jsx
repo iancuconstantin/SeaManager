@@ -1,5 +1,5 @@
-import { useLoaderData,useNavigation } from "react-router-dom";
-import { useState } from "react";
+import { useLoaderData, useNavigation,useNavigate } from "react-router-dom";
+import { useState,useEffect } from "react";
 import VoyagesTable from "./VoyagesTable";
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Form } from 'react-bootstrap';
@@ -7,12 +7,18 @@ import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
 import AddVoyageForm from './VoyagesAdd';
 
-export const Voyages = () => {
+export const Voyages = ({isLoggedIn}) => {
     const voyagesFetch = useLoaderData();
     const navigation = useNavigation();
     const [vesselType, setVesselType] = useState('');
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!isLoggedIn) {
+        navigate('/login')
+        }
+    }, [isLoggedIn]);
 
     if(navigation.state === "loading"){
         return <h3>Loading...</h3>
