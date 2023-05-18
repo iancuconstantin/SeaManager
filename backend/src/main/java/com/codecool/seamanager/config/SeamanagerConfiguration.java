@@ -47,6 +47,7 @@ public class SeamanagerConfiguration {
 						Rank.values()[random.nextInt(Rank.values().length)],
 						Gender.values()[random.nextInt(Gender.values().length)],
 						DateGenerator.generateRandomReadinessDate()
+						//TODO - readiness date field?
 				);
 				Certificate certificate = new Certificate();
 				for (int j = 0; j < 10; j++){

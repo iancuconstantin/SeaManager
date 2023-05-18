@@ -2,12 +2,16 @@ package com.codecool.seamanager.service;
 
 import com.codecool.seamanager.exceptions.sailor.EmailTakenException;
 import com.codecool.seamanager.exceptions.sailor.SailorNotFoundException;
+import com.codecool.seamanager.model.employee.Rank;
 import com.codecool.seamanager.model.employee.Sailor;
+import com.codecool.seamanager.model.vessel.Vessel;
 import com.codecool.seamanager.repository.SailorRepository;
+import com.codecool.seamanager.repository.VoyageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,5 +96,14 @@ public class SailorService {
 					"Email " + employeeOptional.get().getEmail() + " is taken"
 			);
 		}
+	}
+
+	public ResponseEntity<List<Sailor>> getSuitableRelievers(Rank rank, Vessel vessel){
+		return null;
+		//TODO - add VoyageRepository first
+	}
+
+	public List<Sailor> getEmployeesByRank(Rank rank) {
+		return sailorRepository.findByRank(rank);
 	}
 }

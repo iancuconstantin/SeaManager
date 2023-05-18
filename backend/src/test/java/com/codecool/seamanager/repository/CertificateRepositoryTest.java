@@ -35,7 +35,8 @@ public class CertificateRepositoryTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				MALE
+				MALE,
+				null
 		);
 
 		certificate = new Certificate(

@@ -33,7 +33,8 @@ public class SailorRepositoryTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				MALE
+				MALE,
+				null
 		);
 	}
 

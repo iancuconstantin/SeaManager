@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import AddEmployeeForm from "./EmployeeAdd";
 import EmployeeTable from "./EmployeeTable";
 import EmployeeSearch from "./EmployeeSearch";
+import { getAuthHeaders } from '../../authUtils';
 import Button from "react-bootstrap/Button";
 import Collapse from "react-bootstrap/Collapse";
 
@@ -189,14 +190,17 @@ export const Employees = ({ isLoggedIn }) => {
 };
 
 export const employeeLoader = async () => {
-  const response = await fetch("http://localhost:8080/api/employee");
-  const data = await response.json();
-  return data;
-};
+    const response = await fetch('http://localhost:8080/api/employee', {
+        headers: getAuthHeaders()
+    });
+    const data = await response.json();
+    return data;
+}
+
 export const fetchCertificates = async (employeeId) => {
-  const response = await fetch(
-    `http://localhost:8080/api/employee/${employeeId}`
-  );
-  const data = await response.json();
-  return data;
-};
+    const response = await fetch(`http://localhost:8080/api/employee/${employeeId}`, {
+        headers: getAuthHeaders()
+    });
+    const data = await response.json();
+    return data;
+

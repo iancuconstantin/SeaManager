@@ -26,7 +26,8 @@ public class CertificateTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				MALE
+				MALE,
+				null
 		);
 		certificate = new Certificate(
 				sailor,
@@ -67,7 +68,8 @@ public class CertificateTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				FEMALE
+				FEMALE,
+				null
 		);
 		certificate.setOwner(sailor2);
 		assertEquals(sailor2, certificate.getOwner());

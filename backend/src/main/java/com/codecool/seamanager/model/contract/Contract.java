@@ -5,6 +5,7 @@ import com.codecool.seamanager.model.voyage.Voyage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Contract {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	private Long id;
+	private Long contractId;
 
 	@ManyToOne
 	@JoinColumn(
@@ -38,7 +39,7 @@ public class Contract {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Sailor owner;
-	@Future(message = "Start date cannot be in the past.")
+	@PastOrPresent(message = "Start date should be in the past or today.")
 	private LocalDate startDate;
 	@Future(message = "End date should be in the future.")
 	private LocalDate finishDate;

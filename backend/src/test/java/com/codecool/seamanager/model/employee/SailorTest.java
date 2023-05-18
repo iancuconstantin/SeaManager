@@ -28,7 +28,8 @@ public class SailorTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				MALE
+				MALE,
+				null
 		);
 	}
 
@@ -174,7 +175,8 @@ public class SailorTest {
 				"123 Main St",
 				"johndoe@gmail.com",
 				THIRD_ENGINEER,
-				FEMALE
+				FEMALE,
+				null
 		);
 		assertNotEquals(sailor, sailor2);
 	}

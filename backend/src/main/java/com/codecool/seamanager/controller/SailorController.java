@@ -1,6 +1,7 @@
 package com.codecool.seamanager.controller;
 
 import com.codecool.seamanager.exceptions.sailor.EmailTakenException;
+import com.codecool.seamanager.model.employee.Rank;
 import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.service.SailorService;
 import jakarta.validation.Valid;
@@ -30,6 +31,11 @@ public class SailorController {
 	@GetMapping(path = "/{employeeId}")
 	public Sailor getEmployeeById(@PathVariable("employeeId") Long employeeId){
 		return sailorService.getEmployeeById(employeeId);
+	}
+
+	@GetMapping(path = "/byRank")
+	public List<Sailor> getEmployeesByRank(@RequestParam Rank rank){
+		return sailorService.getEmployeesByRank(rank);
 	}
 
 	@PostMapping()
