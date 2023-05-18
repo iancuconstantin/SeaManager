@@ -64,15 +64,15 @@ public class User {
 			pattern = "yyyy-MM-dd"
 	)
 	private LocalDate createdAt;
-	private String roles;
+	private String authorities;
 
-	public User(String username, String password, String firstName, String lastName, String email, String roles) {
+	public User(String username, String password, String firstName, String lastName, String email, String authorities) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.roles = roles;
+		this.authorities = authorities;
 	}
 
 	@PrePersist

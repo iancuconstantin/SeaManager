@@ -9,7 +9,6 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +25,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -53,43 +53,30 @@ public class SecurityConfig {
 		return http
 				.cors(withDefaults()) //by default use a bean by the name of corsConfiguration
 				.csrf(AbstractHttpConfigurer::disable)
-				.authorizeHttpRequests(auth -> {
-							auth.requestMatchers("/api/employee/**").hasAnyRole("USER", "ADMIN");
-							auth.requestMatchers("/api/vessel/**").hasRole("ADMIN");
-							auth.anyRequest().authenticated();
-						}
-				)
-				.userDetailsService(jpaUserDetailsService)
+				.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.userDetailsService(jpaUserDetailsService)
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-				.headers(headers -> headers.frameOptions().sameOrigin())
 				.exceptionHandling(
 						(ex) -> ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
 								.accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
-				.httpBasic(withDefaults())
 				.build();
 	}
 
 	// This will allow the /token endpoint to use basic auth and everything else uses the SFC above
-//	@Order(Ordered.HIGHEST_PRECEDENCE)
-//	@Bean
-//	SecurityFilterChain tokenSecurityFilterChain(HttpSecurity http) throws Exception {
-//		return http
-//				.cors(withDefaults())//by default use a bean by the name of corsConfiguration
-//				.csrf(AbstractHttpConfigurer::disable)
-//				.authorizeHttpRequests(auth -> {
-//							auth.requestMatchers("/token").authenticated();
-//							auth.anyRequest().authenticated();
-//						}
-//				)
-//				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//				.exceptionHandling(ex -> {
-//					ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
-//					ex.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
-//				})
-//				.httpBasic(withDefaults())
-//				.build();
-//	}
+	@Bean
+	@Order(1)
+	SecurityFilterChain tokenSecurityFilterChain(HttpSecurity http) throws Exception {
+		return http
+				.cors(withDefaults())//by default use a bean by the name of corsConfiguration
+				.csrf(AbstractHttpConfigurer::disable)
+				.securityMatcher(new AntPathRequestMatcher("/token"))
+				.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.userDetailsService(jpaUserDetailsService)
+				.httpBasic(withDefaults())
+				.build();
+	}
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
