@@ -7,6 +7,7 @@ import { Form } from 'react-bootstrap';
 import VesselType from "./VesselType";
 import Collapse from 'react-bootstrap/Collapse';
 import AddVesselForm from './VesselAdd';
+import {getBasicAuthHeaders, getBearerAuthHeaders} from '../../authUtils';
 
 export const Vessels = ({ isLoggedIn }) => {
     const vesselsFetch = useLoaderData();
@@ -66,7 +67,9 @@ export const Vessels = ({ isLoggedIn }) => {
 }
 
 export const vesselsLoader = async () => {
-    const response = await fetch('http://localhost:8080/api/vessel');
+    const response = await fetch('http://localhost:8080/api/vessel', {
+        headers: getBearerAuthHeaders()
+    });
     const data = await response.json();
     console.log(data)
     return data;

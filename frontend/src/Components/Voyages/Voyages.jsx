@@ -6,6 +6,7 @@ import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
 import AddVoyageForm from './VoyagesAdd';
+import {getBasicAuthHeaders, getBearerAuthHeaders} from '../../authUtils';
 
 export const Voyages = ({isLoggedIn}) => {
     const voyagesFetch = useLoaderData();
@@ -58,7 +59,9 @@ export const Voyages = ({isLoggedIn}) => {
 }
 
 export const voyageLoader = async () => {
-    const response = await fetch('http://localhost:8080/api/voyage');
+    const response = await fetch('http://localhost:8080/api/voyage', {
+        headers: getBearerAuthHeaders()
+    });
     const data = await response.json();
     return data;
 }
