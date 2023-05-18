@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-const Login = ({onLogin}) => {
+const Login = ({handleLogin}) => {
   const [validated, setValidated] = useState(false);
 
   const handleSubmit = (event) => {
@@ -13,7 +13,7 @@ const Login = ({onLogin}) => {
       setValidated(true);
     }
 
-    onLogin();
+    handleLogin();
   };
 
   return (
