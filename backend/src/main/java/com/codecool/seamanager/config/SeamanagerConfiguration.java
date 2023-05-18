@@ -70,9 +70,9 @@ public class SeamanagerConfiguration {
 
 			}
 
-			User user1 = new User("admin", encoder.encode("abcD1234"), "John", "Doe", "john@yahoo.com",  "ROLE_ADMIN,ROLE_USER");
-			User user2 = new User("user",  encoder.encode("abcD1234"), "Jane", "Doe", "jane@yahoo.com",  "ROLE_USER");
-			User user3 = new User("user789",  encoder.encode("seAcure123"), "Nicu", "Gheara", "nicu@gmail.co.uk",  "ROLE_USER");
+			User user1 = new User("admin", encoder.encode("abcD1234"), "John", "Doe", "john@yahoo.com",  "ADMIN,USER");
+			User user2 = new User("user",  encoder.encode("abcD1234"), "Jane", "Doe", "jane@yahoo.com",  "USER");
+			User user3 = new User("user789",  encoder.encode("seAcure123"), "Nicu", "Gheara", "nicu@gmail.co.uk",  "USER");
 
 			Port port1 = new Port("Houston", true);
 			Port port2 = new Port("Antwerp", true);

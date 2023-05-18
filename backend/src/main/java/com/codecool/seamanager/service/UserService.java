@@ -51,7 +51,7 @@ public class UserService {
             User existingUser = optionalUser.get();
             existingUser.setUsername(user.getUsername());
             existingUser.setPassword(user.getPassword());
-            existingUser.setRoles(user.getRoles());
+            existingUser.setAuthorities(user.getAuthorities());
             User updatedUser = userRepository.save(existingUser);
             return ResponseEntity.ok(updatedUser);
         } else {
