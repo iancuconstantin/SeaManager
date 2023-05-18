@@ -1,22 +1,19 @@
 import "./App.css";
-import {useState, useEffect} from "react";
-import {Data, dataLoader} from "./Components/Data";
-import {Contact} from "./Components/Contact";
-import {NewAccount} from "./Components/NewAccount";
+import { useState,useEffect } from "react";
+import { NewAccount } from "./Components/NewAccount";
 import Login from "./Components/Login";
 import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Route,
-    Link,
-    Outlet,
-    RouterProvider,
-    useNavigate
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  Outlet,
+  RouterProvider,
+  useNavigate
 } from "react-router-dom";
-import {Employees, employeeLoader} from "./Components/Employee/Employees";
-import {Vessels, vesselsLoader} from "./Components/Vessels/Vessels";
-import {Voyages, voyageLoader} from "./Components/Voyages/Voyages";
-import {Button} from "react-bootstrap";
+import { Employees, employeeLoader } from "./Components/Employee/Employees";
+import { Vessels, vesselsLoader } from "./Components/Vessels/Vessels";
+import { Voyages, voyageLoader } from "./Components/Voyages/Voyages";
+
 import Menu from "./Components/Menu";
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -64,10 +61,12 @@ function App() {
         )
     );
 
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         setIsLoggedIn(token);
     }, []);
+
 
     return (
         <div className="App">
@@ -87,6 +86,7 @@ const Root = ({isLoggedIn, handleLogout}) => {
         }else{
             navigate('/')
         }
+
     }, [isLoggedIn]);
 
     return (
