@@ -16,11 +16,11 @@ export const Vessels = ({ isLoggedIn }) => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-        navigate('/login')
-        }
-    }, [isLoggedIn]);
+    // useEffect(() => {
+    //     if (!isLoggedIn) {
+    //     navigate('/login')
+    //     }
+    // }, [isLoggedIn]);
 
     if(navigation.state === "loading"){
         return <h3>Loading...</h3>

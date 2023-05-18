@@ -19,26 +19,22 @@ export const Employees = ({isLoggedIn}) => {
     const [sortOrder, setSortOrder] = useState("asc");
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-            navigate('/login')
-        }
-    }, [isLoggedIn]);
+    // useEffect(() => {
+    //     if (!isLoggedIn) {
+    //         navigate('/login')
+    //     }
+    // }, [isLoggedIn]);
 
 
     const maxId = Math.max(...employeesFetch.map((emp) => emp.employeeId));
 
     async function addNewEmployee(formData) {
         try {
+            const headers = getBearerAuthHeaders();
+            headers.append("Content-Type", "application/json");
             const response = await fetch("http://localhost:8080/api/employee", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods":
-                        "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-                    "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
-                },
+                headers: headers,
                 body: JSON.stringify(formData),
             });
             if (response.ok) {
@@ -192,7 +188,6 @@ export const Employees = ({isLoggedIn}) => {
 };
 
 export const employeeLoader = async () => {
-    console.log("loader")
     const response = await fetch('http://localhost:8080/api/employee', {
         headers: getBearerAuthHeaders()
     });
