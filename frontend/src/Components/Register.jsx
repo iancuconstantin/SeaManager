@@ -18,12 +18,24 @@ const Register = () => {
 });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    console.log("name: ",name, "value:",value)
-    setFormData((prevFormData) => ({
-              ...prevFormData,
-              [name]: value
-          }));
+    const { name, value,checked } = e.target;
+    console.log("name: ",name, "checked:",checked)
+    if(name==="isAdmin" && checked){
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: "ROLE_USER,ROLE_ADMIN"
+    }));
+    } else if(name==="isAdmin" && !checked) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: "ROLE_USER"
+    }));
+    } else {
+      setFormData((prevFormData) => ({
+                ...prevFormData,
+                [name]: value
+            }));
+    }
   }
 
   const handlePasswordChange = (e) => {
@@ -50,10 +62,12 @@ const Register = () => {
       event.preventDefault();
       event.stopPropagation();
       if (passwordsMatch) {
+        console.log(formData)
         // Passwords match, continue with form submission
         // Your logic here
         console.log("pass match!")
       } else {
+        console.log(formData)
         // Passwords don't match, set passwordsMatch state to false
         console.log("pass do not match!")
       }
@@ -164,7 +178,6 @@ const Register = () => {
                 type={"checkbox"}
                 id={`default-checkbox`}
                 label={`Is Admin`}
-                // checked={formData.isAdmin+',ROLE_ADMIN'}
                 onChange={handleChange}
               />
           </div>
