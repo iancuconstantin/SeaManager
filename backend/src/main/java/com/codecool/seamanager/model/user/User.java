@@ -18,7 +18,8 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @Table(
 		uniqueConstraints = {
 				@UniqueConstraint(name = "username_uk", columnNames = {"username"})
-		}
+		},
+		name = "users"
 )
 @Getter
 @Setter
@@ -34,7 +35,7 @@ public class User {
 	private String username;
 	@NotBlank(message = "Password is required.")
 	@Pattern(
-			regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$",
+			regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d@#$%\\-^&+-=]{8,}$",
 			message = "Password must have at least 8 characters, one uppercase letter, one lowercase letter, and one digit"
 	)
 	@JsonIgnore
@@ -55,9 +56,6 @@ public class User {
 	@Column(unique = true)
 	@Email(message = "Invalid email.")
 	private String email;
-	@Min(value = 1, message = "Access level must be at least 1")
-	@Max(value = 3, message = "Access level cannot be greater than 3")
-	private int accessLevel;
 	@Column(
 			columnDefinition = "DATE"
 	)
@@ -66,14 +64,15 @@ public class User {
 			pattern = "yyyy-MM-dd"
 	)
 	private LocalDate createdAt;
+	private String roles;
 
-	public User(String username, String password, String firstName, String lastName, String email, Integer accessLevel) {
+	public User(String username, String password, String firstName, String lastName, String email, String roles) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.accessLevel = accessLevel;
+		this.roles = roles;
 	}
 
 	@PrePersist

@@ -7,6 +7,7 @@ import com.codecool.seamanager.model.employee.Rank;
 import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.model.port.Port;
 import com.codecool.seamanager.model.portinteraction.PortInteraction;
+import com.codecool.seamanager.model.user.User;
 import com.codecool.seamanager.model.vessel.Vessel;
 import com.codecool.seamanager.model.voyage.Voyage;
 import com.codecool.seamanager.repository.*;
@@ -14,6 +15,7 @@ import com.codecool.seamanager.utils.DateGenerator;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -32,7 +34,9 @@ public class SeamanagerConfiguration {
 			SailorRepository sailorRepository, CertificateRepository certificateRepository,
 			VesselRepository vesselRepository, UserRepository userRepository,
 			VoyageRepository voyageRepository, PortRepository portRepository,
-			PortInteractionRepository portInteractionRepository, ContractRepository contractRepository
+			PortInteractionRepository portInteractionRepository, ContractRepository contractRepository,
+			PasswordEncoder encoder
+
 	) {
 		return args -> {
 			Random random = new Random();
@@ -65,18 +69,10 @@ public class SeamanagerConfiguration {
 				certificateRepository.save(certificate);
 
 			}
-//
 
-//			User user1 = new User("john123", "pasAsword123", "John", "Doe", "john@yahoo.com", 1);
-//			User user2 = new User("jane456", "myAp@ssword", "Jane", "Doe", "jane@yahoo.com", 2);
-//			User user3 = new User("user789", "seAcure123", "Nicu", "Gheara", "nicu@gmail.co.uk", 3);
-//			User user4 = new User("admin123", "admAinpass", "Fane", "Spoitoru", "fane_spoitoru@gmail.com", 3);
-//			User user5 = new User("user321", "paAssword123", "Sile", "Camataru", "sile@yahoo.ro", 2);
-//			User user6 = new User("jdoe", "pasAs1234", "Nutu", "Camataru", "nutu@gmail.com", 1);
-//			User user7 = new User("jsmith", "mypAassword", "Adi", "Corduneanu", "adi@yahoo.com", 1);
-//			User user8 = new User("user456", "secAurepass", "George", "Corduneanu", "george@yahoo.com", 2);
-//			User user9 = new User("user789", "myp@ssAword", "Sandu", "Geamanu", "sandu.g@yahoo.com", 3);
-//			User user10 = new User("johndoe", "mypasswAord123", "Sorin", "Caiac", "caiac@hotmail.com", 2);
+			User user1 = new User("admin", encoder.encode("abcD1234"), "John", "Doe", "john@yahoo.com",  "ROLE_ADMIN,ROLE_USER");
+			User user2 = new User("user",  encoder.encode("abcD1234"), "Jane", "Doe", "jane@yahoo.com",  "ROLE_USER");
+			User user3 = new User("user789",  encoder.encode("seAcure123"), "Nicu", "Gheara", "nicu@gmail.co.uk",  "ROLE_USER");
 
 			Port port1 = new Port("Houston", true);
 			Port port2 = new Port("Antwerp", true);
@@ -97,6 +93,7 @@ public class SeamanagerConfiguration {
 			Voyage vv1 = new Voyage(vessel1, new HashSet<>(), pi1, pi2);
 			Voyage vv2 = new Voyage(vessel2, new HashSet<>(), pi3, pi4);
 			Voyage vv3 = new Voyage(vessel2, new HashSet<>(), pi5, pi6);
+
 			portRepository.saveAll(
 					List.of(
 							port1,
@@ -130,21 +127,13 @@ public class SeamanagerConfiguration {
 							vv3)
 			);
 
-
-//			userRepository.saveAll(
-//					List.of(
-//							user1,
-//							user2,
-//							user3,
-//							user4,
-//							user5,
-//							user6,
-//							user7,
-//							user8,
-//							user9,
-//							user10
-//					)
-//			); //TODO - fix controller/service
+			userRepository.saveAll(
+					List.of(
+							user1,
+							user2,
+							user3
+					)
+			);
 
 			vesselRepository.saveAll(
 					List.of(
