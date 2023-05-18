@@ -1,8 +1,15 @@
-export const getAuthHeaders = () => {
+export const getBasicAuthHeaders = (user, pass) => {
     const headers = new Headers();
-    const username = 'user';
-    const password = 'abcD1234';
-    const credentials = Buffer.from(`${username}:${password}`).toString('base64');
+    const credentials = Buffer.from(`${user}:${pass}`).toString('base64');
     headers.append('Authorization', `Basic ${credentials}`);
+    return headers;
+};
+
+export const getBearerAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+    const headers = new Headers();
+    if(token){
+        headers.append('Authorization', `Bearer ${token}`);
+    }
     return headers;
 };

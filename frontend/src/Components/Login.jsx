@@ -1,55 +1,83 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import {fetchBasicAuth,fetchBearerAuth} from "../fetchFunction";
+import {parseTextResponse} from "../responseParsers";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 const Login = ({handleLogin}) => {
   const [validated, setValidated] = useState(false);
+  const [loginDetails, setLoginDetails] = useState({username:"", password:""})
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setValidated(true);
+
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-      setValidated(true);
+      return;
     }
 
-    handleLogin();
+    try {
+      console.log(loginDetails)
+      const response = await fetchBasicAuth("http://localhost:8080/token", "POST", loginDetails.username, loginDetails.password);
+      const token = await parseTextResponse(response);
+      console.log("TOKEN:" , token)
+      if (token) {
+        console.log(token);
+        localStorage.setItem("token", token);
+        handleLogin();
+      } else {
+        console.log("ERROR")
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+
   };
 
+  const setPassword = (pass) => setLoginDetails({username: loginDetails.username, password: pass});
+  const setUsername = (username) => setLoginDetails({username: username, password: loginDetails.password});
+
   return (
-    <>
-      <h5 className="p-3">Login</h5>
-      <Form
-        className="p-3"
-        noValidate
-        validated={validated}
-        onSubmit={handleSubmit}
-      >
-        <Form.Group className="p-1" controlId="formGroupUsername">
-          <Form.Label>Username</Form.Label>
-          <Form.Control
-            // required
-            className="form-control-sm"
-            type="text"
-            placeholder="Username"
-          />
-          <Form.Control.Feedback type="invalid">Please enter a username</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group className="p-1" controlId="formGroupPassword1">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            // required
-            className="form-control-sm"
-            type="password"
-            placeholder="Password"
-          />
-          <Form.Control.Feedback type="invalid">Please enter a password</Form.Control.Feedback>
-        </Form.Group>
-        <Button type="submit" className="btn-sm" variant="outline-warning">
-          Login
-        </Button>{" "}
-      </Form>
-    </>
+      <>
+        <h5 className="p-3">Login</h5>
+        <Form
+            className="p-3"
+            noValidate
+            //validated={validated}
+            //onSubmit={(event) => handleSubmit(event)}
+        >
+          <Form.Group className="p-1" controlId="formGroupUsername">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+                onChange={(e) => setUsername(e.target.value)}
+                className="form-control-sm"
+                type="text"
+                placeholder="Username"
+            />
+            <Form.Control.Feedback type="invalid">Please enter a username</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group className="p-1" controlId="formGroupPassword1">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+                onChange={(e) => setPassword(e.target.value)}
+                className="form-control-sm"
+                type="password"
+                placeholder="Password"
+            />
+            <Form.Control.Feedback type="invalid">Please enter a password</Form.Control.Feedback>
+          </Form.Group>
+          <Button
+              onClick={(e) => handleSubmit(e)}
+              type="submit"
+              className="btn-sm"
+              variant="outline-warning">
+            Login
+          </Button>{" "}
+        </Form>
+      </>
   );
 };
 

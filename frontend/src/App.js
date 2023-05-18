@@ -40,7 +40,8 @@ function App() {
         <Route
           index
           path="/employees"
-          element={<Employees isLoggedIn={isLoggedIn} loader={employeeLoader}/>}
+          element={<Employees isLoggedIn={isLoggedIn} />}
+          loader={employeeLoader}
         />
         <Route path="/login" element={<Login handleLogin={handleLogin} loader={dataLoader} />} />
         <Route path="/newAccount" element={<NewAccount isLoggedIn={isLoggedIn}/>}/>
