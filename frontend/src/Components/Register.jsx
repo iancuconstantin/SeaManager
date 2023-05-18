@@ -14,16 +14,16 @@ const Register = () => {
     lastName: '',
     email: '',
     password: '',
-    isAdmin: 'ROLE_isAdmin'
+    isAdmin: 'ROLE_USER'
 });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("name: ",name, "value:",value)
     setFormData((prevFormData) => ({
               ...prevFormData,
               [name]: value
           }));
-    console.log(name,value)
   }
 
   const handlePasswordChange = (e) => {
@@ -164,6 +164,8 @@ const Register = () => {
                 type={"checkbox"}
                 id={`default-checkbox`}
                 label={`Is Admin`}
+                // checked={formData.isAdmin+',ROLE_ADMIN'}
+                onChange={handleChange}
               />
           </div>
         </Form.Group>
