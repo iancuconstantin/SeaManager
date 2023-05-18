@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import myImage from "../images/apple-touch-icon.png";
 
-const Menu = () => {
+const Menu = ({handleLogout}) => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -45,6 +45,11 @@ const Menu = () => {
                 Menu
               </Button>
             </Link> */}
+            <Link to="/login">
+              <Button variant="outline-warning" className="mx-2 mt-3 btn-sm" onClick={handleLogout}>
+                Logout
+              </Button>
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
