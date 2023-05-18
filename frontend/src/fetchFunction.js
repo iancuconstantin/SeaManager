@@ -18,3 +18,14 @@ export const fetchBearerAuth = async (url, method) => {
     });
     return response;
 };
+
+export const fetchBearerAuthWithBody = async (url, method, body) => {
+    console.log("IN FETCH BEARER WITH BODY")
+    const headers = getBearerAuthHeaders();
+    const response = await fetch(url, {
+        method: method,
+        headers: headers,
+        body: JSON.stringify(body)
+    });
+    return response;
+};

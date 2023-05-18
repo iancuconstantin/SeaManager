@@ -6,7 +6,7 @@ import EmployeeSearch from "./EmployeeSearch";
 import {getBasicAuthHeaders, getBearerAuthHeaders} from '../../authUtils';
 import Button from "react-bootstrap/Button";
 import Collapse from "react-bootstrap/Collapse";
-import {fetchBearerAuth, fetchBasicAuth} from "../../fetchFunction";
+import {fetchBearerAuth, fetchBasicAuth, fetchBearerAuthWithBody} from "../../fetchFunction";
 import {parseTextResponse, parseJsonResponse} from "../../responseParsers";
 
 export const Employees = ({isLoggedIn}) => {
@@ -30,15 +30,13 @@ export const Employees = ({isLoggedIn}) => {
 
     async function addNewEmployee(formData) {
         try {
+            //const response = await fetchBearerAuthWithBody("http://localhost:8080/api/employee","POST", formData);
+            console.log(JSON.stringify(formData))
+            const headers = getBearerAuthHeaders();
+            headers.append("Content-Type", "application/json");
             const response = await fetch("http://localhost:8080/api/employee", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods":
-                        "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-                    "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
-                },
+                headers: headers,
                 body: JSON.stringify(formData),
             });
             if (response.ok) {
@@ -67,14 +65,7 @@ export const Employees = ({isLoggedIn}) => {
                 `http://localhost:8080/api/employee/${employeeID}`,
                 {
                     method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Methods":
-                            "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-                        "Access-Control-Allow-Headers":
-                            "Origin, Content-Type, X-Auth-Token",
-                    },
+                    headers: getBearerAuthHeaders(),
                     body: JSON.stringify(formData),
                 }
             );
@@ -109,6 +100,7 @@ export const Employees = ({isLoggedIn}) => {
                     `http://localhost:8080/api/employee/${employeeId}`,
                     {
                         method: "DELETE",
+                        headers: getBearerAuthHeaders()
                     }
                 );
 
