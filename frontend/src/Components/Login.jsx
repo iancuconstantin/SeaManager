@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 const Login = ({handleLogin}) => {
   const [validated, setValidated] = useState(false);
   const [loginDetails, setLoginDetails] = useState({username:"", password:""})
+  const [showError, setShowError] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,7 +29,7 @@ const Login = ({handleLogin}) => {
         localStorage.setItem("token", token);
         handleLogin();
       } else {
-        console.log("ERROR")
+        setShowError(true);
       }
     } catch (e) {
       console.log(e);
@@ -69,6 +70,16 @@ const Login = ({handleLogin}) => {
             />
             <Form.Control.Feedback type="invalid">Please enter a password</Form.Control.Feedback>
           </Form.Group>
+          {showError && <Form.Text
+              className="d-flex justify-content-center text-center"
+              style={{
+                fontSize: "16px",
+                color: "red",
+                marginTop: "1rem",
+                marginBottom: "1rem",
+              }}>
+            Wrong credentials! Please try again.
+          </Form.Text>}
           <Button
               onClick={(e) => handleSubmit(e)}
               type="submit"

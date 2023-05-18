@@ -8,7 +8,8 @@ import myImage from "../images/apple-touch-icon.png";
 import jwt_decode from 'jwt-decode';
 import { useState, useEffect } from "react";
 
-const Menu = () => {
+
+const Menu = ({handleLogout}) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const token = localStorage.getItem('token');
   
@@ -25,6 +26,7 @@ const Menu = () => {
       setIsAdmin(false);
     }
   }, [token]);
+
 
   return (
     <Navbar bg="light" expand="lg">
@@ -51,6 +53,7 @@ const Menu = () => {
                 Voyages
               </Button>
             </Link>
+
             {isAdmin && 
               <Link to="/newAccount">
                 <Button variant="outline-warning" className="mx-2 mt-3 btn-sm">
@@ -58,6 +61,12 @@ const Menu = () => {
                 </Button>
               </Link>
             }
+
+            <Link to="/login">
+              <Button variant="outline-warning" className="mx-2 mt-3 btn-sm" onClick={handleLogout}>
+                Logout
+              </Button>
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
