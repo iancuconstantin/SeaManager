@@ -203,4 +203,4 @@ export const fetchCertificates = async (employeeId) => {
     });
     const data = await response.json();
     return data;
-
+}
