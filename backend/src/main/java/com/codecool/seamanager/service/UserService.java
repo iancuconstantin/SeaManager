@@ -6,6 +6,7 @@ import com.codecool.seamanager.model.user.User;
 import com.codecool.seamanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder encoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -41,6 +44,7 @@ public class UserService {
                     "Email " + user.getEmail() + " is taken"
             );
         }
+        user.setPassword(encoder.encode(user.getPassword()));;
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);
     }

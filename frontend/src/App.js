@@ -1,20 +1,21 @@
 import "./App.css";
-import { useState,useEffect } from "react";
-import { NewAccount } from "./Components/NewAccount";
+import {useState, useEffect} from "react";
+import {NewAccount} from "./Components/NewAccount";
 import Login from "./Components/Login";
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  Outlet,
-  RouterProvider,
-  useNavigate
+    createBrowserRouter,
+    createRoutesFromElements,
+    Route,
+    Outlet,
+    RouterProvider,
+    useNavigate
 } from "react-router-dom";
-import { Employees, employeeLoader } from "./Components/Employee/Employees";
-import { Vessels, vesselsLoader } from "./Components/Vessels/Vessels";
-import { Voyages, voyageLoader } from "./Components/Voyages/Voyages";
+import {Employees, employeeLoader} from "./Components/Employee/Employees";
+import {Vessels, vesselsLoader} from "./Components/Vessels/Vessels";
+import {Voyages, voyageLoader} from "./Components/Voyages/Voyages";
 
 import Menu from "./Components/Menu";
+import Button from "react-bootstrap/Button";
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
@@ -46,7 +47,7 @@ function App() {
                     element={<Employees isLoggedIn={isLoggedIn}/>}
                     loader={employeeLoader}
                 />
-                <Route path="/login" element={<Login handleLogin={handleLogin} loader={dataLoader}/>}/>
+                <Route path="/login" element={<Login handleLogin={handleLogin}/>}/>
                 <Route path="/newAccount" element={<NewAccount isLoggedIn={isLoggedIn}/>}/>
                 {/* <Route path="/data" element={<Data isLoggedIn={isLoggedIn}/>} loader={dataLoader} /> */}
                 {/* <Route path="/contact" element={<Contact isLoggedIn={isLoggedIn}/>} /> */}
@@ -54,10 +55,10 @@ function App() {
                 <Route path="/voyages" element={<Voyages isLoggedIn={isLoggedIn}/>} loader={voyageLoader}/>
                 <Route path="/menu" element={<Menu/>}/>
                 <Route path="/login"
-                       element = {<Button variant="outline-warning" className="mx-2 mt-3 btn-sm" onClick={handleLogout}>
-                            Logout
-                                </Button>}/>
-                </Route>
+                       element={<Button variant="outline-warning" className="mx-2 mt-3 btn-sm" onClick={handleLogout}>
+                           Logout
+                       </Button>}/>
+            </Route>
         )
     );
 
@@ -83,7 +84,7 @@ const Root = ({isLoggedIn, handleLogout}) => {
     useEffect(() => {
         if (!isLoggedIn) {
             navigate('/login')
-        }else{
+        } else {
             navigate('/')
         }
 
@@ -133,9 +134,9 @@ const Root = ({isLoggedIn, handleLogout}) => {
                 <div>
                     <Menu handleLogout={handleLogout}/>
                 </div>
-                )}
+            )}
             <div>
-                <Outlet />
+                <Outlet/>
             </div>
         </>
     );

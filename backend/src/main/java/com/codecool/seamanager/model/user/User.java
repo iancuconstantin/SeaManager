@@ -3,6 +3,7 @@ package com.codecool.seamanager.model.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -38,7 +39,7 @@ public class User {
 			regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d@#$%\\-^&+-=]{8,}$",
 			message = "Password must have at least 8 characters, one uppercase letter, one lowercase letter, and one digit"
 	)
-	@JsonIgnore
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	@NotBlank(message = "First name is required")
 	@Size(

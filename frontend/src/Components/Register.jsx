@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import {getBearerAuthHeaders} from "../authUtils";
 
 const Register = () => {
   const [validated, setValidated] = useState(false);
@@ -9,26 +10,26 @@ const Register = () => {
   const [passwordsMatch, setPasswordsMatch] = useState(false);
 
   const [formData, setFormData] = useState({
-    userName: '',
+    username: '',
     firstName: '',
     lastName: '',
     email: '',
     password: '',
-    isAdmin: 'ROLE_USER'
+    authorities: 'USER'
 });
 
   const handleChange = (e) => {
     const { name, value,checked } = e.target;
     console.log("name: ",name, "checked:",checked)
-    if(name==="isAdmin" && checked){
+    if(name==="authorities" && checked){
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: "ROLE_USER,ROLE_ADMIN"
+        [name]: "USER,ADMIN"
     }));
-    } else if(name==="isAdmin" && !checked) {
+    } else if(name==="authorities" && !checked) {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: "ROLE_USER"
+        [name]: "USER"
     }));
     } else {
       setFormData((prevFormData) => ({
@@ -53,7 +54,7 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -63,8 +64,26 @@ const Register = () => {
       event.stopPropagation();
       if (passwordsMatch) {
         console.log(formData)
-        // Passwords match, continue with form submission
-        // Your logic here
+        try {
+
+          //const response = await fetchBearerAuthWithBody("http://localhost:8080/api/employee","POST", formData);
+          console.log(JSON.stringify(formData))
+
+          const headers = getBearerAuthHeaders();
+          headers.append("Content-Type", "application/json");
+          const response = await fetch("http://localhost:8080/api/user", {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(formData),
+          });
+          if (response.ok) {
+
+          } else {
+
+          }
+        } catch (error) {
+          console.log(error)
+        }
         console.log("pass match!")
       } else {
         console.log(formData)
@@ -89,7 +108,7 @@ const Register = () => {
         <Form.Group className="p-1" controlId="formGroupUsername">
           <Form.Label>Username</Form.Label>
           <Form.Control
-            name="userName"
+            name="username"
             required
             className="form-control-sm"
             type="text"
@@ -184,6 +203,7 @@ const Register = () => {
         </Form.Group>
 
         <Button type="submit" className="btn-sm" variant="outline-info">
+
           Register
         </Button>{" "}
       </Form>

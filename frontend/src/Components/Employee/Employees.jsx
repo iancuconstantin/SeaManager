@@ -62,12 +62,14 @@ export const Employees = ({isLoggedIn}) => {
     }
 
     async function updateEmployee(formData, employeeID) {
+        const headers = getBearerAuthHeaders();
+        headers.append("Content-Type", "application/json");
         try {
             const response = await fetch(
                 `http://localhost:8080/api/employee/${employeeID}`,
                 {
                     method: "PUT",
-                    headers: getBearerAuthHeaders(),
+                    headers: headers,
                     body: JSON.stringify(formData),
                 }
             );
