@@ -70,6 +70,9 @@ This command will start the Spring Boot application, which will connect to the P
 This command will download and install all the necessary packages and libraries required for your React project.
 4. Start the Development Server: Once the dependencies are installed, run the following command to start the development server and open your React project in a web browser:
 ```npm start```
+5. Login accounts for demo:
+  - ADMIN ROLE: username -> admin; password: asdD1234
+  - USER ROLE: username -> user; password: asdD1234
 ## Show your support
 
 Give a ⭐️ if this project helped you!
