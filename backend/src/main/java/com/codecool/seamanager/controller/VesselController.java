@@ -35,8 +35,8 @@ public class VesselController {
 	}
 
 	@PostMapping()
-	public void createVessel(@RequestBody @Valid Vessel vessel) {
-		vesselService.createVessel(vessel);
+	public Vessel createVessel(@RequestBody @Valid Vessel vessel) {
+		return vesselService.createVessel(vessel);
 	}
 
 	@PutMapping("/{vesselId}")

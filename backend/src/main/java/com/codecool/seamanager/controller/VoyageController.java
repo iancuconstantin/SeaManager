@@ -1,5 +1,6 @@
 package com.codecool.seamanager.controller;
 
+import com.codecool.seamanager.model.employee.Sailor;
 import com.codecool.seamanager.model.request.ContractRequest;
 import com.codecool.seamanager.model.voyage.Voyage;
 import com.codecool.seamanager.service.VoyageService;
@@ -33,13 +34,12 @@ public class VoyageController {
 		return voyageService.getById(voyageId);
 	}
 
-	@PutMapping(path = "{voyageId}/add/{employeeId}")
-	public ResponseEntity<Voyage> addNewCrewMember(@PathVariable("voyageId") Long voyageId, @PathVariable("employeeId") Long employeeId, @RequestBody ContractRequest contractRequest) {
-		return voyageService.addNewCrewMember(voyageId, employeeId, contractRequest.startDate(), contractRequest.endDate());
-
+	@PutMapping(path = "/{voyageId}/add/{employeeId}")
+	public void addNewCrewMember(@PathVariable("voyageId") Long voyageId, @PathVariable("employeeId") Long employeeId, @RequestBody ContractRequest contractRequest) {
+		voyageService.addNewCrewMember(voyageId, employeeId, contractRequest.startDate(), contractRequest.endDate());
 	}
 
-	@PutMapping(path = "{voyageId}/remove/{employeeId}")
+	@PutMapping(path = "/{voyageId}/remove/{employeeId}")
 	public ResponseEntity<Voyage> removeCrewMember(@PathVariable("voyageId") Long voyageId, @PathVariable("employeeId") Long employeeId) {
 		return voyageService.removeCrewMember(voyageId, employeeId);
 	}

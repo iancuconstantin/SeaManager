@@ -7,9 +7,13 @@ import com.codecool.seamanager.model.voyage.Voyage;
 import com.codecool.seamanager.repository.ContractRepository;
 import com.codecool.seamanager.repository.SailorRepository;
 import com.codecool.seamanager.repository.VoyageRepository;
+import jakarta.persistence.EntityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,7 +26,6 @@ public class VoyageService {
 	private final SailorRepository sailorRepository;
 	private final SailorService sailorService;
 	private final ContractRepository contractRepository;
-
 	@Autowired
 	public VoyageService(
 			VoyageRepository voyageRepository,
@@ -56,25 +59,25 @@ public class VoyageService {
 		voyageRepository.deleteById(id);
 	}
 
-	public ResponseEntity<Voyage> addNewCrewMember(Long voyageId, Long employeeId, LocalDate contractStartDate, LocalDate contractEndDate) {
+	public void addNewCrewMember(Long voyageId, Long employeeId, LocalDate contractStartDate, LocalDate contractEndDate) {
 		//TODO -recheck logic
 		Voyage voyageToUpdate = getById(voyageId);
 		Sailor sailorToAdd = sailorService.getEmployeeById(employeeId);
 
 
-		if (isNotPartOfCrewList(voyageToUpdate, sailorToAdd) && sailorToAdd.getCurrentVoyage() == null) {
-			saveNewContractForSailor(sailorToAdd, voyageToUpdate, contractStartDate, contractEndDate);
-			addCrewMemberToCrewList(voyageToUpdate, sailorToAdd);
-			sailorToAdd.setCurrentVoyage(voyageToUpdate);
+//		if (isNotPartOfCrewList(voyageToUpdate, sailorToAdd) && sailorToAdd.getCurrentVoyage() == null) {
+//			saveNewContractForSailor(sailorToAdd, voyageToUpdate, contractStartDate, contractEndDate);//motiv eroare randare employees and voyages
 			sailorToAdd.setReadinessDate(null);
-		} else {
-			throw new SailorExistsException(
-					"Sailor with id: " + sailorToAdd.getEmployeeId() + " already part of a crew list."
-			);
-		}
+			sailorToAdd.setCurrentVoyage(voyageToUpdate);//1
+			addCrewMemberToCrewList(voyageToUpdate, sailorToAdd);//2
+//		} else {
+//			throw new SailorExistsException(
+//					"Sailor with id: " + sailorToAdd.getEmployeeId() + " already part of a crew list."
+//			);
+//		}
+		sailorRepository.save(sailorToAdd);
 
-		Voyage updatedVoyage = voyageRepository.save(voyageToUpdate);
-		return ResponseEntity.ok(updatedVoyage);
+		voyageRepository.save(voyageToUpdate);
 	}
 
 	public ResponseEntity<Voyage> removeCrewMember(Long voyageId, Long employeeId) {
@@ -118,7 +121,9 @@ public class VoyageService {
 	}
 
 	private void addCrewMemberToCrewList(Voyage voyageToUpdate, Sailor sailorToAdd) {
-		voyageToUpdate.getCrewList().add(sailorToAdd);
+		Set<Sailor> actualCrew = voyageToUpdate.getCrewList();
+		actualCrew.add(sailorToAdd);
+		voyageToUpdate.setCrewList(actualCrew);
 	}
 
 	private boolean isNotPartOfCrewList(Voyage voyageToUpdate, Sailor sailorToAdd) {

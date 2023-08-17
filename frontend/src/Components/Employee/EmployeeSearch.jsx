@@ -1,7 +1,8 @@
-import { Form, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup, Button, FormGroup, FormControl } from 'react-bootstrap';
 import RankList from './RankList';
 
-const EmployeeSearch = ({filterBy}) => {
+const EmployeeSearch = ({filterValues, filterBy, clearFilter}) => {
+
     return(
         <>
             <h3>Filter field</h3>
@@ -15,6 +16,7 @@ const EmployeeSearch = ({filterBy}) => {
                                 placeholder="Id"
                                 aria-label="Id"
                                 aria-describedby="basic-addon1"
+                                value={filterValues.id}
                                 onChange={filterBy}
                             />
                         </Form.Group>
@@ -25,6 +27,7 @@ const EmployeeSearch = ({filterBy}) => {
                                 placeholder="FirstName"
                                 aria-label="FirstName"
                                 aria-describedby="basic-addon1"
+                                value={filterValues.firstName}
                                 onChange={filterBy}
                             />
                         </Form.Group>
@@ -35,6 +38,7 @@ const EmployeeSearch = ({filterBy}) => {
                                 placeholder="LastName"
                                 aria-label="LastName"
                                 aria-describedby="basic-addon1"
+                                value={filterValues.lastName}
                                 onChange={filterBy}
                             />
                         </Form.Group>
@@ -43,7 +47,8 @@ const EmployeeSearch = ({filterBy}) => {
                                 className='form-control-sm'
                                 name="email"
                                 type="email" 
-                                placeholder="Email" 
+                                placeholder="Email"
+                                value={filterValues.email}
                                 onChange={filterBy}
                             />
                         </Form.Group>
@@ -52,7 +57,8 @@ const EmployeeSearch = ({filterBy}) => {
                                 className='form-control-sm'
                                 name="age"
                                 type="number" 
-                                placeholder="Age" 
+                                placeholder="Age"
+                                value={filterValues.age}
                                 onChange={filterBy}
                             />
                         </Form.Group>
@@ -63,6 +69,7 @@ const EmployeeSearch = ({filterBy}) => {
                                 placeholder="Address"
                                 aria-label="Address"
                                 aria-describedby="basic-addon1"
+                                value={filterValues.adress}
                                 onChange={filterBy}
                             />
                         </Form.Group>
@@ -73,7 +80,8 @@ const EmployeeSearch = ({filterBy}) => {
                                 type='number'
                                 min="100000000"
                                 max="999999999999999"
-                                placeholder="Contact No" 
+                                placeholder="Contact No"
+                                value={filterValues.contactNo}
                                 onChange={filterBy}
                             />
                         </Form.Group>
@@ -81,7 +89,7 @@ const EmployeeSearch = ({filterBy}) => {
                             <Form.Select 
                                 className='form-select-sm'
                                 name="rank"
-                                // as="select"
+                                value={filterValues.rank}
                                 onChange={filterBy}
                             >
                                 <option value="">Select a rank...</option>
@@ -94,7 +102,7 @@ const EmployeeSearch = ({filterBy}) => {
                             <Form.Select
                                 className='form-select-sm'
                                 name="gender"
-                                aria-label="Default select example"
+                                value={filterValues.gender}
                                 onChange={filterBy}
                             >
                                 <option value="">Gender</option>
@@ -108,11 +116,19 @@ const EmployeeSearch = ({filterBy}) => {
                                 name="readinessDate"
                                 type="date" 
                                 placeholder="Readiness Date" 
+                                value={filterValues.readinessDate}
                                 onChange={filterBy}
                             />
                         </Form.Group>
                     </InputGroup>
                 </Form.Group>
+                <Button
+                    variant="danger"
+                    className="mx-1 btn-sm"
+                    onClick={() => clearFilter()}
+                >
+                    ❌
+                </Button>
             </Form>
         </>
     )

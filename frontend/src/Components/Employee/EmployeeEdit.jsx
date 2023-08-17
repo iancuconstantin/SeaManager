@@ -24,6 +24,10 @@ function EditEmployeeForm({openEdit,employeeObj, updateEmployee, feedBackMsg, fe
         }
     }, [feedBackStatus]);
 
+    useEffect(()=>{
+        setValidated(true);
+    },[formData]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         if(name==="contactNo"){
@@ -65,157 +69,166 @@ function EditEmployeeForm({openEdit,employeeObj, updateEmployee, feedBackMsg, fe
                     )
                 );
         }
-        setValidated(true);
+        // setValidated(true);
     };
 
     return (
         <>
             {( openEdit && !feedBackStatus &&
             <Collapse in={openEdit}>
-            <Form noValidate validated={validated} onSubmit={handleSubmit} className="justify-content-center">
-                <Form.Group className="d-flex" style={{ width: "90%" }}>
-                    <InputGroup className="justify-content-center">
-                        <Form.Group className="p-1">
-                            <Form.Control
-                                className='form-control-sm'
-                                name="firstName"
-                                placeholder="FirstName"
-                                aria-label="FirstName"
-                                aria-describedby="basic-addon1"
-                                required
-                                value={formData.firstName}
-                                onChange={handleChange}
-                                pattern="^[a-zA-Z]{2,25}(([',. -][a-zA-Z ])?[a-zA-Z]*)$"
-                            />
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid first name</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="p-1">
-                            <Form.Control
-                                className='form-control-sm'
-                                name="lastName"
-                                placeholder="LastName"
-                                aria-label="LastName"
-                                aria-describedby="basic-addon1"
-                                required
-                                value={formData.lastName}
-                                onChange={handleChange}
-                                pattern="^[a-zA-Z]{2,25}(([',. -][a-zA-Z ])?[a-zA-Z]*)$"
-                            />
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid last name</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="p-1">
-                            <Form.Control 
-                                className='form-control-sm'
-                                name="email"
-                                type="email" 
-                                placeholder="Email" 
-                                required
-                                value={formData.email} 
-                                onChange={handleChange}
-                            />
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid email</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="p-1">
-                            <Form.Control 
-                                className='form-control-sm'
-                                name="birthDate"
-                                type="date" 
-                                placeholder="Date Of Birth" 
-                                required
-                                value={formData.birthDate} 
-                                onChange={handleChange}
-                                max={minDate.toISOString().split('T')[0]}
-                            />
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid Date Of Birth</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="p-1">
-                            <Form.Control 
-                                className='form-control-sm'
-                                name="address"
-                                placeholder="Address" 
-                                required
-                                value={formData.address} 
-                                onChange={handleChange}
-                                pattern="^.{5,150}$"
-                            />
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid Address</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="p-1">
-                            <Form.Control 
-                                className='form-control-sm'
-                                name="contactNo"
-                                type='number' 
-                                min="100000000"
-                                max="999999999999999"
-                                placeholder="Contact No" 
-                                required
-                                value={formData.contactNo} 
-                                onChange={handleChange}
-                            />
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid Contact No</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="p-1">
-                            <Form.Select 
-                                className='form-select-sm'
-                                name="rank"
-                                as="select"
-                                onChange={handleChange}
-                                required
-                                value={formData.rank} 
-                            >
-                                <option value="">Select a rank...</option>
-                                {RankList.map((rankOption, index) => (
-                                    <option key={index} value={rankOption}>{rankOption}</option>
-                                ))}
-                            </Form.Select>
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid Rank</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="p-1">
-                            <Form.Select 
-                                className='form-select-sm'
-                                name="gender"
-                                aria-label="Default select example"
-                                required
-                                value={formData.gender}
-                                onChange={handleChange}
-                            >
-                                <option value="">Gender</option>
-                                <option value="MALE">MALE</option>
-                                <option value="FEMALE">FEMALE</option>
-                            </Form.Select>
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid Gender</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="p-1">
-                            <Form.Control 
-                                className='form-control-sm'
-                                name="readinessDate"
-                                type="date" 
-                                placeholder="Readiness Date" 
-                                required
-                                value={formData.readinessDate} 
-                                onChange={handleChange}
-                                min={maxDate.toISOString().split('T')[0]}
-                            />
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">Please enter a valid Date Of Birth</Form.Control.Feedback>
-                        </Form.Group>
-                    </InputGroup>
-                        <Button className='btn-sm' variant="success" type="submit">UPDATE</Button>{' '}
-                </Form.Group>
-            </Form>
+                <Form noValidate validated={validated} onSubmit={handleSubmit} className="justify-content-center">
+                    <Form.Group className="d-flex" style={{ width: "90%" }}>
+                        <InputGroup className="justify-content-center">
+                            {/* EMPLOYEE FIRST NAME */}
+                            <Form.Group className="p-1">
+                                <Form.Control
+                                    className='form-control-sm'
+                                    name="firstName"
+                                    placeholder="FirstName"
+                                    aria-label="FirstName"
+                                    aria-describedby="basic-addon1"
+                                    required
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    pattern="^[a-zA-Z]{2,25}(([',. -][a-zA-Z ])?[a-zA-Z]*)$"
+                                />
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">Please enter a valid first name</Form.Control.Feedback>
+                            </Form.Group>
+                            {/* EMPLOYEE LAST NAME */}
+                            <Form.Group className="p-1">
+                                <Form.Control
+                                    className='form-control-sm'
+                                    name="lastName"
+                                    placeholder="LastName"
+                                    aria-label="LastName"
+                                    aria-describedby="basic-addon1"
+                                    required
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    pattern="^[a-zA-Z]{2,25}(([',. -][a-zA-Z ])?[a-zA-Z]*)$"
+                                />
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">Please enter a valid last name</Form.Control.Feedback>
+                            </Form.Group>
+                            {/* EMPLOYEE EMAIL */}
+                            <Form.Group className="p-1">
+                                <Form.Control 
+                                    className='form-control-sm'
+                                    name="email"
+                                    type="email" 
+                                    placeholder="Email" 
+                                    required
+                                    value={formData.email} 
+                                    onChange={handleChange}
+                                />
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">Please enter a valid email</Form.Control.Feedback>
+                            </Form.Group>
+                            {/* EMPLOYEE DOB */}
+                            <Form.Group className="p-1">
+                                <Form.Control 
+                                    className='form-control-sm'
+                                    name="birthDate"
+                                    type="date" 
+                                    placeholder="Date Of Birth" 
+                                    required
+                                    value={formData.birthDate} 
+                                    onChange={handleChange}
+                                    max={minDate.toISOString().split('T')[0]}
+                                />
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">Please enter a valid Date Of Birth</Form.Control.Feedback>
+                            </Form.Group>
+                            {/* EMPLOYEE ADRESS */}
+                            <Form.Group className="p-1">
+                                <Form.Control 
+                                    className='form-control-sm'
+                                    name="address"
+                                    placeholder="Address" 
+                                    required
+                                    value={formData.address} 
+                                    onChange={handleChange}
+                                    pattern="^.{5,150}$"
+                                />
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">Please enter a valid Address</Form.Control.Feedback>
+                            </Form.Group>
+                            {/* EMPLOYEE CONTACT NO */}
+                            <Form.Group className="p-1">
+                                <Form.Control 
+                                    className='form-control-sm'
+                                    name="contactNo"
+                                    type='number' 
+                                    min="100000000"
+                                    max="999999999999999"
+                                    placeholder="Contact No" 
+                                    required
+                                    value={formData.contactNo} 
+                                    onChange={handleChange}
+                                />
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">Please enter a valid Contact No</Form.Control.Feedback>
+                            </Form.Group>
+                            {/* EMPLOYEE RANK */}
+                            <Form.Group className="p-1">
+                                <Form.Select 
+                                    className='form-select-sm'
+                                    name="rank"
+                                    as="select"
+                                    onChange={handleChange}
+                                    required
+                                    value={formData.rank} 
+                                >
+                                    <option value="">Select a rank...</option>
+                                    {RankList.map((rankOption, index) => (
+                                        <option key={index} value={rankOption}>{rankOption}</option>
+                                    ))}
+                                </Form.Select>
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">Please enter a valid Rank</Form.Control.Feedback>
+                            </Form.Group>
+                            {/* EMPLOYEE GENDER */}
+                            <Form.Group className="p-1">
+                                <Form.Select 
+                                    className='form-select-sm'
+                                    name="gender"
+                                    aria-label="Default select example"
+                                    required
+                                    value={formData.gender}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">Gender</option>
+                                    <option value="MALE">MALE</option>
+                                    <option value="FEMALE">FEMALE</option>
+                                </Form.Select>
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">Please enter a valid Gender</Form.Control.Feedback>
+                            </Form.Group>
+                            {/* EMPLOYEE READINESS DATE */}
+                            <Form.Group className="p-1">
+                                <Form.Control 
+                                    className='form-control-sm'
+                                    name="readinessDate"
+                                    type="date" 
+                                    placeholder="Readiness Date" 
+                                    required
+                                    value={formData.readinessDate} 
+                                    onChange={handleChange}
+                                    min={maxDate.toISOString().split('T')[0]}
+                                />
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">Please enter a valid Date Of Birth</Form.Control.Feedback>
+                            </Form.Group>
+                        </InputGroup>
+                            <Button className='btn-sm' variant="success" type="submit">UPDATE</Button>{' '}
+                    </Form.Group>
+                </Form>
             </Collapse>
             )}
-            {feedBackStatus && (
+            {/* {feedBackStatus && (
                 <h3>{feedBackMsg}</h3>
-            )}
+            )} */}
         </>
     );
 }

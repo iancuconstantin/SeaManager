@@ -36,7 +36,7 @@ public class SailorService {
 				);
 	}
 
-	public void addNewEmployee(Sailor sailor) {
+	public Sailor addNewEmployee(Sailor sailor) {
 		Optional<Sailor> employeeOptional = sailorRepository.findEmployeeByEmail(sailor.getEmail());
 		if (employeeOptional.isPresent()) {
 			throw new EmailTakenException(
@@ -44,6 +44,7 @@ public class SailorService {
 			);
 		}
 		sailorRepository.save(sailor);
+		return sailor;
 	}
 
 	public void deleteEmployee(Long employeeId) {

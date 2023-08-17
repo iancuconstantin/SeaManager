@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Collapse from "react-bootstrap/Collapse";
 import { Button } from "react-bootstrap";
 import EmployeeEdit from "./EmployeeEdit";
@@ -13,13 +13,10 @@ const EmployeeTable = ({
   setEmployeesFetch
 }) => {
   const [open, setOpen] = useState(new Array(employees.length).fill(false));
-  const [openEdit, setOpenEdit] = useState(
-    new Array(employees.length).fill(false)
-  );
+  const [openEdit, setOpenEdit] = useState(new Array(employees.length).fill(false));
   const [feedBackMsg, setFeedBackMsg] = useState("");
   const [feedBackStatus, setFeedBackStatus] = useState(false);
-
-  const [filterValues, setFilterValues] = useState({
+  const initialFilterValues = {
     employeeId: "",
     firstName: "",
     lastName: "",
@@ -30,10 +27,19 @@ const EmployeeTable = ({
     rank: "",
     gender: "",
     readinessDate: "",
-  });
+  };
+
+  useEffect(()=>{
+    console.log(employees)
+  },[])
+
+  const [filterValues, setFilterValues] = useState(initialFilterValues);
 
   const trigger = (employeeId) => {
-    fetchData(employeeId);
+    if(!open[employeeId]){
+      fetchData(employeeId);
+    }
+    // fetchData(employeeId);
     setOpen((prevOpen) => ({
       ...prevOpen,
       [employeeId]: !prevOpen[employeeId]
@@ -51,30 +57,48 @@ const EmployeeTable = ({
     setFilterValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
+  const clearFilter = () => {
+    setFilterValues(initialFilterValues)
+  }
+
   const filterEmployees = employees.filter(
-    (employee) =>
-      (employee.employeeId === parseInt(filterValues.employeeId) ||
-        filterValues.employeeId === "") &&
-      (employee.firstName === filterValues.firstName ||
-        filterValues.firstName === "") &&
-      (employee.lastName === filterValues.lastName ||
-        filterValues.lastName === "") &&
-      (employee.email === filterValues.email || filterValues.email === "") &&
-      (employee.age === parseInt(filterValues.age) ||
-        filterValues.age === "") &&
-      (employee.address === filterValues.address ||
-        filterValues.address === "") &&
-      (employee.contactNo === parseInt(filterValues.contactNo) ||
-        filterValues.contactNo === "") &&
-      (employee.rank === filterValues.rank || filterValues.rank === "") &&
-      (employee.gender === filterValues.gender || filterValues.gender === "") &&
-      (employee.readinessDate === filterValues.readinessDate ||
-        filterValues.readinessDate === "")
+    (employee) => {
+      const {
+        employeeId,
+        firstName,
+        lastName,
+        email,
+        age,
+        address,
+        contactNo,
+        rank,
+        gender,
+        readinessDate,
+      } = filterValues;
+    
+      return (
+        (employee.employeeId === parseInt(employeeId) || employeeId === "") &&
+        (employee.firstName.includes(firstName) || firstName === "") &&
+        (employee.lastName.includes(lastName) || lastName === "") &&
+        (employee.email.includes(email) || email === "") &&
+        (employee.age === parseInt(age) || age === "") &&
+        (employee.address.includes(address) || address === "") &&
+        (employee.contactNo === parseInt(contactNo) || contactNo === "") &&
+        (employee.rank === rank || rank === "") &&
+        (employee.gender === gender || gender === "") &&
+        // (employee.readinessDate.includes(readinessDate) || readinessDate === "")
+        (((employee.readinessDate && employee.readinessDate.includes(readinessDate)) || readinessDate === ""))
+      );
+    }
   );
 
   return (
     <>
-      <EmployeeSearch filterBy={handleFilterChange} />
+      <EmployeeSearch 
+        filterValues={filterValues} 
+        filterBy={handleFilterChange} 
+        clearFilter = {clearFilter}
+      />
       <div
         style={{ width: "90%", fontSize: 12 }}
         className="d-flex justify-content-center mx-auto my-3"
@@ -118,7 +142,6 @@ const EmployeeTable = ({
                         variant="primary"
                         className="mx-1 btn-sm"
                         onClick={() => trigger(employee.employeeId)}
-                        // aria-controls={`example-collapse-text-${employee.employeeId}`}
                         aria-controls={`certificates-${employee.employeeId}`}
                         aria-expanded={open[employee.employeeId]}
                       >
@@ -174,15 +197,15 @@ const EmployeeTable = ({
                   </tr>
                   <tr>
                     <td colSpan="10">
-                        <EmployeeEdit
-                          openEdit={openEdit[idx]}
-                          employeeObj={employee}
-                          updateEmployee={updateEmployee}
-                          feedBackMsg={feedBackMsg}
-                          feedBackStatus={feedBackStatus}
-                          setFeedBackStatus={setFeedBackStatus}
-                          setEmployeesFetch={setEmployeesFetch}
-                        />
+                      <EmployeeEdit
+                        openEdit={openEdit[idx]}
+                        employeeObj={employee}
+                        updateEmployee={updateEmployee}
+                        feedBackMsg={feedBackMsg}
+                        feedBackStatus={feedBackStatus}
+                        setFeedBackStatus={setFeedBackStatus}
+                        setEmployeesFetch={setEmployeesFetch}
+                      />
                     </td>
                   </tr>
                 </Fragment>

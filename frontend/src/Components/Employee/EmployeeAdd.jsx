@@ -33,6 +33,9 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
         }
     }, [feedBackStatus]);
 
+    useEffect(()=>{
+        setValidated(true);
+    },[formData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -78,7 +81,7 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                 email: '',
                 birthDate: '',
                 address: '',
-                contactNo: 0,
+                contactNo: null,
                 rank: '',
                 gender: '',
                 age:'',
@@ -89,7 +92,7 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
             })
         }
         setOpen(!open)
-        setValidated(true);
+        // setValidated(true);
     };
 
     return (
@@ -234,9 +237,6 @@ function AddEmployeeForm({open, setOpen, addNewEmployee, feedBackStatus, setFeed
                     <Button className="btn-sm" variant="success" type="submit">Add</Button>{' '}
                 </Form.Group>
             </Form>
-            )}
-            {feedBackStatus && (
-                <h3>{feedBackMsg}</h3>
             )}
         </>
     );

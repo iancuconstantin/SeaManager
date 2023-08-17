@@ -25,9 +25,6 @@ export const Employees = ({isLoggedIn}) => {
     //     }
     // }, [isLoggedIn]);
 
-
-    const maxId = Math.max(...employeesFetch.map((emp) => emp.employeeId));
-
     async function addNewEmployee(formData) {
         try {
 
@@ -44,7 +41,8 @@ export const Employees = ({isLoggedIn}) => {
             if (response.ok) {
                 setFeedBackStatus(true);
                 setFeedBackMsg("New employee was added!");
-                formData.employeeId = maxId + 1;
+                let sailor = await response.json();
+                formData.employeeId = sailor.employeeId;
                 setEmployeesFetch([formData, ...employeesFetch]);
             } else {
                 if (response.status === 422) {
@@ -164,6 +162,11 @@ export const Employees = ({isLoggedIn}) => {
             >
                 Add New Employee
             </Button>{" "}
+
+            {feedBackStatus && (
+                <h3>{feedBackMsg}</h3>
+            )}
+
             <Collapse in={open}>
                 <AddEmployeeForm
                     open={open}
@@ -182,6 +185,9 @@ export const Employees = ({isLoggedIn}) => {
                 deleteEmp={deleteEmp}
                 handleSort={handleSort}
                 setEmployeesFetch={setEmployeesFetch}
+                feedBackStatus={feedBackStatus}
+                setFeedBackStatus={setFeedBackStatus}
+                feedBackMsg={feedBackMsg}
             />
         </>
     );

@@ -39,9 +39,9 @@ public class Contract {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Sailor owner;
-	@PastOrPresent(message = "Start date should be in the past or today.")
+//	@PastOrPresent(message = "Start date should be in the past or today.")
 	private LocalDate startDate;
-	@Future(message = "End date should be in the future.")
+//	@Future(message = "End date should be in the future.")
 	private LocalDate finishDate;
 	@ManyToOne //TODO - ask?
 	private Voyage vesselVoyageAtStart;
@@ -52,6 +52,6 @@ public class Contract {
 		this.startDate = startDate;
 		this.finishDate = finishDate;
 		this.vesselVoyageAtStart = vesselVoyageAtStart;
-		owner.addNewContract(this);
+//		owner.addNewContract(this);
 	}
 }

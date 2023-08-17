@@ -39,17 +39,8 @@ public class SailorController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<String> registerNewEmployee(@RequestBody Sailor sailor) {
-		try{
-			sailorService.addNewEmployee(sailor);
-			return ResponseEntity.status(HttpStatus.OK)
-					.body("New employee was added!");
-		} catch (EmailTakenException e){
-//			return ResponseEntity.badRequest()
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-//					.body("Email was already used!");
-					.body(HttpStatus.UNPROCESSABLE_ENTITY.toString());
-		}
+	public Sailor registerNewEmployee(@RequestBody Sailor sailor) {
+		return sailorService.addNewEmployee(sailor);
 	}
 
 	@DeleteMapping(path = "{employeeId}")

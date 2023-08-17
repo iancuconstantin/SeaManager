@@ -37,16 +37,15 @@ public class VesselService {
 				);
 	}
 
-	public void createVessel(@RequestBody @Valid Vessel vessel) {
+	public Vessel createVessel (Vessel vessel) {
 		Optional<Vessel> vesselOptional = vesselRepository.findVesselByIMONumber(vessel.getIMONumber());
-
 		if (vesselOptional.isPresent()) {
 			throw new IMONumberExistsException(
 					"Vessel with IMO Number: " + vessel.getIMONumber() + " already exists."
 			);
 		}
-
 		vesselRepository.save(vessel);
+		return vessel;
 	}
 
 
@@ -56,12 +55,12 @@ public class VesselService {
 						"Vessel with id:" + id + "not found.")
 				);
 
-		Optional<Vessel> vesselOptional = vesselRepository.findVesselByIMONumber(vessel.getIMONumber());
-		if(vesselOptional.isPresent()){
-			throw new IMONumberExistsException(
-					"IMO number " + vessel.getIMONumber() + " exists in database."
-			);
-		}
+//		Optional<Vessel> vesselOptional = vesselRepository.findVesselByIMONumber(vessel.getIMONumber());
+//		if(vesselOptional.isPresent()){
+//			throw new IMONumberExistsException(
+//					"IMO number " + vessel.getIMONumber() + " exists in database."
+//			);
+//		}
 		vesselToUpdate.setIMONumber(vessel.getIMONumber());
 
 		vesselToUpdate.setName(vessel.getName());

@@ -63,7 +63,9 @@ public class Sailor {
 			message = "Not a valid email"
 	)
 	@Column(
-			columnDefinition = "TEXT"
+			columnDefinition = "TEXT",
+			name = "email",
+			nullable = false
 	)
 	private String email;
 	@BirthDate(
@@ -141,14 +143,14 @@ public class Sailor {
 	)
 	private LocalDate readinessDate;
 	@ManyToOne
-	@JoinTable(
-			name = "sailor_voyage",
-			joinColumns = @JoinColumn(name = "employee_id"),
-			inverseJoinColumns = @JoinColumn(
-					referencedColumnName = "voyageId",
-					name = "voyage_id"
-			)
-	)
+//	@JoinTable(
+//			name = "sailor_voyage",
+//			joinColumns = @JoinColumn(name = "employee_id"),
+//			inverseJoinColumns = @JoinColumn(
+//					referencedColumnName = "voyageId",
+//					name = "voyage_id"
+//			)
+//	)
 	@JoinColumn(name = "voyage_id")
 	@JsonIgnore
 	private Voyage currentVoyage;
