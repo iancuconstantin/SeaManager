@@ -128,7 +128,8 @@ public class Sailor {
 	private Set<Certificate> certificates;
 	@OneToMany(
 			targetEntity = Contract.class,
-			mappedBy = "owner"
+			mappedBy = "owner",
+			cascade = CascadeType.PERSIST
 	)
 	private Set<Contract> contracts;
 	@Future(
@@ -143,14 +144,14 @@ public class Sailor {
 	)
 	private LocalDate readinessDate;
 	@ManyToOne
-//	@JoinTable(
-//			name = "sailor_voyage",
-//			joinColumns = @JoinColumn(name = "employee_id"),
-//			inverseJoinColumns = @JoinColumn(
-//					referencedColumnName = "voyageId",
-//					name = "voyage_id"
-//			)
-//	)
+	@JoinTable(
+			name = "sailor_voyage",
+			joinColumns = @JoinColumn(name = "employee_id"),
+			inverseJoinColumns = @JoinColumn(
+					referencedColumnName = "voyageId",
+					name = "voyage_id"
+			)
+	)
 	@JoinColumn(name = "voyage_id")
 	@JsonIgnore
 	private Voyage currentVoyage;
@@ -186,6 +187,7 @@ public class Sailor {
 
 	public void addNewContract(Contract contract) {
 		contracts.add(contract);
+		contract.setOwner(this);
 	}
 }
 

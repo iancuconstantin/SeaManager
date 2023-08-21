@@ -66,18 +66,27 @@ public class VoyageService {
 
 
 //		if (isNotPartOfCrewList(voyageToUpdate, sailorToAdd) && sailorToAdd.getCurrentVoyage() == null) {
-//			saveNewContractForSailor(sailorToAdd, voyageToUpdate, contractStartDate, contractEndDate);//motiv eroare randare employees and voyages
 			sailorToAdd.setReadinessDate(null);
 			sailorToAdd.setCurrentVoyage(voyageToUpdate);//1
-			addCrewMemberToCrewList(voyageToUpdate, sailorToAdd);//2
+
+			Contract newContract = new Contract(sailorToAdd, contractStartDate, contractEndDate, voyageId);
+//			newContract.setOwner(sailorToAdd);
+			sailorToAdd.getContracts().add(newContract);
+			sailorRepository.save(sailorToAdd);
+			contractRepository.save(newContract);
+			voyageRepository.save(voyageToUpdate);
+
+//			saveNewContractForSailor(sailorToAdd, voyageToUpdate, contractStartDate, contractEndDate);
+
+//			saveNewContractForSailor(sailorToAdd, voyageToUpdate, contractStartDate, contractEndDate);//motiv eroare randare employees and voyages
+//			addCrewMemberToCrewList(voyageToUpdate, sailorToAdd);//2
 //		} else {
 //			throw new SailorExistsException(
 //					"Sailor with id: " + sailorToAdd.getEmployeeId() + " already part of a crew list."
 //			);
 //		}
-		sailorRepository.save(sailorToAdd);
 
-		voyageRepository.save(voyageToUpdate);
+
 	}
 
 	public ResponseEntity<Voyage> removeCrewMember(Long voyageId, Long employeeId) {
@@ -101,8 +110,17 @@ public class VoyageService {
 	}
 
 	private void saveNewContractForSailor(Sailor owner, Voyage voyageAtStart, LocalDate contractStartDate, LocalDate contractEndDate) {
-		Contract newContract = new Contract(owner, contractStartDate, contractEndDate, voyageAtStart);
-		contractRepository.save(newContract);
+//		Contract newContract = new Contract(owner, contractStartDate, contractEndDate, voyageAtStart);
+
+//		contractRepository.save(newContract);
+
+
+//		contractRepository.save(newContract);
+//		Set<Contract> oldContracts = owner.getContracts();
+//		oldContracts.add(newContract);
+//		owner.setContracts(oldContracts);
+//		sailorRepository.save(owner);
+
 	}
 
 	private void makeContractInactive(Sailor sailorToRemove) {

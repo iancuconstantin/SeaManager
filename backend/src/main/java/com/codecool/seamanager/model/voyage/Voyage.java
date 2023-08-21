@@ -80,12 +80,12 @@ public class Voyage {
 		this.crewList = crewList;
 		this.departure = departure;
 		this.arrival = arrival;
-		//vessel.getVoyages().add(this); //TODO -ask?
+//		vessel.getVoyages().add(this); //TODO -ask?
 	}
 
 	@PrePersist
 	public void prePersist() {
-		//vessel.getVoyages().add(this);
+//		vessel.getVoyages().add(this);
 		assignName();
 	}
 
