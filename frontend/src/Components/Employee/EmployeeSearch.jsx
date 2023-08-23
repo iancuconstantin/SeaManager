@@ -16,7 +16,7 @@ const EmployeeSearch = ({filterValues, filterBy, clearFilter}) => {
                                 placeholder="Id"
                                 aria-label="Id"
                                 aria-describedby="basic-addon1"
-                                value={filterValues.id}
+                                value={filterValues.employeeId}
                                 onChange={filterBy}
                             />
                         </Form.Group>

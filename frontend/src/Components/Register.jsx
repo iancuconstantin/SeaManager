@@ -21,10 +21,10 @@ const Register = () => {
   const handleChange = (e) => {
     const { name, value,checked } = e.target;
     console.log("name: ",name, "checked:",checked)
-    if(name==="authorities" && checked){
+    if(name==="isAdmin" && value==="on"){
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: "USER,ADMIN"
+        authorities: "ADMIN,USER"
     }));
     } else if(name==="authorities" && !checked) {
       setFormData((prevFormData) => ({

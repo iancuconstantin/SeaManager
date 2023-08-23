@@ -2,7 +2,7 @@ const vesselType = [
     "TANKER",
 	"CONTAINER",
 	"BULK",
-	"GAS CARRIER",
+	"GAS_CARRIER",
 	"CHEMICAL"
 ];
 

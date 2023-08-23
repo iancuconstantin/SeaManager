@@ -9,11 +9,86 @@ import AddVoyageForm from './VoyagesAdd';
 import {getBasicAuthHeaders, getBearerAuthHeaders} from '../../authUtils';
 
 export const Voyages = ({isLoggedIn}) => {
-    const voyagesFetch = useLoaderData();
+    const [voyagesFetch, setVoyagesFetch] = useState(useLoaderData());
     const navigation = useNavigation();
     const [vesselType, setVesselType] = useState('');
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
+
+    async function addNewCrewMember (voyageId, employeeId, updatedFormData) {
+        try{
+            const headers = getBearerAuthHeaders();
+            headers.append("Content-Type", "application/json");
+            const response = await fetch(`http://localhost:8080/api/voyage/${voyageId}/add/${employeeId}`,{
+                method: "PUT",
+                headers: headers,
+                body: JSON.stringify(updatedFormData),
+            });
+            if(response.ok){
+                console.log("add new crew member SUCCEESS!")
+                console.log("RASPUNS OK: ",response);
+            } else {
+                console.log("add new crew member FAILED!");
+                console.log("RASPUNS FAILED: ",response);
+            }
+    
+        } catch (e) {
+            console.log("EROARE: ", e);
+        }
+    }
+    
+    async function removeCrewListMember (voyageId, employeeId) {
+        try{
+            const headers = getBearerAuthHeaders();
+            headers.append("Content-Type", "application/json");
+            const response = await fetch(`http://localhost:8080/api/voyage/${voyageId}/remove/${employeeId}`,{
+                method: "DELETE",
+                headers: headers
+            });
+            if(response.ok){
+                console.log("remove crew member SUCCEESS!")
+                console.log("RASPUNS OK: ",response);
+            } else {
+                console.log("remove crew member FAILED!");
+                console.log("RASPUNS FAILED: ",response);
+            }
+    
+        } catch (e) {
+            console.log("EROARE: ", e);
+        }
+    }
+
+    async function deleteVoyage(voyageId){
+        // alert("DELETE will be avaible soon.")
+        const confirmed = window.confirm(
+          "Are you sure you want to delete this voyaage?"
+      );
+      if (confirmed) {
+          try{
+            const headers = getBearerAuthHeaders();
+            headers.append("Content-Type", "application/json");
+            const response = await fetch(`http://localhost:8080/api/voyage/${voyageId}`,{
+                method: "DELETE",
+                headers: headers
+            });
+            if(response.ok){
+                console.log("remove voyage SUCCEESS!")
+                console.log("RASPUNS OK: ",response);
+            } else {
+                console.log("remove voyage FAILED!");
+                console.log("RASPUNS FAILED: ",response);
+            }
+  
+            const updatedVoyages = voyagesFetch.filter(
+                (voyage) => voyage.voyageId !== voyageId
+            );
+            setVoyagesFetch(updatedVoyages);
+  
+        } catch (e) {
+            console.log("EROARE: ", e);
+        }
+      }
+    }
 
     // async function addNewCrewMember (voyageId,employeeId,formData) {
     //     // console.log("VERIFICARE FORMDATA LA PRIMIRE: ", formData);
@@ -65,9 +140,11 @@ export const Voyages = ({isLoggedIn}) => {
 
 
             <VoyagesTable 
-                voyages={voyagesFetch} 
-                fetchData={fetchCrewList}
-                // addNewCrewMember = {addNewCrewMember}
+                voyages={voyagesFetch}
+                deleteVoyage={deleteVoyage}
+                fetchCrewList={fetchCrewList}
+                addNewCrewMember={addNewCrewMember}
+                removeCrewListMember={removeCrewListMember}
             />
             {/* <Form.Group className="d-flex justify-content-center mx-auto" style={{ width: "90%" }}>
                 <InputGroup>
@@ -96,5 +173,5 @@ export const fetchCrewList = async (voyageId) => {
         headers: getBearerAuthHeaders()
     });
     const data = await response.json();
-    return data;
+    return data.crewList;
 }

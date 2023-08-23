@@ -272,7 +272,7 @@ function AddVesselForm({open, addNewVessel, setOpen, feedBackStatus, setFeedBack
                                 type='number' 
                                 min="1000000"
                                 max="9999999"
-                                placeholder="Year Built" 
+                                placeholder="IMO Number" 
                                 required
                                 value={formData.imonumber} 
                                 className='form-control-sm'

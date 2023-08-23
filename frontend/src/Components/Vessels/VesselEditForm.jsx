@@ -22,10 +22,13 @@ function VesselEditForm({vesselObj, openEdit, updateVessel, feedBackStatus, setF
 
     useEffect(()=>{
         setValidated(true);
+        console.log("VERIFICAREEEEE: ", formData);
     },[formData])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log("verificare name: ", name);
+        console.log("verificare value: ", value);
         if(name==="imonumber"){
             setFormData((prevFormData) => ({
                 ...prevFormData,

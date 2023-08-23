@@ -1,13 +1,13 @@
-import {React,useState, Fragment, useRef, useEffect} from 'react';
+import {React,useState, Fragment} from 'react';
 import Button from 'react-bootstrap/Button';
 import Tooltip from 'react-bootstrap/Tooltip'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Collapse from "react-bootstrap/Collapse";
 import { Form } from 'react-bootstrap';
-import {getBasicAuthHeaders, getBearerAuthHeaders} from '../../authUtils';
+// import {getBasicAuthHeaders, getBearerAuthHeaders} from '../../authUtils';
 
 
-const VoyagesTable = ({ voyages, fetchData }) => {
+const VoyagesTable = ({ voyages, deleteVoyage, fetchCrewList, addNewCrewMember, removeCrewListMember}) => {
 
   const [open, setOpen] = useState(new Array(voyages.length).fill(false));
   const initialFormDataValues = {
@@ -16,24 +16,34 @@ const VoyagesTable = ({ voyages, fetchData }) => {
   }
   const [formData, setFormData] = useState(initialFormDataValues);
   const [employeeId, setEmployeeId] = useState("");
+  const [crewList, setCrewList] = useState([]);
 
-  const trigger = (voyageId) => {
+  const trigger = async (voyageId) => {
     if(!open[voyageId]){
-      fetchData(voyageId);
+      
+      const data = await fetchCrewList(voyageId);
+      setCrewList([...data]);
+      setEmployeeId("");
     }
-    // fetchData(voyageId);
+    
     setOpen((prevOpen) => ({
       ...prevOpen,
       [voyageId]: !prevOpen[voyageId]
     }));
   };
 
+  const removeMember = (voyageId, employeeId) => {
+    removeCrewListMember(voyageId, employeeId)
+    setOpen((prevOpen) => ({
+      ...prevOpen,
+      [voyageId]: !prevOpen[voyageId]
+    }));
+  }
+
   async function updateVoyage(voyageId){
     alert("UPDATE will be avaible soon.")
   }
-  async function deleteVoyage(voyageId){
-      alert("DELETE will be avaible soon.")
-  }
+  
 
   const renderTooltipVessel = (vessel) => (
   <Tooltip id="button-tooltip" {...vessel}>
@@ -87,36 +97,14 @@ const VoyagesTable = ({ voyages, fetchData }) => {
         setFormData(updatedFormData);
         
         addNewCrewMember(voyage.voyageId, employeeId, updatedFormData);
-        // setFormData(initialFormDataValues);
+        setFormData(initialFormDataValues);
+        console.log("verificare formData dupa add new employee: ", formData);
     }
     setOpen(!open)
     // setValidated(true);
 };
 
-async function addNewCrewMember (voyageId, employeeId, updatedFormData) {
-  console.log("verificare voyageId in addNewCrewMember:", voyageId);
-  console.log("verificare employeeId in addNewCrewMember:", employeeId);
-  console.log("verificare updatedFormData in addNewCrewMember:", updatedFormData)
-  try{
-      const headers = getBearerAuthHeaders();
-      headers.append("Content-Type", "application/json");
-      const response = await fetch(`http://localhost:8080/api/voyage/${voyageId}/add/${employeeId}`,{
-          method: "PUT",
-          headers: headers,
-          body: JSON.stringify(updatedFormData),
-      });
-      if(response.ok){
-          console.log("add new crew member SUCCEESS!")
-          console.log("RASPUNS OK: ",response);
-      } else {
-          console.log("add new crew member FAILED!");
-          console.log("RASPUNS FAILED: ",response);
-      }
 
-  } catch (e) {
-      console.log("EROARE: ", e);
-  }
-}
 
   return (
     <div 
@@ -163,8 +151,6 @@ async function addNewCrewMember (voyageId, employeeId, updatedFormData) {
               <Button 
                   variant="primary"
                   onClick={() => trigger(voyage.voyageId)}
-                  // aria-controls={`example-collapse-text-${employee.employeeId}`}
-                  // aria-expanded={open[employee.employeeId]}
               >
                   📑
               </Button>{' '}
@@ -202,13 +188,21 @@ async function addNewCrewMember (voyageId, employeeId, updatedFormData) {
                               </tr>
                             </thead>
                             <tbody>
-                              {voyage.crewList.map((employee) => (
+                              {crewList && crewList.map((employee) => (
                                 <tr key={employee.employeeId}>
                                   <td>{employee.firstName}</td>
                                   <td>{employee.lastName}</td>
                                   <td>{employee.age}</td>
                                   <td>{employee.rank}</td>
                                   <td>{employee.gender}</td>
+                                  <td>
+                                    <Button 
+                                      variant="light"
+                                      onClick={()=>removeMember(voyage.voyageId, employee.employeeId)}
+                                    >
+                                      ❌
+                                    </Button>{' '}
+                                  </td>
                                 </tr>
                               ))}
                             {/* ADD NEW MEMBER IN CREWLIST */}
@@ -221,7 +215,7 @@ async function addNewCrewMember (voyageId, employeeId, updatedFormData) {
                                         <Form.Control 
                                           name="employeeId"
                                           type="number" 
-                                          value={formData.employeeId}
+                                          value={employeeId}
                                           voyage={voyage}
                                           min="1"
                                           required
