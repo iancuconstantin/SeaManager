@@ -151,7 +151,6 @@ export const Employees = ({isLoggedIn}) => {
 
     return (
         <>
-            <h2>Employees page</h2>
             {/* ADD EMPLOYEE */}
             <Button
                 className="btn-sm"

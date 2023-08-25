@@ -13,7 +13,6 @@ import {
 import {Employees, employeeLoader} from "./Components/Employee/Employees";
 import {Vessels, vesselsLoader} from "./Components/Vessels/Vessels";
 import {Voyages, voyageLoader} from "./Components/Voyages/Voyages";
-
 import Menu from "./Components/Menu";
 import Button from "react-bootstrap/Button";
 
@@ -21,12 +20,8 @@ window.Buffer = window.Buffer || require("buffer").Buffer;
 
 
 function App() {
-
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
     const handleLogin = () => {
-        // Perform login logic here
-        // Set isLoggedIn to true if login is successful
         setIsLoggedIn(true);
     };
 
@@ -49,15 +44,15 @@ function App() {
                 />
                 <Route path="/login" element={<Login handleLogin={handleLogin}/>}/>
                 <Route path="/newAccount" element={<NewAccount isLoggedIn={isLoggedIn}/>}/>
-                {/* <Route path="/data" element={<Data isLoggedIn={isLoggedIn}/>} loader={dataLoader} /> */}
-                {/* <Route path="/contact" element={<Contact isLoggedIn={isLoggedIn}/>} /> */}
                 <Route path="/vessels" element={<Vessels isLoggedIn={isLoggedIn}/>} loader={vesselsLoader}/>
                 <Route path="/voyages" element={<Voyages isLoggedIn={isLoggedIn}/>} loader={voyageLoader}/>
                 <Route path="/menu" element={<Menu/>}/>
                 <Route path="/login"
-                       element={<Button variant="outline-warning" className="mx-2 mt-3 btn-sm" onClick={handleLogout}>
-                           Logout
-                       </Button>}/>
+                        element={
+                            <Button variant="outline-warning" className="mx-2 mt-3 btn-sm" onClick={handleLogout}>
+                                Logout
+                            </Button>
+                        }/>
             </Route>
         )
     );

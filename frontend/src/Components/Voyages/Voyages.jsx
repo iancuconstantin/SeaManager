@@ -122,8 +122,6 @@ export const Voyages = ({isLoggedIn}) => {
 
     return(
         <>
-            <h2>Voyages page</h2>
-
             {/* ADD VOYAGE */}
             <Button
                 onClick={() => setOpen(!open)}

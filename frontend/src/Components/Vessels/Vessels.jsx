@@ -157,7 +157,6 @@ export const Vessels = ({ isLoggedIn }) => {
 
     return(
         <>
-            <h2>Vessels page</h2>
             {/* ADD EMPLOYEE */}
             <Button
                 onClick={() => setOpen(!open)}
