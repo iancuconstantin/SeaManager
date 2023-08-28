@@ -3,14 +3,15 @@ import Register from "./Register";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const NewAccount = ({ isLoggedIn }) => {
+export const NewAccount = () => {
     const navigate = useNavigate();
-
+    
     useEffect(() => {
-        if (!isLoggedIn) {
-        navigate('/login')
+        const token = localStorage.getItem("token");
+        if (!token) {
+            return navigate("/login");
         }
-    }, [isLoggedIn]);
+    }, []);
 
     return(
         <Container className="my-5 w-100 w-md-75 w-lg-50">

@@ -31,6 +31,8 @@ const EmployeeTable = ({
 
   useEffect(()=>{
     console.log(employees)
+    // console.log(employees.totalPages)
+
   },[])
 
   const [filterValues, setFilterValues] = useState(initialFilterValues);
@@ -61,7 +63,7 @@ const EmployeeTable = ({
     setFilterValues(initialFilterValues)
   }
 
-  const filterEmployees = employees.filter(
+  const filterEmployees = employees.content.filter(
     (employee) => {
       const {
         employeeId,
@@ -86,7 +88,6 @@ const EmployeeTable = ({
         (employee.contactNo === parseInt(contactNo) || contactNo === "") &&
         (employee.rank === rank || rank === "") &&
         (employee.gender === gender || gender === "") &&
-        // (employee.readinessDate.includes(readinessDate) || readinessDate === "")
         (((employee.readinessDate && employee.readinessDate.includes(readinessDate)) || readinessDate === ""))
       );
     }

@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import AddEmployeeForm from "./EmployeeAdd";
 import EmployeeTable from "./EmployeeTable";
 import EmployeeSearch from "./EmployeeSearch";
+import EmployeePagination from "./EmployeePagination";
 import {getBasicAuthHeaders, getBearerAuthHeaders} from '../../authUtils';
 import Button from "react-bootstrap/Button";
 import Collapse from "react-bootstrap/Collapse";
@@ -10,16 +11,36 @@ import {fetchBearerAuth, fetchBasicAuth, fetchBearerAuthWithBody} from "../../fe
 import {parseTextResponse, parseJsonResponse} from "../../responseParsers";
 import { handleRequestAndCheckResponse } from "../../authUtils";
 
-export const Employees = ({isLoggedIn}) => {
+export const Employees = () => {
     const [employeesFetch, setEmployeesFetch] = useState(useLoaderData());
+    
+
+    const [currentPage, setCurrentPage] = useState(0);
+    
+
+
     const navigation = useNavigation();
     const [open, setOpen] = useState(false);
     const [feedBackMsg, setFeedBackMsg] = useState("");
     const [feedBackStatus, setFeedBackStatus] = useState(false);
     const [sortColumn, setSortColumn] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
-    
 
+
+    useEffect(() => {
+        console.log("verificare currentPage: ", currentPage);
+        setTimeout(async() => {
+            console.log("a intrat in useEffect!");
+            const data = await employeeLoader(currentPage);
+            setEmployeesFetch(data);
+        }, 1000);
+    }, [currentPage]);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    
     async function addNewEmployee(formData) {
         try {
 
@@ -124,8 +145,8 @@ export const Employees = ({isLoggedIn}) => {
         }
         setSortColumn(column);
         setSortOrder(newOrder);
-
-        const sortedEmployees = [...employeesFetch].sort((a, b) => {
+        
+        const sortedEmployees = [...employeesFetch.content].sort((a, b) => {
             let result = 0;
             if (a[column] > b[column]) {
                 result = 1;
@@ -137,7 +158,10 @@ export const Employees = ({isLoggedIn}) => {
             }
             return result;
         });
-        setEmployeesFetch(sortedEmployees);
+        setEmployeesFetch(prevState => ({
+            ...prevState,
+            content: sortedEmployees
+        }));
     };
 
     if (navigation.state === "loading") {
@@ -183,21 +207,29 @@ export const Employees = ({isLoggedIn}) => {
                 setFeedBackStatus={setFeedBackStatus}
                 feedBackMsg={feedBackMsg}
             />
+            <EmployeePagination 
+                handlePageChange={handlePageChange} 
+                currentPage={currentPage}
+                totalPages={employeesFetch.totalPages}
+                
+            />
         </>
     );
 };
 
-export const employeeLoader = async () => {
+export const employeeLoader = async (page=0) => {
     const token = localStorage.getItem("token");
-    
+    const pageSize = 10;
+
     if (!token) {
         return redirect("/login");
     }
 
-    const response = await fetch('http://localhost:8080/api/employee', {
+    const response = await fetch(`http://localhost:8080/api/employee/${page}/${pageSize}`, {
         headers: getBearerAuthHeaders()
     });
     const data = await parseJsonResponse(response);
+    console.log("verificare data: ", data);
     return data;
 }
 
