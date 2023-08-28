@@ -1,5 +1,5 @@
-import { useLoaderData,useNavigation,useNavigate } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useLoaderData,useNavigation, redirect } from "react-router-dom";
+import { useState } from "react";
 import VesselsTable from "./VesselsTable";
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -9,7 +9,7 @@ import Collapse from 'react-bootstrap/Collapse';
 import AddVesselForm from './VesselAdd';
 import {getBasicAuthHeaders, getBearerAuthHeaders} from '../../authUtils';
 
-export const Vessels = ({ isLoggedIn }) => {
+export const Vessels = () => {
     const [vesselsFetch, setVesselsFetch] = useState(useLoaderData());
     const navigation = useNavigation();
     const [vesselType, setVesselType] = useState('');
@@ -18,13 +18,7 @@ export const Vessels = ({ isLoggedIn }) => {
     const [feedBackStatus, setFeedBackStatus] = useState(false);
     const [sortColumn, setSortColumn] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
-    const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     if (!isLoggedIn) {
-    //     navigate('/login')
-    //     }
-    // }, [isLoggedIn]);
+    
 
     const handleTypeChange = (event) => {
         setVesselType(event.target.value);
@@ -157,7 +151,7 @@ export const Vessels = ({ isLoggedIn }) => {
 
     return(
         <>
-            {/* ADD EMPLOYEE */}
+            {/* ADD VESSEL */}
             <Button
                 onClick={() => setOpen(!open)}
                 aria-controls="example-collapse-text"
@@ -180,7 +174,7 @@ export const Vessels = ({ isLoggedIn }) => {
                     setOpen={setOpen}
                 />
             </Collapse>
-            {/* ADD EMPLOYEE */}
+            {/* ADD VESSEL */}
             <VesselsTable 
                 vessels={vesselsFetch} 
                 fetchData={fetchVesselDetails}
@@ -191,26 +185,18 @@ export const Vessels = ({ isLoggedIn }) => {
                 feedBackMsg={feedBackMsg}
                 handleSort={handleSort}
                 />
-            {/* <Form.Group className="d-flex justify-content-center mx-auto" style={{ width: "90%" }}>
-                <InputGroup>
-                    <Form.Control placeholder="Name" aria-label="Name"/>
-                    <Form.Control as="select" value={vesselType} onChange={handleTypeChange}>
-                        <option value="">Select a vessel type...</option>
-                        {VesselType.map((type, index) => (
-                            <option key={index} value={type}>{type}</option>
-                        ))}
-                    </Form.Control>
-                    <Form.Control placeholder="Flag" aria-label="Flag"/>
-                    <Form.Control type='number' placeholder="IMO Number"/>
-                    <Button variant="success">Add Vessel</Button>{' '}
-                </InputGroup>
-            </Form.Group> */}
         </>
         
     )
 }
 
 export const vesselsLoader = async () => {
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+        return redirect("/login");
+    }
+
     const response = await fetch('http://localhost:8080/api/vessel', {
         headers: getBearerAuthHeaders()
     });

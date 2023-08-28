@@ -87,49 +87,12 @@ const Root = ({isLoggedIn, handleLogout}) => {
 
     return (
         <>
-            {isLoggedIn && (
-                // <div>
-                //   {/* <Link to="/data">
-                //     <Button variant="info" className="mx-2 mt-3 btn-sm">
-                //       Data
-                //     </Button>
-                //   </Link> */}
-                //   {/* <Link to="/contact">
-                //     <Button variant="info" className="mx-2 mt-3 btn-sm">
-                //       Contact
-                //     </Button>
-                //   </Link> */}
-                //   <Link to="/employees">
-                //     <Button variant="info" className="mx-2 mt-3 btn-sm">
-                //       Employees
-                //     </Button>
-                //   </Link>
-                //   <Link to="/vessels">
-                //     <Button variant="info" className="mx-2 mt-3 btn-sm">
-                //       Vessels
-                //     </Button>
-                //   </Link>
-                //   <Link to="/voyages">
-                //     <Button variant="info" className="mx-2 mt-3 btn-sm">
-                //       Voyages
-                //     </Button>
-                //   </Link>
-                //   <Link to="/newAccount">
-                //     <Button variant="outline-warning" className="mx-2 mt-3 btn-sm">
-                //       New Account
-                //     </Button>
-                //   </Link>
-                //   <Link to="/menu">
-                //     <Button variant="outline-warning" className="mx-2 mt-3 btn-sm">
-                //       Menu
-                //     </Button>
-                //   </Link>
-
-                // </div>
-                <div>
-                    <Menu handleLogout={handleLogout}/>
-                </div>
-            )}
+            {isLoggedIn && 
+                (
+                    <div>
+                        <Menu handleLogout={handleLogout}/>
+                    </div>
+                )}
             <div>
                 <Outlet/>
             </div>

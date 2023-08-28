@@ -1,5 +1,5 @@
-import { useLoaderData, useNavigation,useNavigate } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useLoaderData, useNavigation, redirect } from "react-router-dom";
+import { useState } from "react";
 import VoyagesTable from "./VoyagesTable";
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Form } from 'react-bootstrap';
@@ -13,7 +13,7 @@ export const Voyages = ({isLoggedIn}) => {
     const navigation = useNavigation();
     const [vesselType, setVesselType] = useState('');
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
+    
 
     async function addNewCrewMember (voyageId, employeeId, updatedFormData) {
         try{
@@ -90,32 +90,6 @@ export const Voyages = ({isLoggedIn}) => {
       }
     }
 
-    // async function addNewCrewMember (voyageId,employeeId,formData) {
-    //     // console.log("VERIFICARE FORMDATA LA PRIMIRE: ", formData);
-    //     // const voyageId = formData.voyageId;
-    //     // const employeeId = formData.employeeId;
-    //     console.log("formDATA addNewCrewMember: ", formData);
-    //     try{
-    //         const headers = getBearerAuthHeaders();
-    //         headers.append("Content-Type", "application/json");
-    //         const response = await fetch(`http://localhost:8080/api/voyage/${voyageId}/add/${employeeId}`,{
-    //             method: "PUT",
-    //             headers: headers,
-    //             body: JSON.stringify(formData),
-    //         });
-    //         if(response.ok){
-    //             console.log("add new crew member SUCCEESS!")
-    //             console.log("RASPUNS OK: ",response);
-    //         } else {
-    //             console.log("add new crew member FAILED!");
-    //             console.log("RASPUNS FAILED: ",response);
-    //         }
-
-    //     } catch (e) {
-    //         console.log("EROARE: ", e);
-    //     }
-    // }
-
     if(navigation.state === "loading"){
         return <h3>Loading...</h3>
     }
@@ -144,20 +118,19 @@ export const Voyages = ({isLoggedIn}) => {
                 addNewCrewMember={addNewCrewMember}
                 removeCrewListMember={removeCrewListMember}
             />
-            {/* <Form.Group className="d-flex justify-content-center mx-auto" style={{ width: "90%" }}>
-                <InputGroup>
-                    <Form.Control placeholder="Vessel" aria-label="Vessel"/>
-                    <Form.Control placeholder="Departure Port" aria-label="Departure Port"/>
-                    <Form.Control placeholder="Arrival Port" aria-label="Arrival Port"/>
-                    <Button variant="success">Add Voayage</Button>{' '}
-                </InputGroup>
-            </Form.Group> */}
         </>
         
     )
 }
 
 export const voyageLoader = async () => {
+
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+        return redirect("/login");
+    }
+
     const response = await fetch('http://localhost:8080/api/voyage', {
         headers: getBearerAuthHeaders()
     });

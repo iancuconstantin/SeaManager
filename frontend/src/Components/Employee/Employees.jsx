@@ -1,4 +1,4 @@
-import {useLoaderData, useNavigation, useNavigate} from "react-router-dom";
+import {useLoaderData, useNavigation, redirect} from "react-router-dom";
 import {useState, useEffect} from "react";
 import AddEmployeeForm from "./EmployeeAdd";
 import EmployeeTable from "./EmployeeTable";
@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button";
 import Collapse from "react-bootstrap/Collapse";
 import {fetchBearerAuth, fetchBasicAuth, fetchBearerAuthWithBody} from "../../fetchFunction";
 import {parseTextResponse, parseJsonResponse} from "../../responseParsers";
+import { handleRequestAndCheckResponse } from "../../authUtils";
 
 export const Employees = ({isLoggedIn}) => {
     const [employeesFetch, setEmployeesFetch] = useState(useLoaderData());
@@ -17,13 +18,7 @@ export const Employees = ({isLoggedIn}) => {
     const [feedBackStatus, setFeedBackStatus] = useState(false);
     const [sortColumn, setSortColumn] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
-    const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     if (!isLoggedIn) {
-    //         navigate('/login')
-    //     }
-    // }, [isLoggedIn]);
+    
 
     async function addNewEmployee(formData) {
         try {
@@ -193,6 +188,12 @@ export const Employees = ({isLoggedIn}) => {
 };
 
 export const employeeLoader = async () => {
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+        return redirect("/login");
+    }
+
     const response = await fetch('http://localhost:8080/api/employee', {
         headers: getBearerAuthHeaders()
     });
